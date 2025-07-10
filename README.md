@@ -1,7 +1,3 @@
-<<<<<<< Updated upstream
-# baldape.github.io
-Professional Discord setup and management services for sports betting communities
-=======
 # BaldApe Services - Professional Discord Community Management
 
 A professional website showcasing Discord community management services, portfolio, and client testimonials.
@@ -180,4 +176,3 @@ programmersalesman.github.io/
 ---
 
 *Professional Discord community management services for growing communities.*
->>>>>>> Stashed changes
