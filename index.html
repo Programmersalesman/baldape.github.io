@@ -3,296 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Discord Services - Professional Community Management</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        header {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            padding: 1rem 0;
-            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #5865F2;
-        }
-
-        .nav {
-            display: flex;
-            gap: 2rem;
-        }
-
-        .nav a {
-            text-decoration: none;
-            color: #333;
-            font-weight: 500;
-            transition: color 0.3s;
-        }
-
-        .nav a:hover {
-            color: #5865F2;
-        }
-
-        .hero {
-            padding: 4rem 0;
-            text-align: center;
-            color: white;
-        }
-
-        .hero h1 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-        }
-
-        .hero p {
-            font-size: 1.2rem;
-            margin-bottom: 2rem;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
-        }
-
-        .cta-button {
-            display: inline-block;
-            background: #5865F2;
-            color: white;
-            padding: 1rem 2rem;
-            text-decoration: none;
-            border-radius: 50px;
-            font-weight: bold;
-            transition: all 0.3s;
-            box-shadow: 0 4px 15px rgba(88, 101, 242, 0.3);
-        }
-
-        .cta-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(88, 101, 242, 0.4);
-        }
-
-        .section {
-            padding: 4rem 0;
-            background: white;
-            margin: 2rem 0;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-        }
-
-        .section h2 {
-            text-align: center;
-            font-size: 2.5rem;
-            margin-bottom: 3rem;
-            color: #333;
-        }
-
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 2rem;
-            margin-bottom: 3rem;
-        }
-
-        .stat {
-            text-align: center;
-            padding: 1.5rem;
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            border-radius: 15px;
-            color: white;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .stat-number {
-            font-size: 2.5rem;
-            font-weight: bold;
-            display: block;
-        }
-
-        .stat-label {
-            font-size: 0.9rem;
-            opacity: 0.9;
-        }
-
-        .services {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-
-        .service-card {
-            background: white;
-            border-radius: 15px;
-            padding: 2rem;
-            text-align: center;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s;
-            border: 2px solid #f0f0f0;
-        }
-
-        .service-card:hover {
-            transform: translateY(-5px);
-            border-color: #5865F2;
-        }
-
-        .service-price {
-            font-size: 2rem;
-            font-weight: bold;
-            color: #5865F2;
-            margin-bottom: 1rem;
-        }
-
-        .service-title {
-            font-size: 1.3rem;
-            margin-bottom: 1rem;
-            color: #333;
-        }
-
-        .service-features {
-            list-style: none;
-            margin-bottom: 2rem;
-        }
-
-        .service-features li {
-            padding: 0.5rem 0;
-            border-bottom: 1px solid #f0f0f0;
-        }
-
-        .service-features li:last-child {
-            border-bottom: none;
-        }
-
-        .contact {
-            text-align: center;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 4rem 0;
-            border-radius: 20px;
-        }
-
-        .contact h2 {
-            color: white;
-            margin-bottom: 2rem;
-        }
-
-        .contact-info {
-            display: flex;
-            justify-content: center;
-            gap: 3rem;
-            margin-top: 2rem;
-        }
-
-        .contact-item {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .contact-item a {
-            color: white;
-            text-decoration: none;
-            font-weight: 500;
-        }
-
-        .contact-item a:hover {
-            text-decoration: underline;
-        }
-
-        footer {
-            text-align: center;
-            padding: 2rem 0;
-            color: white;
-            background: rgba(0, 0, 0, 0.1);
-        }
-
-        @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2rem;
-            }
-            
-            .nav {
-                flex-direction: column;
-                gap: 1rem;
-            }
-            
-            .contact-info {
-                flex-direction: column;
-                gap: 1rem;
-            }
-            
-            .header-content {
-                flex-direction: column;
-                gap: 1rem;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="discord-services.css">
+    <link rel="icon" type="image/jpeg" href="images/profile-pic.jpg">
+    <title>BaldApe Services - Professional Discord Community Management</title>
 </head>
 <body>
+    <!-- Header -->
     <header>
         <div class="container">
             <div class="header-content">
-                <div class="logo">Discord Services</div>
+                <div class="logo">
+                    <a href="index.html">BaldApe Services</a>
+                </div>
                 <nav class="nav">
-                    <a href="#about">About</a>
-                    <a href="#services">Services</a>
-                    <a href="#portfolio">Portfolio</a>
-                    <a href="#contact">Contact</a>
+                    <a href="about.html">About</a>
+                    <a href="services.html">Services</a>
+                    <a href="portfolio.html">Portfolio</a>
+                    <a href="testimonials.html">Testimonials</a>
+                    <a href="contact.html">Contact</a>
                 </nav>
             </div>
         </div>
     </header>
 
+    <!-- Hero Section -->
     <section class="hero">
         <div class="container">
-            <h1>Professional Discord Community Management</h1>
-            <p>Transform your Discord server into a thriving, organized community that drives engagement and growth. Specialized in sports betting, gaming, and hobby communities.</p>
-            <a href="#contact" class="cta-button">Get Started Today</a>
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1>Professional Discord Community Management</h1>
+                    <p>
+                        Transform your Discord server into a thriving, organized community that drives engagement and growth. 
+                        Specialized in sports betting, gaming, trading, and hobby communities of all sizes.
+                    </p>
+                    <a href="#contact" class="cta-button">Get Started Today</a>
+                </div>
+                <div class="hero-profile">
+                    <img src="images/profile-pic.jpg" alt="BaldApe - Discord Services Professional" class="profile-pic">
+                </div>
+            </div>
         </div>
     </section>
 
+    <!-- About Section -->
     <section id="about" class="section">
         <div class="container">
             <h2>Proven Track Record</h2>
             <div class="stats">
                 <div class="stat">
-                    <span class="stat-number">500+</span>
+                    <span class="stat-number">2000+</span>
                     <span class="stat-label">Total Members Managed</span>
                 </div>
                 <div class="stat">
-                    <span class="stat-number">4+</span>
+                    <span class="stat-number">5</span>
                     <span class="stat-label">Active Communities</span>
                 </div>
                 <div class="stat">
-                    <span class="stat-number">11</span>
+                    <span class="stat-number">12</span>
                     <span class="stat-label">Professional Bots</span>
                 </div>
                 <div class="stat">
@@ -301,109 +68,110 @@
                 </div>
             </div>
             <p style="text-align: center; font-size: 1.1rem; color: #666; max-width: 800px; margin: 0 auto;">
-                Experienced Discord administrator specializing in sports betting, gaming, and hobby communities. 
-                I create organized, engaging environments that drive growth and member retention using professional bot integration and proven management strategies.
+                Experienced Discord administrator with expertise in sports betting, gaming, trading, and related communities. 
+                I create organized, engaging environments using professional bot integration and proven management strategies that drive real results.
+                Specializing in grassroots betting communities under 1,000 followers.
             </p>
         </div>
     </section>
 
-    <section id="services" class="section">
+    <!-- Navigation Section -->
+    <section id="navigation" class="section">
         <div class="container">
-            <h2>Service Packages</h2>
-            <div class="services">
-                <div class="service-card">
-                    <div class="service-price">$50</div>
-                    <div class="service-title">Quick Setup</div>
-                    <ul class="service-features">
-                        <li>Essential channel structure</li>
-                        <li>Basic bot setup</li>
-                        <li>Role hierarchy</li>
-                        <li>Welcome system</li>
-                        <li>24-48 hour delivery</li>
-                    </ul>
-                    <a href="#contact" class="cta-button">Choose Plan</a>
+            <h2>Explore My Services</h2>
+            <div class="navigation-grid">
+                <div class="nav-card">
+                    <div class="nav-icon">👤</div>
+                    <h3>About Me</h3>
+                    <p>Learn about my background, expertise, and passion for community building.</p>
+                    <a href="about.html" class="cta-button">Learn More</a>
                 </div>
                 
-                <div class="service-card">
-                    <div class="service-price">$150</div>
-                    <div class="service-title">Premium Setup</div>
-                    <ul class="service-features">
-                        <li>Complete server architecture</li>
-                        <li>Advanced bot integration</li>
-                        <li>Custom permissions</li>
-                        <li>Engagement tools</li>
-                        <li>3-5 day delivery</li>
-                    </ul>
-                    <a href="#contact" class="cta-button">Choose Plan</a>
+                <div class="nav-card">
+                    <div class="nav-icon">💰</div>
+                    <h3>Services & Pricing</h3>
+                    <p>View my service packages and pricing options for Discord community management.</p>
+                    <a href="services.html" class="cta-button">View Services</a>
                 </div>
                 
-                <div class="service-card">
-                    <div class="service-price">$75</div>
-                    <div class="service-title">Server Audit</div>
-                    <ul class="service-features">
-                        <li>Complete analysis</li>
-                        <li>Performance optimization</li>
-                        <li>Security enhancement</li>
-                        <li>Growth recommendations</li>
-                        <li>2-3 day delivery</li>
-                    </ul>
-                    <a href="#contact" class="cta-button">Choose Plan</a>
-                </div>
-                
-                <div class="service-card">
-                    <div class="service-price">$100/mo</div>
-                    <div class="service-title">Monthly Management</div>
-                    <ul class="service-features">
-                        <li>Daily moderation</li>
-                        <li>Community engagement</li>
-                        <li>Bot maintenance</li>
-                        <li>Monthly reports</li>
-                        <li>7-day trial</li>
-                    </ul>
-                    <a href="#contact" class="cta-button">Choose Plan</a>
+                <div class="nav-card">
+                    <div class="nav-icon">📁</div>
+                    <h3>Portfolio</h3>
+                    <p>See examples of my work managing successful Discord communities.</p>
+                    <a href="portfolio.html" class="cta-button">View Portfolio</a>
                 </div>
             </div>
         </div>
     </section>
 
-    <section id="portfolio" class="section">
+    <!-- Consultation Section -->
+    <section class="section section-gradient">
         <div class="container">
-            <h2>Portfolio</h2>
-            <p style="text-align: center; font-size: 1.1rem; color: #666; margin-bottom: 3rem;">
-                Examples of my work managing successful Discord communities
+            <h2>Ready to Transform Your Discord Community?</h2>
+            <p style="text-align: center; margin-bottom: var(--spacing-lg);">
+                Book a free consultation to discuss your community goals and get a personalized action plan. 
+                Let's work together to create the perfect Discord server for your community.
             </p>
-            <!-- Add your screenshots and portfolio content here -->
-            <div style="text-align: center; padding: 3rem; background: #f8f9fa; border-radius: 10px;">
-                <p style="color: #666; font-style: italic;">Portfolio screenshots and case studies coming soon...</p>
+            <div class="consultation-highlights">
+                <div class="consultation-highlight">
+                    <div class="highlight-icon">🎯</div>
+                    <h3>Custom Strategy</h3>
+                    <p>Get a personalized plan tailored to your community's specific needs and goals.</p>
+                </div>
+                <div class="consultation-highlight">
+                    <div class="highlight-icon">💡</div>
+                    <h3>Expert Insights</h3>
+                    <p>Learn from years of experience managing successful Discord communities.</p>
+                </div>
+                <div class="consultation-highlight">
+                    <div class="highlight-icon">📊</div>
+                    <h3>Current Analysis</h3>
+                    <p>Receive a detailed assessment of your current server setup and opportunities.</p>
+                </div>
+                <div class="consultation-highlight">
+                    <div class="highlight-icon">🚀</div>
+                    <h3>Action Plan</h3>
+                    <p>Walk away with a clear roadmap to implement improvements immediately.</p>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: var(--spacing-xl);">
+                <a href="consultation.html" class="cta-button">Book Free Consultation</a>
             </div>
         </div>
     </section>
 
+    <!-- Contact Section -->
     <section id="contact" class="contact">
         <div class="container">
-            <h2>Ready to Get Started?</h2>
-            <p>Let's discuss your Discord community needs and create a professional setup that drives real results.</p>
+            <h2>Get In Touch</h2>
+            <p>
+                Have questions or want to learn more? Reach out through any of the channels below.
+            </p>
             <div class="contact-info">
                 <div class="contact-item">
                     <span>📧</span>
-                    <a href="mailto:your.email@example.com">your.email@example.com</a>
+                    <a href="mailto:BaldApeBiz@proton.me">BaldApeBiz@proton.me</a>
                 </div>
                 <div class="contact-item">
                     <span>💬</span>
-                    <span>Discord: YourUsername#0000</span>
+                    <span>Discord: z3rowolfhd (BaldApe)</span>
                 </div>
                 <div class="contact-item">
                     <span>🐦</span>
-                    <a href="https://twitter.com/yourusername">@yourusername</a>
+                    <a href="https://discord.gg/ZscedDjSct">Join BaldApe's Lab (Social Media Inside)</a>
                 </div>
             </div>
         </div>
     </section>
 
+    <!-- Footer -->
     <footer>
         <div class="container">
-            <p>&copy; 2024 Discord Services. Professional community management that drives results.</p>
+            <p>&copy; 2025 BaldApe Services.</p>
         </div>
     </footer>
+    
+    <!-- Scripts -->
+    <script src="script.js"></script>
 </body>
 </html>
