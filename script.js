@@ -318,3 +318,59 @@ function validateEmail(email) {
 function sanitizeInput(input) {
     return input.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '');
 } 
+
+// Helper function to send form data to Vercel API
+async function sendToDiscordAPI(formData) {
+  try {
+    const response = await fetch('/api/send-to-discord', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(formData),
+    });
+    return response.ok;
+  } catch (error) {
+    return false;
+  }
+}
+
+// Example: Update testimonial form submission
+const testimonialForm = document.getElementById('testimonial-form');
+if (testimonialForm) {
+  testimonialForm.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    const formData = {
+      name: this.elements['name']?.value,
+      community: this.elements['community']?.value,
+      role: this.elements['role']?.value,
+      privacy: this.elements['privacy']?.value,
+      testimonial: this.elements['testimonial']?.value,
+    };
+    const success = await sendToDiscordAPI(formData);
+    if (success) {
+      alert('Thank you for your testimonial!');
+      this.reset();
+    } else {
+      alert('There was an error submitting your testimonial. Please try again later.');
+    }
+  });
+}
+
+// Example: Update contact form submission
+const contactForm = document.getElementById('contact-form');
+if (contactForm) {
+  contactForm.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    const formData = {
+      name: this.elements['name']?.value,
+      email: this.elements['email']?.value,
+      message: this.elements['message']?.value,
+    };
+    const success = await sendToDiscordAPI(formData);
+    if (success) {
+      alert('Thank you for contacting us!');
+      this.reset();
+    } else {
+      alert('There was an error submitting your message. Please try again later.');
+    }
+  });
+} 
