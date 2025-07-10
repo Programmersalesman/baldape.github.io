@@ -3,10 +3,31 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  // Extract form data from the request body
-  const { name, email, message, community, role, privacy, testimonial } = req.body;
+  // Extract all possible fields
+  const {
+    name,
+    email,
+    message,
+    community,
+    role,
+    privacy,
+    testimonial,
+    rating,
+    features,
+    permission,
+    anonymous,
+    discord,
+    memberCount,
+    services,
+    goals,
+    challenges,
+    timeline,
+    budget,
+    preferredTime,
+    additionalInfo
+  } = req.body;
 
-  // Determine which webhook to use
+  // Determine which webhook to use and format content
   let webhookUrl;
   let content;
   if (testimonial) {
@@ -15,8 +36,27 @@ export default async function handler(req, res) {
       (name ? `**Name:** ${name}\n` : '') +
       (community ? `**Community:** ${community}\n` : '') +
       (role ? `**Role:** ${role}\n` : '') +
-      (privacy ? `**Privacy:** ${privacy}\n` : '') +
-      (testimonial ? `**Testimonial:** ${testimonial}\n` : '');
+      (email ? `**Email:** ${email}\n` : '') +
+      (rating ? `**Rating:** ${rating}\n` : '') +
+      (testimonial ? `**Testimonial:** ${testimonial}\n` : '') +
+      (features && features.length ? `**Features Liked:** ${Array.isArray(features) ? features.join(', ') : features}\n` : '') +
+      (permission ? `**Permission:** ${permission}\n` : '') +
+      (anonymous ? `**Privacy:** ${anonymous}\n` : '');
+  } else if (goals || discord || memberCount || services) {
+    webhookUrl = process.env.DISCORD_WEBHOOK_URL_CONTACT;
+    content = `**New Consultation Request**\n` +
+      (name ? `**Name:** ${name}\n` : '') +
+      (email ? `**Email:** ${email}\n` : '') +
+      (discord ? `**Discord:** ${discord}\n` : '') +
+      (community ? `**Community:** ${community}\n` : '') +
+      (memberCount ? `**Member Count:** ${memberCount}\n` : '') +
+      (services && services.length ? `**Services:** ${Array.isArray(services) ? services.join(', ') : services}\n` : '') +
+      (goals ? `**Goals:** ${goals}\n` : '') +
+      (challenges ? `**Challenges:** ${challenges}\n` : '') +
+      (timeline ? `**Timeline:** ${timeline}\n` : '') +
+      (budget ? `**Budget:** ${budget}\n` : '') +
+      (preferredTime ? `**Preferred Time:** ${preferredTime}\n` : '') +
+      (additionalInfo ? `**Additional Info:** ${additionalInfo}\n` : '');
   } else {
     webhookUrl = process.env.DISCORD_WEBHOOK_URL_CONTACT;
     content = `**New Contact Submission**\n` +
