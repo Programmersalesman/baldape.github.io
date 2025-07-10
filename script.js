@@ -374,3 +374,68 @@ if (contactForm) {
     }
   });
 } 
+
+// Add test buttons for sending dummy data to both forms
+function addTestButtons() {
+  const testContainer = document.createElement('div');
+  testContainer.style.position = 'fixed';
+  testContainer.style.bottom = '20px';
+  testContainer.style.right = '20px';
+  testContainer.style.zIndex = '9999';
+  testContainer.style.display = 'flex';
+  testContainer.style.flexDirection = 'column';
+  testContainer.style.gap = '8px';
+
+  // Testimonial button
+  const testimonialBtn = document.createElement('button');
+  testimonialBtn.textContent = 'Test Testimonial Form';
+  testimonialBtn.style.padding = '8px 16px';
+  testimonialBtn.style.background = '#5865F2';
+  testimonialBtn.style.color = 'white';
+  testimonialBtn.style.border = 'none';
+  testimonialBtn.style.borderRadius = '4px';
+  testimonialBtn.style.cursor = 'pointer';
+  testimonialBtn.onclick = async () => {
+    const dummyTestimonial = {
+      name: 'Test User',
+      community: "BaldApe's Lab",
+      role: 'member',
+      email: 'test@example.com',
+      rating: '5',
+      testimonial: 'This is a test testimonial!',
+      features: ['organization', 'bots'],
+      permission: 'yes',
+      anonymous: 'public',
+    };
+    const success = await sendToDiscordAPI(dummyTestimonial);
+    alert(success ? 'Testimonial sent!' : 'Testimonial failed!');
+  };
+
+  // Contact button
+  const contactBtn = document.createElement('button');
+  contactBtn.textContent = 'Test Contact Form';
+  contactBtn.style.padding = '8px 16px';
+  contactBtn.style.background = '#43B581';
+  contactBtn.style.color = 'white';
+  contactBtn.style.border = 'none';
+  contactBtn.style.borderRadius = '4px';
+  contactBtn.style.cursor = 'pointer';
+  contactBtn.onclick = async () => {
+    const dummyContact = {
+      name: 'Contact Tester',
+      email: 'contact@example.com',
+      message: 'This is a test contact message.'
+    };
+    const success = await sendToDiscordAPI(dummyContact);
+    alert(success ? 'Contact message sent!' : 'Contact message failed!');
+  };
+
+  testContainer.appendChild(testimonialBtn);
+  testContainer.appendChild(contactBtn);
+  document.body.appendChild(testContainer);
+}
+
+// Only show test buttons if running on Vercel preview or localhost
+if (window.location.hostname.includes('vercel.app') || window.location.hostname === 'localhost') {
+  window.addEventListener('DOMContentLoaded', addTestButtons);
+} 
