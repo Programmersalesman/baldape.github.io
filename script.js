@@ -333,7 +333,7 @@ async function sendToDiscordAPI(formData) {
   }
 }
 
-// Example: Update testimonial form submission
+// Updated testimonial form submission to collect all fields
 const testimonialForm = document.getElementById('testimonial-form');
 if (testimonialForm) {
   testimonialForm.addEventListener('submit', async function (e) {
@@ -342,20 +342,20 @@ if (testimonialForm) {
       name: this.elements['name']?.value,
       community: this.elements['community']?.value,
       role: this.elements['role']?.value,
-      privacy: this.elements['privacy']?.value,
+      email: this.elements['email']?.value,
+      rating: this.elements['rating']?.value,
       testimonial: this.elements['testimonial']?.value,
+      features: Array.from(this.querySelectorAll('input[name="features[]"]:checked')).map(cb => cb.value),
+      permission: this.elements['permission']?.value,
+      anonymous: this.elements['anonymous']?.value,
     };
     const success = await sendToDiscordAPI(formData);
-    if (success) {
-      alert('Thank you for your testimonial!');
-      this.reset();
-    } else {
-      alert('There was an error submitting your testimonial. Please try again later.');
-    }
+    alert(success ? 'Thank you for your testimonial!' : 'There was an error submitting your testimonial. Please try again later.');
+    if (success) this.reset();
   });
 }
 
-// Example: Update contact form submission
+// Updated contact form submission to collect all fields
 const contactForm = document.getElementById('contact-form');
 if (contactForm) {
   contactForm.addEventListener('submit', async function (e) {
@@ -366,12 +366,8 @@ if (contactForm) {
       message: this.elements['message']?.value,
     };
     const success = await sendToDiscordAPI(formData);
-    if (success) {
-      alert('Thank you for contacting us!');
-      this.reset();
-    } else {
-      alert('There was an error submitting your message. Please try again later.');
-    }
+    alert(success ? 'Thank you for contacting us!' : 'There was an error submitting your message. Please try again later.');
+    if (success) this.reset();
   });
 } 
 
