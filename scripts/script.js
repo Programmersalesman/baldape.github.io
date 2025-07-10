@@ -243,11 +243,15 @@ async function sendToDiscordAPI(formData) {
 
 // Updated testimonial form submission to collect all fields
 const testimonialForm = document.getElementById('testimonial-form');
-if (testimonialForm) {
+if (testimonialForm && !testimonialForm._handlerAttached) {
+  testimonialForm._handlerAttached = true;
+  const handlerId = Math.floor(Math.random() * 1000000);
+  console.log('Attaching testimonial form handler, id:', handlerId);
   testimonialForm.addEventListener('submit', async function (e) {
     e.preventDefault();
     const form = e.target;
-    console.log('Testimonial form submitted', form);
+    const submitId = Math.floor(Math.random() * 1000000);
+    console.log('Testimonial form submitted', form, 'handlerId:', handlerId, 'submitId:', submitId);
     const formData = {
       name: form.elements['name']?.value,
       community: form.elements['community']?.value,
