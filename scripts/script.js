@@ -28,9 +28,25 @@ document.addEventListener('DOMContentLoaded', function() {
     // Handle consultation form submission
     const consultationForm = document.querySelector('.consultation-form');
     if (consultationForm) {
-        consultationForm.addEventListener('submit', function(e) {
+        consultationForm.addEventListener('submit', async function(e) {
             e.preventDefault();
-            handleConsultationSubmission(this);
+            const formData = {
+                name: this.elements['name']?.value,
+                email: this.elements['email']?.value,
+                discord: this.elements['discord']?.value,
+                community: this.elements['community']?.value,
+                memberCount: this.elements['member-count']?.value,
+                services: Array.from(this.querySelectorAll('input[name="services[]"]:checked')).map(cb => cb.value),
+                goals: this.elements['goals']?.value,
+                challenges: this.elements['challenges']?.value,
+                timeline: this.elements['timeline']?.value,
+                budget: this.elements['budget']?.value,
+                preferredTime: this.elements['preferred-time']?.value,
+                additionalInfo: this.elements['additional-info']?.value,
+            };
+            const success = await sendToDiscordAPI(formData);
+            alert(success ? 'Thank you for your consultation request!' : 'There was an error submitting your request. Please try again later.');
+            if (success) this.reset();
         });
     }
 
@@ -76,142 +92,13 @@ document.addEventListener('DOMContentLoaded', function() {
 // ===== FORM HANDLING FUNCTIONS =====
 
 // ===== DISCORD WEBHOOK INTEGRATION =====
-function sendToDiscord(data, formType) {
-    let webhookUrl = '';
-    if (formType === 'consultation') {
-        webhookUrl = 'https://discord.com/api/webhooks/1392754627753148508/co6mUrFq4xt2WF6LeYUojD_qHJ7uLYuazqi0wOUPXkqKzxX88wFOpO82J0Z-2nPKGjG5';
-    } else if (formType === 'testimonial') {
-        webhookUrl = 'https://discord.com/api/webhooks/1392754692164943913/ZWI2n7njgO5_cAuIedFJImy30NV-FDWewop2Rxq1159HCIUmkzwBWzRigde1C7JkJFs9';
-    } else {
-        showNotification('Unknown form type for Discord webhook.', 'error');
-        return;
-    }
+// Remove old sendToDiscord and handleTestimonialSubmission functions
 
-    let embed = {
-        title: formType === 'consultation' ? '🎯 New Consultation Request' : '⭐ New Testimonial',
-        color: formType === 'consultation' ? 0x5865F2 : 0xFFD700,
-        fields: [],
-        timestamp: new Date().toISOString()
-    };
-
-    if (formType === 'consultation') {
-        embed.fields = [
-            { name: '👤 Name', value: data.name, inline: true },
-            { name: '📧 Email', value: data.email, inline: true },
-            { name: '🎮 Discord', value: data.discord || 'Not provided', inline: true },
-            { name: '🏠 Community', value: data.community, inline: true },
-            { name: '👥 Member Count', value: data.memberCount || 'Not specified', inline: true },
-            { name: '🎯 Goals', value: data.goals, inline: false },
-            { name: '⚠️ Challenges', value: data.challenges || 'Not specified', inline: false },
-            { name: '⏰ Timeline', value: data.timeline || 'Not specified', inline: true },
-            { name: '💰 Budget', value: data.budget || 'Not specified', inline: true },
-            { name: '📅 Preferred Time', value: data.preferredTime || 'Not specified', inline: true },
-            { name: '📝 Additional Info', value: data.additionalInfo || 'None', inline: false }
-        ];
-    } else {
-        embed.fields = [
-            { name: '👤 Name', value: data.anonymous === 'anonymous' ? 'Anonymous' : data.name, inline: true },
-            { name: '🏠 Community', value: data.community, inline: true },
-            { name: '🎭 Role', value: data.role, inline: true },
-            { name: '⭐ Rating', value: '★'.repeat(data.rating), inline: true },
-            { name: '💬 Testimonial', value: data.testimonial, inline: false },
-            { name: '❤️ Features Liked', value: data.features && data.features.length ? data.features.join(', ') : 'None', inline: false }
-        ];
-    }
-
-    fetch(webhookUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        mode: 'no-cors',
-        body: JSON.stringify({ embeds: [embed] })
-    });
-
-    showNotification(
-        formType === 'consultation'
-            ? 'Thank you for your consultation request! I\'ll get back to you within 24 hours.'
-            : 'Thank you for sharing your experience! We\'ll review and add it to our featured testimonials.',
-        'success'
-    );
-}
-
-function handleConsultationSubmission(form) {
-    const formData = new FormData(form);
-    const consultationData = {
-        name: formData.get('name'),
-        email: formData.get('email'),
-        discord: formData.get('discord'),
-        community: formData.get('community'),
-        memberCount: formData.get('member-count'),
-        services: formData.getAll('services[]'),
-        goals: formData.get('goals'),
-        challenges: formData.get('challenges'),
-        timeline: formData.get('timeline'),
-        budget: formData.get('budget'),
-        preferredTime: formData.get('preferred-time'),
-        additionalInfo: formData.get('additional-info')
-    };
-
-    // Validate required fields
-    if (!consultationData.name || !consultationData.email || !consultationData.community || !consultationData.goals) {
-        showNotification('Please fill in all required fields.', 'error');
-        return;
-    }
-
-    if (!validateEmail(consultationData.email)) {
-        showNotification('Please enter a valid email address.', 'error');
-        return;
-    }
-
-    // Send to Discord webhook
-    sendToDiscord(consultationData, 'consultation');
-    
-    // Reset form
-    form.reset();
-}
-
-function handleTestimonialSubmission(form) {
-    const formData = new FormData(form);
-    const testimonialData = {
-        name: formData.get('name'),
-        community: formData.get('community'),
-        role: formData.get('role'),
-        email: formData.get('email'),
-        rating: formData.get('rating'),
-        testimonial: formData.get('testimonial'),
-        features: formData.getAll('features[]'),
-        permission: formData.get('permission'),
-        anonymous: formData.get('anonymous')
-    };
-
-    // Validate required fields
-    if (!testimonialData.name || !testimonialData.community || !testimonialData.rating || !testimonialData.testimonial) {
-        showNotification('Please fill in all required fields.', 'error');
-        return;
-    }
-
-    if (!testimonialData.permission || testimonialData.permission !== 'yes') {
-        showNotification('Please give permission to use your testimonial.', 'error');
-        return;
-    }
-
-    // Send to Discord webhook
-    sendToDiscord(testimonialData, 'testimonial');
-    
-    // Reset form
-    form.reset();
-    
-    // Reset rating display
-    const ratingLabels = form.querySelectorAll('.rating-input label');
-    ratingLabels.forEach(label => {
-        label.style.color = 'inherit';
-    });
-}
-
+// Update the visible rating value when a star is clicked
 function updateRatingDisplay(selectedInput) {
     const ratingContainer = selectedInput.closest('.rating-input');
     const labels = ratingContainer.querySelectorAll('label');
     const rating = parseInt(selectedInput.value);
-    
     labels.forEach((label, index) => {
         if (index < rating) {
             label.style.color = '#ffd700';
@@ -219,6 +106,11 @@ function updateRatingDisplay(selectedInput) {
             label.style.color = 'inherit';
         }
     });
+    // Update the visible rating value
+    const ratingValue = document.getElementById('rating-value');
+    if (ratingValue) {
+        ratingValue.textContent = `Selected Rating: ${rating}`;
+    }
 }
 
 // ===== NOTIFICATION SYSTEM =====
