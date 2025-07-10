@@ -244,21 +244,22 @@ const testimonialForm = document.getElementById('testimonial-form');
 if (testimonialForm) {
   testimonialForm.addEventListener('submit', async function (e) {
     e.preventDefault();
-    console.log('Testimonial form submitted');
+    const form = e.target;
+    console.log('Testimonial form submitted', form);
     const formData = {
-      name: this.elements['name']?.value,
-      community: this.elements['community']?.value,
-      role: this.elements['role']?.value,
-      email: this.elements['email']?.value,
-      rating: this.elements['rating']?.value,
-      testimonial: this.elements['testimonial']?.value,
-      features: Array.from(this.querySelectorAll('input[name="features[]"]:checked')).map(cb => cb.value),
-      permission: this.elements['permission']?.value,
-      anonymous: this.elements['anonymous']?.value,
+      name: form.elements['name']?.value,
+      community: form.elements['community']?.value,
+      role: form.elements['role']?.value,
+      email: form.elements['email']?.value,
+      rating: form.elements['rating']?.value,
+      testimonial: form.elements['testimonial']?.value,
+      features: Array.from(form.querySelectorAll('input[name="features[]"]:checked')).map(cb => cb.value),
+      permission: form.elements['permission']?.value,
+      anonymous: form.elements['anonymous']?.value,
     };
     const success = await sendToDiscordAPI(formData);
     alert(success ? 'Thank you for your testimonial!' : 'There was an error submitting your testimonial. Please try again later.');
-    if (success) this.reset();
+    if (success) form.reset();
   });
 }
 
