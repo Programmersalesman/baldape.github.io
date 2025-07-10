@@ -30,6 +30,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (consultationForm) {
         consultationForm.addEventListener('submit', async function(e) {
             e.preventDefault();
+            console.log('Consultation form submitted');
             const formData = {
                 name: this.elements['name']?.value,
                 email: this.elements['email']?.value,
@@ -243,6 +244,7 @@ const testimonialForm = document.getElementById('testimonial-form');
 if (testimonialForm) {
   testimonialForm.addEventListener('submit', async function (e) {
     e.preventDefault();
+    console.log('Testimonial form submitted');
     const formData = {
       name: this.elements['name']?.value,
       community: this.elements['community']?.value,

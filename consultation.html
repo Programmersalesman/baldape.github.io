@@ -86,22 +86,22 @@
                 <div class="form-grid">
                     <div class="form-group">
                         <label for="name">Full Name *</label>
-                        <input type="text" id="name" name="name" required>
+                        <input type="text" id="name" name="name" required value="Test Consultation">
                     </div>
                     
                     <div class="form-group">
                         <label for="email">Email Address *</label>
-                        <input type="email" id="email" name="email" required>
+                        <input type="email" id="email" name="email" required value="consult@example.com">
                     </div>
                     
                     <div class="form-group">
                         <label for="discord">Discord Username</label>
-                        <input type="text" id="discord" name="discord" placeholder="username#0000">
+                        <input type="text" id="discord" name="discord" placeholder="username#0000" value="testuser#1234">
                     </div>
                     
                     <div class="form-group">
                         <label for="community">Community Name *</label>
-                        <input type="text" id="community" name="community" required>
+                        <input type="text" id="community" name="community" required value="Test Community">
                     </div>
                 </div>
                 
@@ -109,7 +109,7 @@
                     <label for="member-count">Current Member Count</label>
                     <select id="member-count" name="member-count">
                         <option value="">Select member count</option>
-                        <option value="1-50">1-50 members</option>
+                        <option value="1-50" selected>1-50 members</option>
                         <option value="51-100">51-100 members</option>
                         <option value="101-500">101-500 members</option>
                         <option value="501-1000">501-1000 members</option>
@@ -121,11 +121,11 @@
                     <label for="services">Services of Interest *</label>
                     <div class="checkbox-group">
                         <label class="checkbox-label">
-                            <input type="checkbox" name="services[]" value="quick-setup">
+                            <input type="checkbox" name="services[]" value="quick-setup" checked>
                             <span>Quick Setup ($50)</span>
                         </label>
                         <label class="checkbox-label">
-                            <input type="checkbox" name="services[]" value="premium-setup">
+                            <input type="checkbox" name="services[]" value="premium-setup" checked>
                             <span>Premium Setup ($100)</span>
                         </label>
                         <label class="checkbox-label">
@@ -145,21 +145,19 @@
                 
                 <div class="form-group">
                     <label for="goals">What are your main goals? *</label>
-                    <textarea id="goals" name="goals" rows="4" required 
-                              placeholder="Describe what you want to achieve with your Discord community..."></textarea>
+                    <textarea id="goals" name="goals" rows="4" required>Grow the community and improve engagement.</textarea>
                 </div>
                 
                 <div class="form-group">
                     <label for="challenges">Current Challenges</label>
-                    <textarea id="challenges" name="challenges" rows="3" 
-                              placeholder="What issues are you currently facing with your server?"></textarea>
+                    <textarea id="challenges" name="challenges" rows="3">Low activity and unclear rules.</textarea>
                 </div>
                 
                 <div class="form-group">
                     <label for="timeline">Preferred Timeline</label>
                     <select id="timeline" name="timeline">
                         <option value="">Select timeline</option>
-                        <option value="asap">As soon as possible</option>
+                        <option value="asap" selected>As soon as possible</option>
                         <option value="1-2-weeks">1-2 weeks</option>
                         <option value="1-month">1 month</option>
                         <option value="flexible">Flexible</option>
@@ -170,7 +168,7 @@
                     <label for="budget">Budget Range</label>
                     <select id="budget" name="budget">
                         <option value="">Select budget range</option>
-                        <option value="50-100">$50-$100</option>
+                        <option value="50-100" selected>$50-$100</option>
                         <option value="100-200">$100-$200</option>
                         <option value="200-500">$200-$500</option>
                         <option value="500+">$500+</option>
@@ -182,7 +180,7 @@
                     <label for="preferred-time">Preferred Consultation Time</label>
                     <select id="preferred-time" name="preferred-time">
                         <option value="">Select preferred time</option>
-                        <option value="morning">Morning (9 AM - 12 PM EST)</option>
+                        <option value="morning" selected>Morning (9 AM - 12 PM EST)</option>
                         <option value="afternoon">Afternoon (12 PM - 5 PM EST)</option>
                         <option value="evening">Evening (5 PM - 9 PM EST)</option>
                         <option value="weekend">Weekend</option>
@@ -192,8 +190,7 @@
                 
                 <div class="form-group">
                     <label for="additional-info">Additional Information</label>
-                    <textarea id="additional-info" name="additional-info" rows="3" 
-                              placeholder="Any other details you'd like to share..."></textarea>
+                    <textarea id="additional-info" name="additional-info" rows="3">No additional info.</textarea>
                 </div>
                 
                 <button type="submit" class="cta-button">Schedule Consultation</button>
