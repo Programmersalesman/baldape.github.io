@@ -284,7 +284,7 @@ function showNotification(message, type = 'info') {
         padding: 15px 20px;
         border-radius: 5px;
         box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        z-index: 1000;
+        z-index: 2001;
         max-width: 400px;
         animation: slideIn 0.3s ease;
         margin-top: ${getNotificationOffset()}px;
@@ -477,6 +477,7 @@ if (consultationForm && !consultationForm._handlerAttached) {
 
 // Attach handler for consultation modal form (id='consultation-form-modal')
 const consultationFormModal = document.getElementById('consultation-form-modal');
+const consultationModal = document.getElementById('consultation-modal');
 if (consultationFormModal && !consultationFormModal._handlerAttached) {
   consultationFormModal._handlerAttached = true;
   const handlerId = Math.floor(Math.random() * 1000000);
@@ -507,7 +508,13 @@ if (consultationFormModal && !consultationFormModal._handlerAttached) {
         : `❌ Consultation request failed. (Submission ID: ${submitId})\nThere was an error sending your request. Please try again later or contact support.`,
       success ? 'success' : 'error'
     );
-    if (success) form.reset();
+    if (success) {
+      form.reset();
+      if (consultationModal) {
+        consultationModal.style.display = 'none';
+        document.body.style.overflow = '';
+      }
+    }
   });
 }
 
