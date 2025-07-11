@@ -475,6 +475,42 @@ if (consultationForm && !consultationForm._handlerAttached) {
   });
 }
 
+// Attach handler for consultation modal form (id='consultation-form-modal')
+const consultationFormModal = document.getElementById('consultation-form-modal');
+if (consultationFormModal && !consultationFormModal._handlerAttached) {
+  consultationFormModal._handlerAttached = true;
+  const handlerId = Math.floor(Math.random() * 1000000);
+  console.log('Attaching consultation modal form handler, id:', handlerId);
+  consultationFormModal.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const form = e.target;
+    const submitId = Math.floor(Math.random() * 1000000);
+    console.log('Consultation modal form submitted', form, 'handlerId:', handlerId, 'submitId:', submitId);
+    const formData = {
+      name: form.elements['name']?.value,
+      email: form.elements['email']?.value,
+      discord: form.elements['discord']?.value,
+      community: form.elements['community']?.value,
+      memberCount: form.elements['member-count']?.value,
+      services: Array.from(form.querySelectorAll('input[name="services[]"]:checked')).map(cb => cb.value),
+      goals: form.elements['goals']?.value,
+      challenges: form.elements['challenges']?.value,
+      timeline: form.elements['timeline']?.value,
+      budget: form.elements['budget']?.value,
+      preferredTime: form.elements['preferred-time']?.value,
+      additionalInfo: form.elements['additional-info']?.value,
+    };
+    const success = await sendToDiscordAPI(formData);
+    showNotification(
+      success
+        ? `✅ Consultation request sent! (Submission ID: ${submitId})\nThank you for booking a consultation. You will receive a follow-up within 24 hours.`
+        : `❌ Consultation request failed. (Submission ID: ${submitId})\nThere was an error sending your request. Please try again later or contact support.`,
+      success ? 'success' : 'error'
+    );
+    if (success) form.reset();
+  });
+}
+
 // Add test buttons below each form (only on localhost or Vercel preview)
 function injectTestButtons() {
   if (!(window.location.hostname.includes('vercel.app') || window.location.hostname === 'localhost')) return;
