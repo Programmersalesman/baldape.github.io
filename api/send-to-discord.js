@@ -42,7 +42,7 @@ export default async function handler(req, res) {
       (features && features.length ? `**Features Liked:** ${Array.isArray(features) ? features.join(', ') : features}\n` : '') +
       (permission ? `**Permission:** ${permission}\n` : '') +
       (anonymous ? `**Privacy:** ${anonymous}\n` : '');
-  } else if (goals || discord || memberCount || services) {
+  } else if (goals) {
     webhookUrl = process.env.DISCORD_WEBHOOK_URL_CONTACT;
     content = `**New Consultation Request**\n` +
       (name ? `**Name:** ${name}\n` : '') +
