@@ -2,69 +2,41 @@
 // BaldApe Services - Form Handling & Interactivity
 // ==========================================================================
 
-document.addEventListener('DOMContentLoaded', function() {
-    // Handle consultation form submission
-    const consultationForm = document.querySelector('.consultation-form');
-    if (consultationForm) {
-        consultationForm.addEventListener('submit', async function(e) {
-            e.preventDefault();
-            console.log('Consultation form submitted');
-            const formData = {
-                name: this.elements['name']?.value,
-                email: this.elements['email']?.value,
-                discord: this.elements['discord']?.value,
-                community: this.elements['community']?.value,
-                memberCount: this.elements['member-count']?.value,
-                services: Array.from(this.querySelectorAll('input[name="services[]"]:checked')).map(cb => cb.value),
-                goals: this.elements['goals']?.value,
-                challenges: this.elements['challenges']?.value,
-                timeline: this.elements['timeline']?.value,
-                budget: this.elements['budget']?.value,
-                preferredTime: this.elements['preferred-time']?.value,
-                additionalInfo: this.elements['additional-info']?.value,
-            };
-            const success = await sendToDiscordAPI(formData);
-            showNotification(success ? 'Thank you for your consultation request!' : 'There was an error submitting your request. Please try again later.', success ? 'success' : 'error');
-            if (success) this.reset();
-        });
-    }
-
-    // Handle rating input interactions
-    const ratingInputs = document.querySelectorAll('.rating-input input[type="radio"]');
-    ratingInputs.forEach(input => {
-        input.addEventListener('change', function() {
-            updateRatingDisplay(this);
-        });
+// Handle rating input interactions
+const ratingInputs = document.querySelectorAll('.rating-input input[type="radio"]');
+ratingInputs.forEach(input => {
+    input.addEventListener('change', function() {
+        updateRatingDisplay(this);
     });
+});
 
 
 
-    // Smooth scrolling for anchor links
-    const anchorLinks = document.querySelectorAll('a[href^="#"]');
-    anchorLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            const targetId = this.getAttribute('href').substring(1);
-            const targetElement = document.getElementById(targetId);
-            if (targetElement) {
-                targetElement.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
-                });
-            }
-        });
+// Smooth scrolling for anchor links
+const anchorLinks = document.querySelectorAll('a[href^="#"]');
+anchorLinks.forEach(link => {
+    link.addEventListener('click', function(e) {
+        e.preventDefault();
+        const targetId = this.getAttribute('href').substring(1);
+        const targetElement = document.getElementById(targetId);
+        if (targetElement) {
+            targetElement.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
     });
+});
 
-    // Add hover effects to server cards
-    const serverCards = document.querySelectorAll('.server-card');
-    serverCards.forEach(card => {
-        card.addEventListener('mouseenter', function() {
-            this.style.transform = 'translateY(-5px)';
-        });
-        
-        card.addEventListener('mouseleave', function() {
-            this.style.transform = 'translateY(0)';
-        });
+// Add hover effects to server cards
+const serverCards = document.querySelectorAll('.server-card');
+serverCards.forEach(card => {
+    card.addEventListener('mouseenter', function() {
+        this.style.transform = 'translateY(-5px)';
+    });
+    
+    card.addEventListener('mouseleave', function() {
+        this.style.transform = 'translateY(0)';
     });
 });
 
