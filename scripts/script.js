@@ -3,30 +3,6 @@
 // ==========================================================================
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Handle testimonial form submission
-    const testimonialForm = document.getElementById('testimonial-form');
-    if (testimonialForm) {
-        testimonialForm.addEventListener('submit', async function(e) {
-            e.preventDefault();
-            const form = e.target;
-            console.log('Testimonial form submitted', form);
-            const formData = {
-                name: form.elements['name']?.value,
-                community: form.elements['community']?.value,
-                role: form.elements['role']?.value,
-                email: form.elements['email']?.value,
-                rating: form.elements['rating']?.value,
-                testimonial: form.elements['testimonial']?.value,
-                features: Array.from(form.querySelectorAll('input[name="features[]"]:checked')).map(cb => cb.value),
-                permission: form.elements['permission']?.value,
-                anonymous: form.elements['anonymous']?.value,
-            };
-            const success = await sendToDiscordAPI(formData);
-            alert(success ? 'Thank you for your testimonial!' : 'There was an error submitting your testimonial. Please try again later.');
-            if (success) form.reset();
-        });
-    }
-
     // Handle consultation form submission
     const consultationForm = document.querySelector('.consultation-form');
     if (consultationForm) {
