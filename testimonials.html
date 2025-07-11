@@ -126,7 +126,7 @@
     </section>
 
     <!-- Testimonial Form Section -->
-    <section id="testimonial-form" class="section">
+    <section id="testimonial-section" class="section">
         <div class="container">
             <h2>Share Your Experience</h2>
             <p style="text-align: center; margin-bottom: var(--spacing-lg);">
@@ -138,14 +138,14 @@
                 <div class="form-grid">
                     <div class="form-group">
                         <label for="name">Your Name *</label>
-                        <input type="text" id="name" name="name" required value="Test User">
+                        <input type="text" id="name" name="name" required>
                     </div>
                     
                                     <div class="form-group">
                     <label for="community">Which Community Are You From? *</label>
                     <select id="community" name="community" required>
                         <option value="">Select your community</option>
-                        <option value="baldapes-lab" selected>BaldApe's Lab</option>
+                        <option value="baldapes-lab">BaldApe's Lab</option>
                         <option value="panda-picks">Panda Picks</option>
                         <option value="sportsscijacob">SportsSciJacob</option>
                         <option value="cantstopthecaptv">CantStopTheCapTV</option>
@@ -157,7 +157,7 @@
                     <label for="role">Your Role in the Community</label>
                     <select id="role" name="role">
                         <option value="">Select your role</option>
-                        <option value="member" selected>Regular Member</option>
+                        <option value="member">Regular Member</option>
                         <option value="moderator">Moderator</option>
                         <option value="admin">Administrator</option>
                         <option value="owner">Community Owner</option>
@@ -167,14 +167,14 @@
                     
                     <div class="form-group">
                         <label for="email">Email Address</label>
-                        <input type="email" id="email" name="email" placeholder="Optional - for follow-up" value="test@example.com">
+                        <input type="email" id="email" name="email" placeholder="Optional - for follow-up">
                     </div>
                 </div>
                 
                 <div class="form-group">
                     <label for="rating">Rating *</label>
                     <div class="rating-input">
-                        <input type="radio" id="star5" name="rating" value="5" required checked>
+                        <input type="radio" id="star5" name="rating" value="5" required>
                         <label for="star5">⭐</label>
                         <input type="radio" id="star4" name="rating" value="4">
                         <label for="star4">⭐</label>
@@ -185,19 +185,19 @@
                         <input type="radio" id="star1" name="rating" value="1">
                         <label for="star1">⭐</label>
                     </div>
-                    <div id="rating-value" style="text-align:center; margin-top:8px; font-weight:bold;">Selected Rating: 5</div>
+                    <div id="rating-value" style="text-align:center; margin-top:8px; font-weight:bold;">Selected Rating:</div>
                 </div>
                 
                 <div class="form-group">
                     <label for="testimonial">Your Experience *</label>
-                    <textarea id="testimonial" name="testimonial" rows="6" required>Great service! This is a test testimonial.</textarea>
+                    <textarea id="testimonial" name="testimonial" rows="6" required></textarea>
                 </div>
                 
                 <div class="form-group">
                     <label for="features">What Features Do You Like Most?</label>
                     <div class="checkbox-group">
                         <label class="checkbox-label">
-                            <input type="checkbox" name="features[]" value="organization" checked>
+                            <input type="checkbox" name="features[]" value="organization">
                             <span>Channel Organization</span>
                         </label>
                         <label class="checkbox-label">
@@ -227,7 +227,7 @@
                     <label>Permission to Use Testimonial *</label>
                     <div class="radio-group">
                         <label class="radio-label">
-                            <input type="radio" name="permission" value="yes" required checked>
+                            <input type="radio" name="permission" value="yes" required>
                             <span>Yes, I give permission to use this testimonial on the website</span>
                         </label>
                         <label class="radio-label">
@@ -241,7 +241,7 @@
                     <label>Privacy Preference</label>
                     <div class="radio-group">
                         <label class="radio-label">
-                            <input type="radio" name="anonymous" value="public" checked>
+                            <input type="radio" name="anonymous" value="public">
                             <span>Public (show my username)</span>
                         </label>
                         <label class="radio-label">
@@ -251,7 +251,7 @@
                     </div>
                 </div>
                 
-                <button type="submit" class="cta-button">Submit Testimonial</button>
+                <button type="submit" class="cta-button" id="testimonial-submit">Submit Testimonial</button>
             </form>
         </div>
     </section>

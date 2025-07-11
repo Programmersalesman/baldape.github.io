@@ -245,83 +245,93 @@ if (testimonialForm && !testimonialForm._handlerAttached) {
   });
 }
 
-// Updated contact form submission to collect all fields
-const contactForm = document.getElementById('contact-form');
-if (contactForm) {
-  contactForm.addEventListener('submit', async function (e) {
+// Updated consultation form submission to collect all fields
+const consultationForm = document.getElementById('consultation-form');
+if (consultationForm && !consultationForm._handlerAttached) {
+  consultationForm._handlerAttached = true;
+  const handlerId = Math.floor(Math.random() * 1000000);
+  console.log('Attaching consultation form handler, id:', handlerId);
+  consultationForm.addEventListener('submit', async function(e) {
     e.preventDefault();
     const formData = {
       name: this.elements['name']?.value,
       email: this.elements['email']?.value,
-      message: this.elements['message']?.value,
+      discord: this.elements['discord']?.value,
+      community: this.elements['community']?.value,
+      memberCount: this.elements['member-count']?.value,
+      services: Array.from(this.querySelectorAll('input[name="services[]"]:checked')).map(cb => cb.value),
+      goals: this.elements['goals']?.value,
+      challenges: this.elements['challenges']?.value,
+      timeline: this.elements['timeline']?.value,
+      budget: this.elements['budget']?.value,
+      preferredTime: this.elements['preferred-time']?.value,
+      additionalInfo: this.elements['additional-info']?.value,
     };
     const success = await sendToDiscordAPI(formData);
-    alert(success ? 'Thank you for contacting us!' : 'There was an error submitting your message. Please try again later.');
+    alert(success ? 'Thank you for your consultation request!' : 'There was an error submitting your request. Please try again later.');
     if (success) this.reset();
   });
-} 
-
-// Add test buttons for sending dummy data to both forms
-function addTestButtons() {
-  const testContainer = document.createElement('div');
-  testContainer.style.position = 'fixed';
-  testContainer.style.bottom = '20px';
-  testContainer.style.right = '20px';
-  testContainer.style.zIndex = '9999';
-  testContainer.style.display = 'flex';
-  testContainer.style.flexDirection = 'column';
-  testContainer.style.gap = '8px';
-
-  // Testimonial button
-  const testimonialBtn = document.createElement('button');
-  testimonialBtn.textContent = 'Test Testimonial Form';
-  testimonialBtn.style.padding = '8px 16px';
-  testimonialBtn.style.background = '#5865F2';
-  testimonialBtn.style.color = 'white';
-  testimonialBtn.style.border = 'none';
-  testimonialBtn.style.borderRadius = '4px';
-  testimonialBtn.style.cursor = 'pointer';
-  testimonialBtn.onclick = async () => {
-    const dummyTestimonial = {
-      name: 'Test User',
-      community: "BaldApe's Lab",
-      role: 'member',
-      email: 'test@example.com',
-      rating: '5',
-      testimonial: 'This is a test testimonial!',
-      features: ['organization', 'bots'],
-      permission: 'yes',
-      anonymous: 'public',
-    };
-    const success = await sendToDiscordAPI(dummyTestimonial);
-    alert(success ? 'Testimonial sent!' : 'Testimonial failed!');
-  };
-
-  // Contact button
-  const contactBtn = document.createElement('button');
-  contactBtn.textContent = 'Test Contact Form';
-  contactBtn.style.padding = '8px 16px';
-  contactBtn.style.background = '#43B581';
-  contactBtn.style.color = 'white';
-  contactBtn.style.border = 'none';
-  contactBtn.style.borderRadius = '4px';
-  contactBtn.style.cursor = 'pointer';
-  contactBtn.onclick = async () => {
-    const dummyContact = {
-      name: 'Contact Tester',
-      email: 'contact@example.com',
-      message: 'This is a test contact message.'
-    };
-    const success = await sendToDiscordAPI(dummyContact);
-    alert(success ? 'Contact message sent!' : 'Contact message failed!');
-  };
-
-  testContainer.appendChild(testimonialBtn);
-  testContainer.appendChild(contactBtn);
-  document.body.appendChild(testContainer);
 }
 
-// Only show test buttons if running on Vercel preview or localhost
-if (window.location.hostname.includes('vercel.app') || window.location.hostname === 'localhost') {
-  window.addEventListener('DOMContentLoaded', addTestButtons);
-} 
+// Add test buttons below each form (only on localhost or Vercel preview)
+function injectTestButtons() {
+  if (!(window.location.hostname.includes('vercel.app') || window.location.hostname === 'localhost')) return;
+
+  // Testimonial form test button
+  const testimonialForm = document.getElementById('testimonial-form');
+  if (testimonialForm && !document.getElementById('testimonial-test-btn')) {
+    const testBtn = document.createElement('button');
+    testBtn.type = 'button';
+    testBtn.id = 'testimonial-test-btn';
+    testBtn.textContent = 'Fill with Test Data';
+    testBtn.className = 'cta-button';
+    testBtn.style.marginTop = '16px';
+    testBtn.onclick = () => {
+      testimonialForm.elements['name'].value = 'Test User';
+      testimonialForm.elements['community'].value = 'baldapes-lab';
+      testimonialForm.elements['role'].value = 'member';
+      testimonialForm.elements['email'].value = 'test@example.com';
+      testimonialForm.elements['rating'].value = '5';
+      testimonialForm.elements['testimonial'].value = 'This is a test testimonial!';
+      testimonialForm.querySelectorAll('input[name="features[]"]').forEach(cb => cb.checked = false);
+      testimonialForm.querySelector('input[name="features[]"][value="organization"]').checked = true;
+      testimonialForm.querySelector('input[name="features[]"][value="bots"]').checked = true;
+      testimonialForm.querySelector('input[name="permission"][value="yes"]').checked = true;
+      testimonialForm.querySelector('input[name="anonymous"][value="public"]').checked = true;
+      if (typeof updateRatingDisplay === 'function') {
+        updateRatingDisplay(testimonialForm.querySelector('input[name="rating"]:checked'));
+      }
+    };
+    testimonialForm.appendChild(testBtn);
+  }
+
+  // Consultation form test button
+  const consultationForm = document.getElementById('consultation-form');
+  if (consultationForm && !document.getElementById('consultation-test-btn')) {
+    const testBtn = document.createElement('button');
+    testBtn.type = 'button';
+    testBtn.id = 'consultation-test-btn';
+    testBtn.textContent = 'Fill with Test Data';
+    testBtn.className = 'cta-button';
+    testBtn.style.marginTop = '16px';
+    testBtn.onclick = () => {
+      consultationForm.elements['name'].value = 'Test Consultation';
+      consultationForm.elements['email'].value = 'consult@example.com';
+      consultationForm.elements['discord'].value = 'testuser#1234';
+      consultationForm.elements['community'].value = 'Test Community';
+      consultationForm.elements['member-count'].value = '1-50';
+      consultationForm.querySelectorAll('input[name="services[]"]').forEach(cb => cb.checked = false);
+      consultationForm.querySelector('input[name="services[]"][value="quick-setup"]').checked = true;
+      consultationForm.querySelector('input[name="services[]"][value="premium-setup"]').checked = true;
+      consultationForm.elements['goals'].value = 'Grow the community and improve engagement.';
+      consultationForm.elements['challenges'].value = 'Low activity and unclear rules.';
+      consultationForm.elements['timeline'].value = 'asap';
+      consultationForm.elements['budget'].value = '50-100';
+      consultationForm.elements['preferred-time'].value = 'morning';
+      consultationForm.elements['additional-info'].value = 'No additional info.';
+    };
+    consultationForm.appendChild(testBtn);
+  }
+}
+
+window.addEventListener('DOMContentLoaded', injectTestButtons); 
