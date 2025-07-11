@@ -144,7 +144,7 @@ function getNotificationOffset() {
     const notifications = document.querySelectorAll('.notification');
     let offset = 0;
     notifications.forEach(n => {
-        offset += n.offsetHeight + 4; // Reduce spacing to 4px
+        offset += n.offsetHeight + 1; // Reduce spacing to 1px
     });
     return offset;
 }
@@ -153,7 +153,7 @@ function updateNotificationOffsets() {
     let offset = 0;
     notifications.forEach(n => {
         n.style.top = (20 + offset) + 'px';
-        offset += n.offsetHeight + 4; // Reduce spacing to 4px
+        offset += n.offsetHeight + 1; // Reduce spacing to 1px
     });
 }
 
@@ -226,6 +226,9 @@ async function sendToDiscordAPI(formData) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(formData),
     });
+    let respBody = '';
+    try { respBody = await response.text(); } catch (e) {}
+    console.log('sendToDiscordAPI response:', response.status, respBody);
     return response.ok;
   } catch (error) {
     return false;
@@ -255,7 +258,12 @@ if (testimonialForm && !testimonialForm._handlerAttached) {
       anonymous: form.elements['anonymous']?.value,
     };
     const success = await sendToDiscordAPI(formData);
-    showNotification(success ? 'Thank you for your testimonial!' : 'There was an error submitting your testimonial. Please try again later.', success ? 'success' : 'error');
+    showNotification(
+      success
+        ? `✅ Testimonial submitted successfully! (Submission ID: ${submitId})\nThank you for sharing your experience. Your testimonial will be reviewed and may appear on the site soon.`
+        : `❌ Testimonial submission failed. (Submission ID: ${submitId})\nThere was an error sending your testimonial. Please try again later or contact support.`,
+      success ? 'success' : 'error'
+    );
     if (success) form.reset();
   });
 }
@@ -287,7 +295,12 @@ if (consultationForm && !consultationForm._handlerAttached) {
       additionalInfo: form.elements['additional-info']?.value,
     };
     const success = await sendToDiscordAPI(formData);
-    showNotification(success ? 'Thank you for your consultation request!' : 'There was an error submitting your request. Please try again later.', success ? 'success' : 'error');
+    showNotification(
+      success
+        ? `✅ Consultation request sent! (Submission ID: ${submitId})\nThank you for booking a consultation. You will receive a follow-up within 24 hours.`
+        : `❌ Consultation request failed. (Submission ID: ${submitId})\nThere was an error sending your request. Please try again later or contact support.`,
+      success ? 'success' : 'error'
+    );
     if (success) form.reset();
   });
 }
