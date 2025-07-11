@@ -40,6 +40,147 @@ serverCards.forEach(card => {
     });
 });
 
+// Modal overlay logic for managed servers
+
+document.addEventListener('DOMContentLoaded', function() {
+  const serverCards = document.querySelectorAll('.card-clickable');
+  const modal = document.getElementById('server-modal');
+  const closeBtn = document.querySelector('.server-modal-close');
+  const widgetContainer = document.getElementById('server-widget-container');
+
+  // Import serverConfigs from external file for scalability
+  // To add a new server, add an entry to scripts/server-configs.js and a corresponding card in portfolio.html
+  // Example:
+  //   'new-server-key': { id: '...', name: '...', widgetUrl: '...', description: '...' }
+
+  serverCards.forEach(card => {
+    card.style.cursor = 'pointer';
+    card.addEventListener('click', function() {
+      const serverKey = card.dataset.server;
+      const config = window.serverConfigs[serverKey];
+      if (config) {
+        // Custom Discord info widget for any managed server
+        function renderWidget(data, updatedAt) {
+          // Find the card image src for fallback
+          let fallbackImg = '';
+          const cardImg = document.querySelector(`.server-card[data-server="${serverKey}"] img.portfolio-image`);
+          if (cardImg) fallbackImg = cardImg.src;
+          const iconUrl = data.icon
+            ? `https://cdn.discordapp.com/icons/${data.id}/${data.icon}.png`
+            : fallbackImg;
+          const serverName = data.name || config.name;
+          const onlineCount = data.presence_count || 0;
+          const invite = data.instant_invite || '#';
+          const members = (data.members || []);
+          const featured = members.length ? members[Math.floor(Math.random() * members.length)] : null;
+          let membersHtml = '';
+          members.slice(0, 8).forEach(m => {
+            membersHtml += `
+              <div style=\"display:flex;align-items:center;gap:0.7rem;margin-bottom:0.5rem;\">
+                <img src=\"${m.avatar_url}\" style=\"width:32px;height:32px;border-radius:8px;\">
+                <span style=\"color:#fff;\">${m.username}</span>
+                <span style=\"color:${m.status==='online' ? '#43b581' : m.status==='idle' ? '#faa61a' : '#f04747'};font-size:1.2em;\">●</span>
+              </div>
+            `;
+          });
+          if (members.length > 8) {
+            membersHtml += `<div style='color:#aaa;font-size:0.95em;margin-top:0.5rem;'>...and more</div>`;
+          }
+          let featuredHtml = '';
+          if (featured) {
+            featuredHtml = `
+              <div style=\"display:flex;align-items:center;gap:0.7rem;margin:1.2rem 0 0.5rem 0;padding:0.7rem 1rem;background:#2c2f33;border-radius:10px;box-shadow:0 2px 8px #0002;\">
+                <img src=\"${featured.avatar_url}\" style=\"width:40px;height:40px;border-radius:10px;\">
+                <div>
+                  <div style=\"color:#fff;font-weight:bold;\">${featured.username}</div>
+                  <div style=\"color:#aaa;font-size:0.95em;\">Featured Member</div>
+                </div>
+                <span style=\"color:${featured.status==='online' ? '#43b581' : featured.status==='idle' ? '#faa61a' : '#f04747'};font-size:1.3em;margin-left:auto;\">●</span>
+              </div>
+            `;
+          }
+          const description = config.description;
+          widgetContainer.innerHTML = `
+            <div style='background:#23272a;padding:2.2rem 2rem 1.5rem 2rem;border-radius:18px;box-shadow:none;width:100%;max-width:420px;margin:0 auto;display:flex;flex-direction:column;align-items:center;'>
+              <div style='display:flex;align-items:center;gap:1rem;width:100%;'>
+                <img src='${iconUrl}' style='width:56px;height:56px;border-radius:14px;border:2px solid #5865F2;background:#2c2f33;' onerror="this.onerror=null;this.src='${fallbackImg}';">
+                <div style='flex:1;'>
+                  <div style='font-size:1.5em;font-weight:bold;color:#fff;'>${serverName}</div>
+                  <div style='font-size:1em;color:#aaa;'>${onlineCount} Members Online</div>
+                </div>
+              </div>
+              <div style='width:100%;margin:1.1rem 0 0.7rem 0;color:#b9bbbe;font-size:1.08em;'>${description}</div>
+              <div style='width:100%;margin-bottom:0.5rem;font-size:1.08em;color:#fff;font-weight:600;'>Online Members</div>
+              <div style='width:100%;max-height:180px;overflow-y:auto;'>${membersHtml}</div>
+              ${featuredHtml}
+              <a href='${invite}' target='_blank' rel='noopener' style='display:block;margin:1.2rem auto 0 auto;width:100%;text-align:center;background:#5865F2;color:#fff;font-weight:bold;padding:0.9em 0;border-radius:10px;text-decoration:none;font-size:1.15em;box-shadow:0 2px 8px #0004;'>Join Discord</a>
+              <div style='width:100%;display:flex;justify-content:space-between;align-items:center;margin-top:1.2rem;font-size:0.98em;color:#aaa;'>
+                <span>Last updated: ${updatedAt}</span>
+                <div style='display:flex;align-items:center;gap:0.7em;'>
+                  <button id='copy-invite-btn' style='background:none;border:none;cursor:pointer;padding:0;' title='Copy Invite Link'>
+                    <svg width='20' height='20' fill='none' stroke='#aaa' stroke-width='2' viewBox='0 0 20 20'><path d='M7 13v1a3 3 0 0 0 3 3h2a3 3 0 0 0 3-3v-1'/><path d='M13 7V6a3 3 0 0 0-3-3H8a3 3 0 0 0-3 3v1'/><rect x='3' y='7' width='14' height='6' rx='3'/></svg>
+                  </button>
+                  <button id='refresh-widget-btn' style='background:none;border:none;color:#aaa;cursor:pointer;font-size:1em;display:flex;align-items:center;gap:0.3em;'>
+                    <svg width='18' height='18' fill='none' stroke='#aaa' stroke-width='2'><path d='M3 9a6 6 0 1 1 6 6'/><polyline points='9 3 9 9 15 9'/></svg> Refresh
+                  </button>
+                </div>
+              </div>
+              <div style='width:100%;margin-top:0.7em;font-size:0.93em;color:#888;text-align:center;'>Roles and activity data are not available from the Discord widget API.</div>
+            </div>
+          `;
+          // Copy invite link functionality
+          const copyBtn = document.getElementById('copy-invite-btn');
+          if (copyBtn) {
+            copyBtn.onclick = () => {
+              navigator.clipboard.writeText(invite);
+              copyBtn.innerHTML = '<svg width="20" height="20" fill="none" stroke="#43b581" stroke-width="2" viewBox="0 0 20 20"><path d="M7 13v1a3 3 0 0 0 3 3h2a3 3 0 0 0 3-3v-1"/><path d="M13 7V6a3 3 0 0 0-3-3H8a3 3 0 0 0-3 3v1"/><rect x="3" y="7" width="14" height="6" rx="3"/></svg>';
+              setTimeout(() => copyBtn.innerHTML = '<svg width="20" height="20" fill="none" stroke="#aaa" stroke-width="2" viewBox="0 0 20 20"><path d="M7 13v1a3 3 0 0 0 3 3h2a3 3 0 0 0 3-3v-1"/><path d="M13 7V6a3 3 0 0 0-3-3H8a3 3 0 0 0-3 3v1"/><rect x="3" y="7" width="14" height="6" rx="3"/></svg>', 1200);
+            };
+          }
+          // Refresh button functionality
+          const refreshBtn = document.getElementById('refresh-widget-btn');
+          if (refreshBtn) {
+            refreshBtn.onclick = () => {
+              widgetContainer.innerHTML = '<div class="server-widget-placeholder">Refreshing...</div>';
+              fetchAndRender();
+            };
+          }
+        }
+        function fetchAndRender() {
+          fetch(config.widgetUrl)
+            .then(resp => resp.json())
+            .then(data => {
+              const now = new Date();
+              const updatedAt = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+              renderWidget(data, updatedAt);
+            })
+            .catch(() => {
+              widgetContainer.innerHTML = '<div class="server-widget-placeholder">Failed to load server info.</div>';
+            });
+        }
+        fetchAndRender();
+      } else {
+        // Placeholder for other servers
+        widgetContainer.innerHTML = '<div class="server-widget-placeholder">Discord widget for this server will appear here.</div>';
+      }
+      modal.style.display = 'flex';
+    });
+  });
+
+  closeBtn.addEventListener('click', function() {
+    modal.style.display = 'none';
+    widgetContainer.innerHTML = '<div class="server-widget-placeholder">Server widget will appear here.</div>';
+  });
+
+  // Close modal when clicking outside content
+  modal.addEventListener('click', function(e) {
+    if (e.target === modal) {
+      modal.style.display = 'none';
+      widgetContainer.innerHTML = '<div class="server-widget-placeholder">Server widget will appear here.</div>';
+    }
+  });
+});
+
 // ===== FORM HANDLING FUNCTIONS =====
 
 // ===== DISCORD WEBHOOK INTEGRATION =====

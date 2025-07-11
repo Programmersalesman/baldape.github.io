@@ -50,58 +50,68 @@
         <div class="container">
             <h2>My Managed Servers</h2>
             <div class="server-showcase">
-                <div class="server-card">
-                    <div class="server-name">BaldApe's Lab</div>
-                    <div class="member-count">Community Oriented</div>
+                <div class="server-card card-clickable" data-server="baldapes-lab">
                     <div class="screenshot-placeholder">
                         <img src="images/portfolio/servers/baldapes-lab.jpg" alt="BaldApe's Lab Server" class="portfolio-image">
+                        <div class="server-overlay-content">
+                            <div class="server-name">BaldApe's Lab</div>
+                            <div class="member-count">Community Oriented</div>
+                            <p>Flagship server with premium organization and active community engagement</p>
+                        </div>
                     </div>
-                    <p>Flagship server with premium organization and active community engagement</p>
-                    <a href="https://discord.gg/ZscedDjSct" class="server-link" target="_blank">Join Server</a>
                 </div>
-                
-                <div class="server-card">
-                    <div class="server-name">Panda Picks</div>
-                    <div class="member-count">Established Community</div>
+                <div class="server-card card-clickable" data-server="panda-picks">
                     <div class="screenshot-placeholder">
-                        <img src="images/portfolio/servers/panda-picks.png" alt="Panda Picks Server" class="portfolio-image">
+                        <div class="portfolio-image portfolio-placeholder"></div>
+                        <div class="server-overlay-content">
+                            <div class="server-name">Panda Picks</div>
+                            <div class="member-count">Established Community</div>
+                            <p>Specialized betting picks with streamlined channel structure</p>
+                        </div>
                     </div>
-                    <p>Specialized betting picks with streamlined channel structure</p>
-                    <a href="#" class="server-link" target="_blank">Join Server</a>
                 </div>
-                
-                <div class="server-card">
-                    <div class="server-name">SportsSciJacob</div>
-                    <div class="member-count">Researched Plays</div>
+                <div class="server-card card-clickable" data-server="sportsscijacob">
                     <div class="screenshot-placeholder">
                         <img src="images/portfolio/servers/sportsscijacob.png" alt="SportsSciJacob Server" class="portfolio-image">
+                        <div class="server-overlay-content">
+                            <div class="server-name">SportsSciJacob</div>
+                            <div class="member-count">Researched Plays</div>
+                            <p>Data-driven sports analysis community with professional setup</p>
+                        </div>
                     </div>
-                    <p>Data-driven sports analysis community with professional setup</p>
-                    <a href="#" class="server-link" target="_blank">Join Server</a>
                 </div>
-                
-                <div class="server-card">
-                    <div class="server-name">CantStopTheCapTV</div>
-                    <div class="member-count">Engaged Community</div>
+                <div class="server-card card-clickable" data-server="cantstopthecaptv">
                     <div class="screenshot-placeholder">
                         <img src="images/portfolio/servers/cantstopthecaptv.png" alt="CantStopTheCapTV Server" class="portfolio-image">
+                        <div class="server-overlay-content">
+                            <div class="server-name">CantStopTheCapTV</div>
+                            <div class="member-count">Engaged Community</div>
+                            <p>Entertainment-focused betting community with custom features</p>
+                        </div>
                     </div>
-                    <p>Entertainment-focused betting community with custom features</p>
-                    <a href="#" class="server-link" target="_blank">Join Server</a>
                 </div>
-                
-                <div class="server-card">
-                    <div class="server-name">BetsByRaven</div>
-                    <div class="member-count">WNBA Plays</div>
+                <div class="server-card card-clickable" data-server="betsbyraven">
                     <div class="screenshot-placeholder">
-                        <img src="images/portfolio/servers/betsbyraven.jpg" alt="BetsByRaven Server" class="portfolio-image">
+                        <div class="portfolio-image portfolio-placeholder"></div>
+                        <div class="server-overlay-content">
+                            <div class="server-name">BetsByRaven</div>
+                            <div class="member-count">WNBA Plays</div>
+                            <p>WNBA-focused betting community with specialized features</p>
+                        </div>
                     </div>
-                    <p>WNBA-focused betting community with specialized features</p>
-                    <a href="#" class="server-link" target="_blank">Join Server</a>
                 </div>
             </div>
         </div>
     </section>
+
+    <!-- Modal Overlay for Discord Widget (hidden by default) -->
+    <div id="server-modal" class="server-modal" style="display:none;">
+        <span class="server-modal-close">&times;</span>
+        <div id="server-widget-container">
+            <!-- Discord widget will be injected here -->
+            <div class="server-widget-placeholder">Server widget will appear here.</div>
+        </div>
+    </div>
 
     <!-- Organization Section -->
     <section id="organization" class="section">
@@ -115,7 +125,7 @@
                 <div class="card">
                     <h3>Private Access Categories</h3>
                     <div class="screenshot-placeholder">
-                        <img src="images/portfolio/organization/private-access-categories.jpg" alt="Private Access Categories" class="portfolio-image">
+                        <div class="portfolio-image portfolio-placeholder"></div>
                     </div>
                     <p>Exclusive channels for premium members with proper role-based permissions and security</p>
                 </div>
@@ -123,7 +133,7 @@
                 <div class="card">
                     <h3>User Threads Management</h3>
                     <div class="screenshot-placeholder">
-                        <img src="images/portfolio/organization/user-threads-management.jpg" alt="User Threads Management" class="portfolio-image">
+                        <div class="portfolio-image portfolio-placeholder"></div>
                     </div>
                     <p>Organized threading system for user-generated content and discussions</p>
                 </div>
@@ -138,7 +148,7 @@
             <div class="card">
                 <h3>11 Professional Bots Expertly Configured</h3>
                 <div class="screenshot-placeholder">
-                    <img src="images/portfolio/bots/bot-list.jpg" alt="Bot Integration List" class="portfolio-image">
+                    <div class="portfolio-image portfolio-placeholder"></div>
                 </div>
                 <div class="bot-list">
                     <span class="bot-tag">Auto Publisher</span>
@@ -164,7 +174,7 @@
                 <div class="card">
                     <h3>Before: Unorganized Server</h3>
                     <div class="screenshot-placeholder">
-                        <img src="images/portfolio/transformations/before-unorganized.jpg" alt="Before: Unorganized Server" class="portfolio-image">
+                        <div class="portfolio-image portfolio-placeholder"></div>
                     </div>
                     <p>Typical disorganized server layout with poor channel structure and limited functionality</p>
                 </div>
@@ -172,7 +182,7 @@
                 <div class="card">
                     <h3>After: Professional Setup</h3>
                     <div class="screenshot-placeholder">
-                        <img src="images/portfolio/transformations/after-professional.jpg" alt="After: Professional Setup" class="portfolio-image">
+                        <div class="portfolio-image portfolio-placeholder"></div>
                     </div>
                     <p>Transformed server with professional organization, custom bots, and optimized user experience</p>
                 </div>
@@ -191,6 +201,9 @@
                     Not sure which service is right for you? I offer free 15-minute consultations to discuss 
                     your community goals and recommend the best approach.
                 </p>
+                <div style="text-align:center; margin-top:1rem;">
+                    <a href="consultation.html" class="cta-button">Book Your Free Consultation</a>
+                </div>
             </div>
             <div class="contact-info">
                 <div class="contact-item">
@@ -217,6 +230,7 @@
     </footer>
     
     <!-- Scripts -->
+    <script src="scripts/server-configs.js"></script>
     <script src="scripts/script.js"></script>
 </body>
 </html>
