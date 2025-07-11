@@ -69,6 +69,9 @@
     --transition-fast: 0.2s ease;
     --transition-normal: 0.3s ease;
     --transition-slow: 0.5s ease;
+    --navcard-bg: rgba(255,255,255,0.18);
+    --navcard-border: 1.5px solid rgba(255,255,255,0.22);
+    --navcard-shadow: 0 8px 25px rgba(0,0,0,0.10);
 }
 
 /* ===== RESET & BASE STYLES ===== */
@@ -596,30 +599,56 @@ header {
 /* ===== ENHANCED NAVIGATION CARDS ===== */
 .navigation-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    grid-template-columns: repeat(5, 1fr);
     gap: var(--spacing-lg);
-    margin-top: var(--spacing-lg);
-    justify-content: center;
-    align-items: stretch; /* Ensure all cards are the same height */
+    max-width: 1400px;
+    margin: var(--spacing-lg) auto 0 auto;
+    justify-items: center;
+    align-items: stretch;
+}
+.navigation-grid .nav-card {
+    width: 100%;
+    min-width: 180px;
+    max-width: 260px;
+    min-height: 220px;
+    box-sizing: border-box;
+}
+@media (max-width: 1300px) {
+    .navigation-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+@media (max-width: 900px) {
+    .navigation-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+@media (max-width: 600px) {
+    .navigation-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
 .nav-card {
-    background: var(--gradient-navigation);
+    background: var(--navcard-bg) !important;
+    border: var(--navcard-border) !important;
+    box-shadow: var(--navcard-shadow) !important;
+    color: #222 !important;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     border-radius: var(--border-radius-md);
-    box-shadow: var(--shadow-card);
     padding: var(--spacing-lg);
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
     transition: all var(--transition-normal);
-    border: none;
     margin-left: auto;
     margin-right: auto;
-    color: var(--color-white);
     position: relative;
     overflow: hidden;
-    height: 100%; /* Make all cards the same height */
+    height: 100%;
+    text-decoration: none;
 }
 
 .nav-card::before {

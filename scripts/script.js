@@ -617,3 +617,48 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 }); 
+
+// Improved leave warning: only show if a form is dirty and user is leaving the site (not clicking inside a form or navigating within the site)
+let formDirtyFlags = {
+  'consultation-form': false,
+  'consultation-form-modal': false,
+  'testimonial-form': false
+};
+
+function markFormDirty(formId) {
+  formDirtyFlags[formId] = true;
+}
+function markFormClean(formId) {
+  formDirtyFlags[formId] = false;
+}
+
+['consultation-form', 'consultation-form-modal', 'testimonial-form'].forEach(formId => {
+  const form = document.getElementById(formId);
+  if (form) {
+    form.addEventListener('input', () => markFormDirty(formId));
+    form.addEventListener('reset', () => markFormClean(formId));
+    form.addEventListener('submit', () => markFormClean(formId));
+  }
+});
+
+window.addEventListener('beforeunload', function(e) {
+  // Only warn if any form is dirty and has data
+  const shouldWarn = Object.entries(formDirtyFlags).some(([formId, dirty]) => {
+    if (!dirty) return false;
+    const form = document.getElementById(formId);
+    if (!form) return false;
+    // Check if any input/select/textarea has a value
+    return Array.from(form.elements).some(el => {
+      if (el.type === 'checkbox' || el.type === 'radio') {
+        return el.checked !== el.defaultChecked;
+      } else {
+        return el.value && el.value !== el.defaultValue;
+      }
+    });
+  });
+  if (shouldWarn) {
+    e.preventDefault();
+    e.returnValue = '';
+    return '';
+  }
+}); 
