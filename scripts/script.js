@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 additionalInfo: this.elements['additional-info']?.value,
             };
             const success = await sendToDiscordAPI(formData);
-            alert(success ? 'Thank you for your consultation request!' : 'There was an error submitting your request. Please try again later.');
+            showNotification(success ? 'Thank you for your consultation request!' : 'There was an error submitting your request. Please try again later.', success ? 'success' : 'error');
             if (success) this.reset();
         });
     }
@@ -95,11 +95,7 @@ function updateRatingDisplay(selectedInput) {
 // ===== NOTIFICATION SYSTEM =====
 
 function showNotification(message, type = 'info') {
-    // Remove existing notifications
-    const existingNotifications = document.querySelectorAll('.notification');
-    existingNotifications.forEach(notification => notification.remove());
-    
-    // Create notification element
+    // Allow multiple notifications to stack
     const notification = document.createElement('div');
     notification.className = `notification notification-${type}`;
     notification.innerHTML = `
@@ -108,7 +104,6 @@ function showNotification(message, type = 'info') {
             <button class="notification-close">&times;</button>
         </div>
     `;
-    
     // Add styles
     notification.style.cssText = `
         position: fixed;
@@ -122,24 +117,44 @@ function showNotification(message, type = 'info') {
         z-index: 1000;
         max-width: 400px;
         animation: slideIn 0.3s ease;
+        margin-top: ${getNotificationOffset()}px;
     `;
-    
     // Add close functionality
     const closeButton = notification.querySelector('.notification-close');
     closeButton.addEventListener('click', () => {
         notification.remove();
+        updateNotificationOffsets();
     });
-    
     // Auto-remove after 5 seconds
     setTimeout(() => {
         if (notification.parentNode) {
             notification.style.animation = 'slideOut 0.3s ease';
-            setTimeout(() => notification.remove(), 300);
+            setTimeout(() => {
+                notification.remove();
+                updateNotificationOffsets();
+            }, 300);
         }
     }, 5000);
-    
     // Add to page
     document.body.appendChild(notification);
+    updateNotificationOffsets();
+}
+// Helper to stack notifications downward
+function getNotificationOffset() {
+    const notifications = document.querySelectorAll('.notification');
+    let offset = 0;
+    notifications.forEach(n => {
+        offset += n.offsetHeight + 10;
+    });
+    return offset;
+}
+function updateNotificationOffsets() {
+    const notifications = document.querySelectorAll('.notification');
+    let offset = 0;
+    notifications.forEach(n => {
+        n.style.top = (20 + offset) + 'px';
+        offset += n.offsetHeight + 10;
+    });
 }
 
 // ===== ANIMATION STYLES =====
@@ -240,7 +255,7 @@ if (testimonialForm && !testimonialForm._handlerAttached) {
       anonymous: form.elements['anonymous']?.value,
     };
     const success = await sendToDiscordAPI(formData);
-    alert(success ? 'Thank you for your testimonial!' : 'There was an error submitting your testimonial. Please try again later.');
+    showNotification(success ? 'Thank you for your testimonial!' : 'There was an error submitting your testimonial. Please try again later.', success ? 'success' : 'error');
     if (success) form.reset();
   });
 }
@@ -253,23 +268,26 @@ if (consultationForm && !consultationForm._handlerAttached) {
   console.log('Attaching consultation form handler, id:', handlerId);
   consultationForm.addEventListener('submit', async function(e) {
     e.preventDefault();
+    const form = e.target;
+    const submitId = Math.floor(Math.random() * 1000000);
+    console.log('Consultation form submitted', form, 'handlerId:', handlerId, 'submitId:', submitId);
     const formData = {
-      name: this.elements['name']?.value,
-      email: this.elements['email']?.value,
-      discord: this.elements['discord']?.value,
-      community: this.elements['community']?.value,
-      memberCount: this.elements['member-count']?.value,
-      services: Array.from(this.querySelectorAll('input[name="services[]"]:checked')).map(cb => cb.value),
-      goals: this.elements['goals']?.value,
-      challenges: this.elements['challenges']?.value,
-      timeline: this.elements['timeline']?.value,
-      budget: this.elements['budget']?.value,
-      preferredTime: this.elements['preferred-time']?.value,
-      additionalInfo: this.elements['additional-info']?.value,
+      name: form.elements['name']?.value,
+      email: form.elements['email']?.value,
+      discord: form.elements['discord']?.value,
+      community: form.elements['community']?.value,
+      memberCount: form.elements['member-count']?.value,
+      services: Array.from(form.querySelectorAll('input[name="services[]"]:checked')).map(cb => cb.value),
+      goals: form.elements['goals']?.value,
+      challenges: form.elements['challenges']?.value,
+      timeline: form.elements['timeline']?.value,
+      budget: form.elements['budget']?.value,
+      preferredTime: form.elements['preferred-time']?.value,
+      additionalInfo: form.elements['additional-info']?.value,
     };
     const success = await sendToDiscordAPI(formData);
-    alert(success ? 'Thank you for your consultation request!' : 'There was an error submitting your request. Please try again later.');
-    if (success) this.reset();
+    showNotification(success ? 'Thank you for your consultation request!' : 'There was an error submitting your request. Please try again later.', success ? 'success' : 'error');
+    if (success) form.reset();
   });
 }
 
