@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles/discord-services.css">
     <link rel="icon" type="image/jpeg" href="images/profile-pic.jpg">
-    <title>BaldApe Services - Professional Discord Community Management</title>
+    <title>BaldApe Services - Schedule Consultation</title>
 </head>
-<body style="background: #fff;">
+<body>
     <!-- Header -->
     <header>
         <div class="container">
@@ -31,11 +31,12 @@
         <div class="container">
             <div class="hero-content">
                 <div class="hero-text">
-                    <h1>Professional Discord Community Management</h1>
+                    <h1>Schedule Your Consultation</h1>
                     <p>
-                        Transform your Discord server into a thriving, organized community that drives engagement and growth. 
-                        Specialized in sports betting, gaming, trading, and hobby communities of all sizes.
+                        Ready to transform your Discord community? Let's discuss your needs and create a 
+                        customized plan to take your server to the next level. Book your free consultation today.
                     </p>
+                    <a href="#consultation-form" class="cta-button">Book Free Consultation</a>
                 </div>
                 <div class="hero-profile">
                     <img src="images/profile-pic.jpg" alt="BaldApe - Discord Services Professional" class="profile-pic">
@@ -44,110 +45,15 @@
         </div>
     </section>
 
-    <!-- About Section -->
-    <section id="about" class="section section-light">
+    <!-- Consultation Form Section -->
+    <section id="consultation-section" class="section">
         <div class="container">
-            <h2 style="color: #222;">Proven Track Record</h2>
-            <div class="stats">
-                <div class="stat card">
-                    <span class="stat-number">2000+</span>
-                    <span class="stat-label" style="color: #444;">Total Members Managed</span>
-                </div>
-                <div class="stat card">
-                    <span class="stat-number">5</span>
-                    <span class="stat-label" style="color: #444;">Active Communities</span>
-                </div>
-                <div class="stat card">
-                    <span class="stat-number">12</span>
-                    <span class="stat-label" style="color: #444;">Professional Bots</span>
-                </div>
-                <div class="stat card">
-                    <span class="stat-number">24/7</span>
-                    <span class="stat-label" style="color: #444;">Community Support</span>
-                </div>
-            </div>
-            <p style="text-align: center; font-size: 1.1rem; color: #222; max-width: 800px; margin: 0 auto;">
-                Experienced Discord administrator with expertise in sports betting, gaming, trading, and related communities. 
-                I create organized, engaging environments using professional bot integration and proven management strategies that drive real results.
-                Specializing in grassroots betting communities under 1,000 followers.
-            </p>
-        </div>
-    </section>
-
-    <!-- Navigation Section -->
-    <section id="navigation" class="section">
-        <div class="container">
-            <h2>Explore My Services</h2>
-            <div class="navigation-grid">
-                <div class="nav-card">
-                    <div class="nav-icon">👤</div>
-                    <h3>About Me</h3>
-                    <p>Learn about my background, expertise, and passion for community building.</p>
-                    <a href="about.html" class="cta-button">Learn More</a>
-                </div>
-                
-                <div class="nav-card">
-                    <div class="nav-icon">💰</div>
-                    <h3>Services & Pricing</h3>
-                    <p>View my service packages and pricing options for Discord community management.</p>
-                    <a href="services.html" class="cta-button">View Services</a>
-                </div>
-                
-                <div class="nav-card">
-                    <div class="nav-icon">📁</div>
-                    <h3>Portfolio</h3>
-                    <p>See examples of my work managing successful Discord communities.</p>
-                    <a href="portfolio.html" class="cta-button">View Portfolio</a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Consultation Section -->
-    <section class="section section-gradient">
-        <div class="container">
-            <h2>Ready to Transform Your Discord Community?</h2>
-            <p style="text-align: center; margin-bottom: var(--spacing-lg);">
-                Book a free consultation to discuss your community goals and get a personalized action plan. 
-                Let's work together to create the perfect Discord server for your community.
-            </p>
-            <div class="consultation-highlights">
-                <div class="consultation-highlight card">
-                    <div class="highlight-icon">🎯</div>
-                    <h3>Custom Strategy</h3>
-                    <p>Get a personalized plan tailored to your community's specific needs and goals.</p>
-                </div>
-                <div class="consultation-highlight card">
-                    <div class="highlight-icon">💡</div>
-                    <h3>Expert Insights</h3>
-                    <p>Learn from years of experience managing successful Discord communities.</p>
-                </div>
-                <div class="consultation-highlight card">
-                    <div class="highlight-icon">📊</div>
-                    <h3>Current Analysis</h3>
-                    <p>Receive a detailed assessment of your current server setup and opportunities.</p>
-                </div>
-                <div class="consultation-highlight card">
-                    <div class="highlight-icon">🚀</div>
-                    <h3>Action Plan</h3>
-                    <p>Walk away with a clear roadmap to implement improvements immediately.</p>
-                </div>
-            </div>
-            <div style="text-align: center; margin-top: var(--spacing-xl);">
-                <button class="cta-button" id="open-consultation-modal">Book Free Consultation</button>
-            </div>
-        </div>
-    </section>
-
-    <!-- Consultation Modal (copied from services.html) -->
-    <div id="consultation-modal" class="modal" style="display: none;">
-        <div class="modal-content form-card" style="max-width: 600px; position: relative;">
-            <span class="modal-close" id="close-consultation-modal" style="position: absolute; top: 1rem; right: 1.2rem; font-size: 2rem; cursor: pointer;">&times;</span>
-            <h2 style="text-align:center;">Book Your Free Consultation</h2>
+            <h2>Book Your Free Consultation</h2>
             <p style="text-align: center; margin-bottom: var(--spacing-lg);">
                 Fill out the form below and I'll get back to you within 24 hours to schedule your consultation.
             </p>
-            <form class="consultation-form" id="consultation-form-modal" action="#" method="POST">
+            
+            <form class="consultation-form form-card" id="consultation-form" action="#" method="POST">
                 <div class="form-grid">
                     <div class="form-group">
                         <label for="name">Full Name *</label>
@@ -246,12 +152,10 @@
                     <label for="additional-info">Additional Information</label>
                     <textarea id="additional-info" name="additional-info" rows="3"></textarea>
                 </div>
-                <button type="button" class="cta-button" id="test-consultation-submit">Test Submit</button>
                 <button type="submit" class="cta-button" id="consultation-submit">Schedule Consultation</button>
             </form>
         </div>
-    </div>
-    <!-- End Consultation Modal -->
+    </section>
 
     <!-- Footer -->
     <footer class="frosted-footer">
@@ -271,4 +175,4 @@
     <!-- Scripts -->
     <script src="scripts/script.js"></script>
 </body>
-</html>
+</html> 

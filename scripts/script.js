@@ -58,6 +58,19 @@ document.addEventListener('DOMContentLoaded', function() {
     card.addEventListener('click', function() {
       const serverKey = card.dataset.server;
       const config = window.serverConfigs[serverKey];
+      
+      // Show modal with fade-in animation
+      modal.style.display = 'flex';
+      setTimeout(() => modal.classList.add('show'), 10);
+      
+      // Show dark glass loading spinner
+      widgetContainer.innerHTML = `
+        <div class="server-widget-loading">
+          <div class="spinner"></div>
+          <div>Loading server information...</div>
+        </div>
+      `;
+      
       if (config) {
         // Custom Discord info widget for any managed server
         function renderWidget(data, updatedAt) {
@@ -141,44 +154,88 @@ document.addEventListener('DOMContentLoaded', function() {
           const refreshBtn = document.getElementById('refresh-widget-btn');
           if (refreshBtn) {
             refreshBtn.onclick = () => {
-              widgetContainer.innerHTML = '<div class="server-widget-placeholder">Refreshing...</div>';
+              widgetContainer.innerHTML = `
+                <div class="server-widget-loading">
+                  <div class="spinner"></div>
+                  <div>Refreshing...</div>
+                </div>
+              `;
               fetchAndRender();
             };
           }
         }
         function fetchAndRender() {
-          fetch(config.widgetUrl)
-            .then(resp => resp.json())
-            .then(data => {
-              const now = new Date();
-              const updatedAt = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-              renderWidget(data, updatedAt);
-            })
-            .catch(() => {
-              widgetContainer.innerHTML = '<div class="server-widget-placeholder">Failed to load server info.</div>';
-            });
+          // Force spinner to show for 5 seconds
+          // setTimeout(() => {
+            fetch(config.widgetUrl)
+              .then(resp => resp.json())
+              .then(data => {
+                const now = new Date();
+                const updatedAt = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                renderWidget(data, updatedAt);
+              })
+              .catch(() => {
+                widgetContainer.innerHTML = `
+                  <div class="server-widget-loading">
+                    <div style="color: #f04747; margin-bottom: 1rem;">⚠️</div>
+                    <div>Failed to load server info.</div>
+                  </div>
+                `;
+              });
+          // }, 5000); // 5 second delay
         }
         fetchAndRender();
       } else {
         // Placeholder for other servers
-        widgetContainer.innerHTML = '<div class="server-widget-placeholder">Discord widget for this server will appear here.</div>';
+        widgetContainer.innerHTML = `
+          <div class="server-widget-loading">
+            <div style="color: #aaa; margin-bottom: 1rem;">📋</div>
+            <div>Discord widget for this server will appear here.</div>
+          </div>
+        `;
       }
-      modal.style.display = 'flex';
     });
   });
 
   closeBtn.addEventListener('click', function() {
-    modal.style.display = 'none';
-    widgetContainer.innerHTML = '<div class="server-widget-placeholder">Server widget will appear here.</div>';
+    modal.classList.remove('show');
+    setTimeout(() => modal.style.display = 'none', 300);
+    widgetContainer.innerHTML = '';
   });
 
   // Close modal when clicking outside content
   modal.addEventListener('click', function(e) {
     if (e.target === modal) {
-      modal.style.display = 'none';
-      widgetContainer.innerHTML = '<div class="server-widget-placeholder">Server widget will appear here.</div>';
+      modal.classList.remove('show');
+      setTimeout(() => modal.style.display = 'none', 300);
+      widgetContainer.innerHTML = '';
     }
   });
+});
+
+// Consultation Modal Logic (services.html)
+document.addEventListener('DOMContentLoaded', function() {
+    var openBtn = document.getElementById('open-consultation-modal');
+    var modal = document.getElementById('consultation-modal');
+    var closeBtn = document.getElementById('close-consultation-modal');
+    if (openBtn && modal && closeBtn) {
+        openBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        });
+        closeBtn.addEventListener('click', function() {
+            modal.style.display = 'none';
+            document.body.style.overflow = '';
+        });
+        // Close modal when clicking outside modal-content
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                modal.style.display = 'none';
+                document.body.style.overflow = '';
+            }
+        });
+    }
 });
 
 // ===== FORM HANDLING FUNCTIONS =====
@@ -480,3 +537,40 @@ function injectTestButtons() {
 }
 
 window.addEventListener('DOMContentLoaded', injectTestButtons); 
+
+// ===== TEST BUTTONS FOR FORMS =====
+document.addEventListener('DOMContentLoaded', function() {
+    // Consultation modal test button (works for both index.html and services.html)
+    var testConsultBtn = document.getElementById('test-consultation-submit');
+    var consultForm = document.getElementById('consultation-form-modal');
+    if (testConsultBtn && consultForm) {
+        testConsultBtn.addEventListener('click', function() {
+            consultForm.name.value = 'Test User';
+            consultForm.email.value = 'test@example.com';
+            consultForm.discord.value = 'testuser#1234';
+            consultForm.community.value = 'Test Community';
+            consultForm['member-count'].value = '101-500';
+            consultForm['services[]'][0].checked = true;
+            consultForm.goals.value = 'Grow the community.';
+            consultForm.challenges.value = 'Low engagement.';
+            consultForm.timeline.value = '1-2-weeks';
+            consultForm.budget.value = '100-200';
+            consultForm['preferred-time'].value = 'afternoon';
+            consultForm['additional-info'].value = 'No additional info.';
+        });
+    }
+    // Testimonial form test button (only fills, does not submit or clear)
+    var testTestimonialBtn = document.getElementById('test-testimonial-submit');
+    var testimonialForm = document.getElementById('testimonial-form');
+    if (testTestimonialBtn && testimonialForm) {
+        testTestimonialBtn.addEventListener('click', function() {
+            testimonialForm.name.value = 'Test User';
+            testimonialForm.community.value = 'Test Community';
+            testimonialForm.role.value = 'Owner';
+            testimonialForm.testimonial.value = 'This is a test testimonial.';
+            var ratingInput = testimonialForm.querySelector('input[name="rating"][value="5"]');
+            if (ratingInput) ratingInput.checked = true;
+            testimonialForm['additional-info'].value = 'No additional info.';
+        });
+    }
+}); 

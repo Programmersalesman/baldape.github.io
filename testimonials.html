@@ -13,7 +13,7 @@
         <div class="container">
             <div class="header-content">
                 <div class="logo">
-                    <a href="index.html">BaldApe Services</a>
+                    <a href="index.html" class="home-link gradient-text">BaldApe Services</a>
                 </div>
                 <nav class="nav">
                     <a href="about.html">About</a>
@@ -50,7 +50,7 @@
         <div class="container">
             <h2>Featured Testimonials</h2>
             <div class="testimonials-grid">
-                <div class="testimonial-card">
+                <div class="testimonial-card card">
                     <div class="testimonial-header">
                         <div class="testimonial-avatar">🎯</div>
                         <div class="testimonial-info">
@@ -74,7 +74,7 @@
                     </div>
                 </div>
 
-                <div class="testimonial-card">
+                <div class="testimonial-card card">
                     <div class="testimonial-header">
                         <div class="testimonial-avatar">📈</div>
                         <div class="testimonial-info">
@@ -98,7 +98,7 @@
                     </div>
                 </div>
 
-                <div class="testimonial-card">
+                <div class="testimonial-card card">
                     <div class="testimonial-header">
                         <div class="testimonial-avatar">🎮</div>
                         <div class="testimonial-info">
@@ -126,103 +126,85 @@
     </section>
 
     <!-- Testimonial Form Section -->
-    <section id="testimonial-section" class="section">
+    <section id="testimonial-section" class="section section-light">
         <div class="container">
             <h2>Share Your Experience</h2>
             <p style="text-align: center; margin-bottom: var(--spacing-lg);">
                 Are you a member of one of my managed Discord communities? Share your experience and help others 
                 discover the difference professional Discord management makes for community engagement and organization.
             </p>
-            
+            <div class="form-card" style="max-width: 700px; margin: 0 auto;">
             <form id="testimonial-form" class="testimonial-form" action="#" method="POST">
                 <div class="form-grid">
                     <div class="form-group">
                         <label for="name">Your Name *</label>
                         <input type="text" id="name" name="name" required>
                     </div>
-                    
-                                    <div class="form-group">
-                    <label for="community">Which Community Are You From? *</label>
-                    <select id="community" name="community" required>
-                        <option value="">Select your community</option>
-                        <option value="baldapes-lab">BaldApe's Lab</option>
-                        <option value="panda-picks">Panda Picks</option>
-                        <option value="sportsscijacob">SportsSciJacob</option>
-                        <option value="cantstopthecaptv">CantStopTheCapTV</option>
-                        <option value="betsbyraven">BetsByRaven</option>
-                    </select>
-                </div>
-                    
-                                    <div class="form-group">
-                    <label for="role">Your Role in the Community</label>
-                    <select id="role" name="role">
-                        <option value="">Select your role</option>
-                        <option value="member">Regular Member</option>
-                        <option value="moderator">Moderator</option>
-                        <option value="admin">Administrator</option>
-                        <option value="owner">Community Owner</option>
-                        <option value="other">Other</option>
-                    </select>
-                </div>
-                    
+                    <div class="form-group">
+                        <label for="community">Which Community Are You From? *</label>
+                        <select id="community" name="community" required>
+                            <option value="">Select your community</option>
+                            <option value="baldapes-lab">BaldApe's Lab</option>
+                            <option value="panda-picks">Panda Picks</option>
+                            <option value="sportsscijacob">SportsSciJacob</option>
+                            <option value="cantstopthecaptv">CantStopTheCapTV</option>
+                            <option value="betsbyraven">BetsByRaven</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="role">Your Role in the Community</label>
+                        <select id="role" name="role">
+                            <option value="">Select your role</option>
+                            <option value="member">Regular Member</option>
+                            <option value="moderator">Moderator</option>
+                            <option value="admin">Administrator</option>
+                            <option value="owner">Community Owner</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
                     <div class="form-group">
                         <label for="email">Email Address</label>
                         <input type="email" id="email" name="email" placeholder="Optional - for follow-up">
                     </div>
                 </div>
-                
-                <div class="form-group">
+                <div class="form-group rating-group">
                     <label for="rating">Rating *</label>
-                    <div class="rating-input">
-                        <input type="radio" id="star5" name="rating" value="5" required>
-                        <label for="star5">⭐</label>
-                        <input type="radio" id="star4" name="rating" value="4">
-                        <label for="star4">⭐</label>
-                        <input type="radio" id="star3" name="rating" value="3">
-                        <label for="star3">⭐</label>
-                        <input type="radio" id="star2" name="rating" value="2">
-                        <label for="star2">⭐</label>
-                        <input type="radio" id="star1" name="rating" value="1">
-                        <label for="star1">⭐</label>
+                    <div class="star-rating">
+                        <input type="radio" id="star5" name="rating" value="5" required><label for="star5" title="5 stars">★</label>
+                        <input type="radio" id="star4" name="rating" value="4"><label for="star4" title="4 stars">★</label>
+                        <input type="radio" id="star3" name="rating" value="3"><label for="star3" title="3 stars">★</label>
+                        <input type="radio" id="star2" name="rating" value="2"><label for="star2" title="2 stars">★</label>
+                        <input type="radio" id="star1" name="rating" value="1"><label for="star1" title="1 star">★</label>
                     </div>
-                    <div id="rating-value" style="text-align:center; margin-top:8px; font-weight:bold;">Selected Rating:</div>
                 </div>
-                
                 <div class="form-group">
                     <label for="testimonial">Your Experience *</label>
-                    <textarea id="testimonial" name="testimonial" rows="6" required></textarea>
+                    <textarea id="testimonial" name="testimonial" rows="5" required></textarea>
                 </div>
-                
                 <div class="form-group">
                     <label for="features">What Features Do You Like Most?</label>
                     <div class="checkbox-group">
                         <label class="checkbox-label">
                             <input type="checkbox" name="features[]" value="organization">
-                            <span>Channel Organization</span>
+                            <span>Organization</span>
                         </label>
                         <label class="checkbox-label">
                             <input type="checkbox" name="features[]" value="bots">
                             <span>Bot Integration</span>
                         </label>
                         <label class="checkbox-label">
-                            <input type="checkbox" name="features[]" value="moderation">
-                            <span>Moderation Tools</span>
+                            <input type="checkbox" name="features[]" value="support">
+                            <span>Support</span>
                         </label>
                         <label class="checkbox-label">
                             <input type="checkbox" name="features[]" value="engagement">
-                            <span>Engagement Features</span>
-                        </label>
-                        <label class="checkbox-label">
-                            <input type="checkbox" name="features[]" value="security">
-                            <span>Security & Permissions</span>
-                        </label>
-                        <label class="checkbox-label">
-                            <input type="checkbox" name="features[]" value="community">
-                            <span>Community Atmosphere</span>
+                            <span>Engagement</span>
                         </label>
                     </div>
                 </div>
-                
+                <div style="display: flex; gap: 1.5rem; justify-content: center; margin-top: 2rem;">
+                    <button type="button" class="cta-button" id="testimonial-submit">Submit Testimonial</button>
+                </div>
                 <div class="form-group">
                     <label>Permission to Use Testimonial *</label>
                     <div class="radio-group">
@@ -236,7 +218,6 @@
                         </label>
                     </div>
                 </div>
-                
                 <div class="form-group">
                     <label>Privacy Preference</label>
                     <div class="radio-group">
@@ -250,41 +231,23 @@
                         </label>
                     </div>
                 </div>
-                
-                <button type="submit" class="cta-button" id="testimonial-submit">Submit Testimonial</button>
             </form>
-        </div>
-    </section>
-
-    <!-- Contact Section -->
-    <section id="contact" class="contact">
-        <div class="container">
-            <h2>Ready to Get Your Own Testimonial?</h2>
-            <p>
-                Join the growing list of satisfied community owners who have transformed their Discord servers 
-                with BaldApe Services.
-            </p>
-            <div class="contact-info">
-                <div class="contact-item">
-                    <span>📧</span>
-                    <a href="mailto:BaldApeBiz@proton.me">BaldApeBiz@proton.me</a>
-                </div>
-                <div class="contact-item">
-                    <span>💬</span>
-                    <span>Discord: z3rowolfhd (BaldApe)</span>
-                </div>
-                <div class="contact-item">
-                    <span>🐦</span>
-                    <a href="https://discord.gg/ZscedDjSct">Join BaldApe's Lab (Social Media Inside)</a>
-                </div>
             </div>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer>
-        <div class="container">
-            <p>&copy; 2025 BaldApe Services.</p>
+    <footer class="frosted-footer">
+        <div class="footer-content">
+            <div class="footer-links">
+                <span><span style="font-size:1.1em;">📧</span> <a href="mailto:BaldApeBiz@proton.me">BaldApeBiz@proton.me</a></span>
+                <span><span style="font-size:1.1em;">💬</span> Discord: z3rowolfhd (BaldApe)</span>
+                <span><span style="font-size:1.1em;">🐦</span> <a href="https://discord.gg/ZscedDjSct">Join BaldApe's Lab</a></span>
+            </div>
+            <div class="footer-meta">
+                <span>&copy; 2025 BaldApe Services.</span>
+                <span style="font-size: 0.97em; color: #a3e3ff;">Built with HTML5, CSS3,<br>JavaScript (vanilla), and Cursor</span>
+            </div>
         </div>
     </footer>
     
