@@ -144,7 +144,7 @@ function getNotificationOffset() {
     const notifications = document.querySelectorAll('.notification');
     let offset = 0;
     notifications.forEach(n => {
-        offset += n.offsetHeight + 10;
+        offset += n.offsetHeight + 4; // Reduce spacing to 4px
     });
     return offset;
 }
@@ -153,7 +153,7 @@ function updateNotificationOffsets() {
     let offset = 0;
     notifications.forEach(n => {
         n.style.top = (20 + offset) + 'px';
-        offset += n.offsetHeight + 10;
+        offset += n.offsetHeight + 4; // Reduce spacing to 4px
     });
 }
 
@@ -267,6 +267,7 @@ if (consultationForm && !consultationForm._handlerAttached) {
   const handlerId = Math.floor(Math.random() * 1000000);
   console.log('Attaching consultation form handler, id:', handlerId);
   consultationForm.addEventListener('submit', async function(e) {
+    console.log('Consultation form submit event, handlerId:', handlerId);
     e.preventDefault();
     const form = e.target;
     const submitId = Math.floor(Math.random() * 1000000);
