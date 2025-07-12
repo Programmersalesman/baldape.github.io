@@ -238,6 +238,51 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
+// Transformation Image Modal/Lightbox
+(function() {
+  const modal = document.getElementById('transformation-modal');
+  const modalImg = document.getElementById('transformation-modal-img');
+  const closeBtn = document.querySelector('.transformation-modal-close');
+  const backdrop = document.querySelector('.transformation-modal-backdrop');
+  const triggers = document.querySelectorAll('.transformation-image-btn');
+  let lastActive = null;
+
+  triggers.forEach(btn => {
+    btn.addEventListener('click', function(e) {
+      e.preventDefault();
+      const img = btn.querySelector('img');
+      if (img) {
+        modalImg.src = img.src;
+        modalImg.alt = img.alt || '';
+        modal.style.display = 'flex';
+        setTimeout(() => { modal.focus && modal.focus(); }, 10);
+        lastActive = btn;
+        document.body.style.overflow = 'hidden';
+      }
+    });
+  });
+
+  function closeModal() {
+    modal.style.display = 'none';
+    modalImg.src = '';
+    document.body.style.overflow = '';
+    if (lastActive) lastActive.focus();
+  }
+
+  closeBtn.addEventListener('click', closeModal);
+  backdrop.addEventListener('click', closeModal);
+  document.addEventListener('keydown', function(e) {
+    if (modal.style.display !== 'none') {
+      if (e.key === 'Escape') closeModal();
+      // Trap focus inside modal
+      if (e.key === 'Tab') {
+        e.preventDefault();
+        closeBtn.focus();
+      }
+    }
+  });
+})();
+
 // ===== FORM HANDLING FUNCTIONS =====
 
 // ===== DISCORD WEBHOOK INTEGRATION =====

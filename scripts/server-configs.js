@@ -29,5 +29,11 @@ window.serverConfigs = {
     name: 'BetsByRaven',
     widgetUrl: 'https://discord.com/api/guilds/1387558595435954187/widget.json',
     description: 'WNBA-focused betting community with specialized features.'
+  },
+  'cloak-line-bets': {
+    id: '1349743443328372767',
+    name: 'Cloak Line Bets',
+    widgetUrl: 'https://discord.com/api/guilds/1349743443328372767/widget.json',
+    description: 'Sharp line movement and value betting community with advanced analytics.'
   }
 }; 

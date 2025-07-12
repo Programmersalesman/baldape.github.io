@@ -9,21 +9,21 @@ BaldApe Services specializes in transforming Discord communities through profess
 ## 🚀 Features
 
 ### Core Pages
-- **Home** (`index.html`) - Landing page with service overview and quick navigation
+- **Home** (`index.html`) - Landing page with service overview and navigation cards
 - **About** (`about.html`) - Personal background, expertise, and philosophy
 - **Services** (`services.html`) - Detailed service offerings and pricing
 - **Portfolio** (`portfolio.html`) - Showcase of completed Discord server transformations
 - **Testimonials** (`testimonials.html`) - Client feedback and testimonial submission form
 - **Contact** (`contact.html`) - Contact information and social media links
-- **Consultation** (`consultation.html`) - Consultation booking form and benefits
 
 ### Key Features
 - **Responsive Design** - Mobile-first approach with modern CSS Grid and Flexbox
-- **Professional Styling** - Discord-inspired color scheme and typography
+- **Professional Styling** - Discord-inspired color scheme with frosted glass effects
 - **Interactive Forms** - Consultation booking and testimonial submission with validation
-- **Portfolio Showcase** - Server transformation examples with direct Discord links
+- **Portfolio Showcase** - Server transformation examples with direct Discord widgets
 - **Client Testimonials** - Social proof with star ratings and detailed feedback
 - **Smooth Navigation** - Consistent header navigation across all pages
+- **Unified Consultation Modal** - Popup consultation form accessible from multiple pages
 
 ## 🎨 Design System
 
@@ -32,6 +32,7 @@ BaldApe Services specializes in transforming Discord communities through profess
 - **Secondary**: Purple gradient (#667eea to #764ba2)
 - **Neutral**: Clean grays and whites
 - **Accent**: Gold for ratings (#ffd700)
+- **Navigation Cards**: Frosted glass effect with subtle borders
 
 ### Typography
 - **Font Family**: Segoe UI, Tahoma, Geneva, Verdana, sans-serif
@@ -40,6 +41,7 @@ BaldApe Services specializes in transforming Discord communities through profess
 
 ### Components
 - **Cards**: Hover effects with subtle shadows and borders
+- **Navigation Cards**: Modern frosted glass styling for homepage navigation
 - **Buttons**: Discord-style CTA buttons with hover animations
 - **Forms**: Professional input styling with validation feedback
 - **Navigation**: Sticky header with smooth scrolling
@@ -48,23 +50,29 @@ BaldApe Services specializes in transforming Discord communities through profess
 
 ```
 programmersalesman.github.io/
-├── index.html              # Home page
+├── index.html              # Home page with navigation cards
 ├── about.html              # About page
-├── services.html           # Services page
-├── portfolio.html          # Portfolio page
-├── testimonials.html       # Testimonials page
+├── services.html           # Services page with consultation modal
+├── portfolio.html          # Portfolio page with Discord widgets
+├── testimonials.html       # Testimonials page with submission form
 ├── contact.html            # Contact page
-├── consultation.html       # Consultation page
-├── discord-services.css    # Main stylesheet
-├── script.js              # JavaScript functionality
-├── README.md              # Project documentation
-└── images/                # Image assets
-    ├── profile-pic.jpg    # Profile picture
-    └── portfolio/         # Portfolio images
-        ├── servers/       # Server screenshots
-        ├── organization/  # Organization examples
-        ├── bots/          # Bot integration examples
-        └── transformations/ # Before/after comparisons
+├── styles/
+│   └── discord-services.css # Main stylesheet with unified design
+├── scripts/
+│   ├── script.js           # JavaScript functionality
+│   └── server-configs.js   # Discord server configurations
+├── api/
+│   └── send-to-discord.js  # Discord webhook API
+├── images/                 # Image assets
+│   ├── profile-pic.jpg    # Profile picture
+│   └── portfolio/         # Portfolio images
+│       ├── servers/       # Server screenshots
+│       ├── organization/  # Organization examples
+│       ├── bots/          # Bot integration examples
+│       └── transformations/ # Before/after comparisons
+├── input/                  # Read-only directory for new images
+└── archive/                # Archived files
+    └── consultation.html   # Archived consultation page
 ```
 
 ## 🛠️ Technical Implementation
@@ -74,11 +82,13 @@ programmersalesman.github.io/
 - Consistent header/footer across all pages
 - Proper meta tags for SEO and social sharing
 - Favicon integration with profile picture
+- Unified consultation modal across pages
 
 ### CSS Architecture
 - **CSS Custom Properties** for consistent theming
 - **Mobile-first responsive design**
 - **CSS Grid and Flexbox** for modern layouts
+- **Frosted glass effects** for navigation cards
 - **Smooth transitions** and hover effects
 - **Professional color scheme** inspired by Discord
 
@@ -88,6 +98,9 @@ programmersalesman.github.io/
 - **Smooth scrolling** for anchor links
 - **Notification system** for user feedback
 - **Input sanitization** for security
+- **Discord webhook integration** for form submissions
+- **Modal management** for consultation forms
+- **Form data preservation** on failed submission
 
 ## 📱 Responsive Design
 
@@ -102,6 +115,7 @@ programmersalesman.github.io/
 - Touch-friendly button sizes
 - Optimized form layouts
 - Readable typography scaling
+- Responsive navigation card grid
 
 ## 🎯 Business Features
 
@@ -130,6 +144,7 @@ programmersalesman.github.io/
 - **CSS** - Single stylesheet with organized sections
 - **JavaScript** - Form handling and interactivity
 - **Images** - Organized by category in subdirectories
+- **API** - Discord webhook integration
 
 ### Browser Compatibility
 - Modern browsers (Chrome, Firefox, Safari, Edge)
@@ -147,9 +162,9 @@ programmersalesman.github.io/
 
 ### Performance Optimizations
 - Optimized images
-- Minified CSS and JavaScript
 - Efficient CSS Grid layouts
 - Minimal external dependencies
+- Responsive image loading
 
 ## 🚀 Deployment
 
@@ -162,6 +177,28 @@ programmersalesman.github.io/
 - All assets included in repository
 - No external dependencies
 - Self-contained website
+- Input directory for new image processing
+
+## 🔄 Recent Updates
+
+### Navigation & Layout
+- **Unified consultation modal** across index.html and services.html
+- **Navigation card layout** fixed with proper sizing and responsive grid
+- **Frosted glass styling** for homepage navigation cards
+- **Underline removal** from navigation card text
+
+### Forms & Functionality
+- **Form submission** to Discord webhook API
+- **Test buttons** for form testing and validation
+- **Success/error notifications** with top-right popup system
+- **Form data preservation** on failed submission
+- **Leave warning** for unsaved form changes
+
+### Technical Improvements
+- **Clean CSS architecture** with maintainable code
+- **Removed redundant overrides** and forced classes
+- **Unified styling** across all pages
+- **Responsive navigation** with proper breakpoints
 
 ## 📞 Contact Information
 
