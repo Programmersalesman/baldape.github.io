@@ -1,11 +1,10 @@
 import React from "react";
-import "./App.css";
-import OrganizationSection from "./OrganizationSection";
-import BotSection from "./BotSection";
-import TransformationSection from "./TransformationSection";
-import ManagedServersSection from "./ManagedServersSection";
+import ManagedServersSection from "../ManagedServersSection";
+import OrganizationSection from "../OrganizationSection";
+import BotSection from "../BotSection";
+import TransformationSection from "../TransformationSection";
 
-function PortfolioTest() {
+function Portfolio() {
   return (
     <div>
       {/* Hero Section */}
@@ -35,4 +34,4 @@ function PortfolioTest() {
   );
 }
 
-export default PortfolioTest; 
+export default Portfolio; 
