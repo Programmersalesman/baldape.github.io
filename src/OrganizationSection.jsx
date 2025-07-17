@@ -1,0 +1,59 @@
+import React from "react";
+
+const transformations = [
+  {
+    img: "/images/portfolio/organization/private-access.png",
+    alt: "Private Access Categories Example",
+    title: "Private Access Categories",
+    desc: "Exclusive channels for premium members with proper role-based permissions and security. Custom categories ensure VIP members have dedicated spaces for exclusive content, private discussions, and special features that enhance their experience while maintaining server hierarchy."
+  },
+  {
+    img: "/images/portfolio/organization/media-section.png",
+    alt: "Media Posting Example",
+    title: "Media Posting",
+    desc: "Automated posting from social media and news sources directly to Discord using services like RSS.app and TweetShift. Streamlined content delivery keeps your community updated with the latest news, social media updates, and relevant content without manual posting, ensuring consistent engagement."
+  },
+  {
+    img: "/images/portfolio/organization/server-meta.png",
+    alt: "Server Meta Tracking & Giveaways Example",
+    title: "Server Meta Tracking & Giveaways",
+    desc: "Track XP, invite leaderboards, and run automated giveaways to boost engagement and reward your community. Comprehensive analytics help identify top contributors while automated systems maintain fair competition and keep members motivated to participate actively."
+  },
+  {
+    img: "/images/portfolio/organization/user-threads.png",
+    alt: "User Threads Management Example",
+    title: "User Threads Management",
+    desc: "Organized threading system for user-generated content and discussions. Structured conversation channels prevent spam while encouraging meaningful dialogue, making it easy for members to find relevant discussions and contribute to ongoing conversations."
+  }
+];
+
+function OrganizationSection() {
+  return (
+    <section id="organization" className="section section-light">
+      <div className="container">
+        <h2 className="section-header">Professional Server Organization</h2>
+        <div className="section-subtitle">
+          Each server below is expertly organized to maximize clarity, security, and engagement.<br />
+          <span className="subtitle-note">More organization examples are always being added.</span>
+        </div>
+        <div className="grid-2">
+          {transformations.map((item, idx) => (
+            <div className="transformation-group" key={idx}>
+              <div className="transformation-card dark-glass-card no-hover equal-size">
+                <div className="image-badge-wrapper">
+                  <img src={item.img} alt={item.alt} className="transformation-image fill-card-image" />
+                </div>
+              </div>
+              <div className="transformation-details frosted-text-card">
+                <h3>{item.title}</h3>
+                <p>{item.desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+export default OrganizationSection; 
