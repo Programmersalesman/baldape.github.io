@@ -44,6 +44,7 @@ programmersalesman.github.io/
 ## 🛠️ Development & Deployment
 
 ### Local Development
+
 1. Install dependencies:
    ```sh
    npm install
@@ -55,6 +56,7 @@ programmersalesman.github.io/
    The app will be available at `http://localhost:5173`.
 
 ### Building for Production
+
 1. Build the app:
    ```sh
    npm run build
@@ -75,4 +77,4 @@ All images and static assets required by the React app are located in `public/im
 
 ---
 
-*Professional Discord community management services for growing communities.*
+_Professional Discord community management services for growing communities._

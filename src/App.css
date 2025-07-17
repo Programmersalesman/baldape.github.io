@@ -1,8 +1,8 @@
 /* BaldApe Services - Professional Discord Theme CSS (copied for React) */
-@import url('/styles/discord-services.css');
+@import url("/styles/discord-services.css");
 .hero {
   background: none;
 }
 .hero::before {
   background: none;
-} 
+}

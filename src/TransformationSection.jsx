@@ -10,9 +10,10 @@ const transformations = [
       "❌ Poor channel organization",
       "❌ No clear user hierarchy",
       "❌ Limited functionality",
-      "❌ Confusing navigation"
+      "❌ Confusing navigation",
     ],
-    description: "Typical disorganized server with scattered channels, poor role management, and limited user engagement features."
+    description:
+      "Typical disorganized server with scattered channels, poor role management, and limited user engagement features.",
   },
   {
     badge: "Transformed",
@@ -23,30 +24,47 @@ const transformations = [
       "✅ Clear channel sections",
       "✅ Improved user hierarchy",
       "✅ Enhanced functionality",
-      "✅ Intuitive navigation"
+      "✅ Intuitive navigation",
     ],
-    description: "Transformed server with organized channels, clear roles, and engaging features for a better user experience."
-  }
+    description:
+      "Transformed server with organized channels, clear roles, and engaging features for a better user experience.",
+  },
 ];
 
-function TransformationCard({ badge, badgeClass, image, alt, issues, improvements, description }) {
+function TransformationCard({
+  badge,
+  badgeClass,
+  image,
+  alt,
+  issues,
+  improvements,
+  description,
+}) {
   return (
     <div className="transformation-group">
       <div className="transformation-card dark-glass-card no-hover equal-size">
         <div className="image-badge-wrapper">
           <span className={`transformation-badge ${badgeClass}`}>{badge}</span>
-          <img src={image} alt={alt} className="transformation-image fill-card-image" />
+          <img
+            src={image}
+            alt={alt}
+            className="transformation-image fill-card-image"
+          />
         </div>
       </div>
       <div className="transformation-details frosted-text-card">
         {issues && (
           <ul className="transformation-issues">
-            {issues.map((item, idx) => <li key={idx}>{item}</li>)}
+            {issues.map((item, idx) => (
+              <li key={idx}>{item}</li>
+            ))}
           </ul>
         )}
         {improvements && (
           <ul className="transformation-improvements">
-            {improvements.map((item, idx) => <li key={idx}>{item}</li>)}
+            {improvements.map((item, idx) => (
+              <li key={idx}>{item}</li>
+            ))}
           </ul>
         )}
         <p>{description}</p>
@@ -61,7 +79,8 @@ function TransformationSection() {
       <div className="container">
         <h2 className="section-header">Server Transformation Examples</h2>
         <div className="section-subtitle">
-          See the dramatic improvements in server organization, user experience, and community engagement
+          See the dramatic improvements in server organization, user experience,
+          and community engagement
         </div>
         <div className="grid-2">
           {transformations.map((t, idx) => (
@@ -73,4 +92,4 @@ function TransformationSection() {
   );
 }
 
-export default TransformationSection; 
+export default TransformationSection;
