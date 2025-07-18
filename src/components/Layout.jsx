@@ -1,14 +1,27 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import NavBar from "./NavBar";
 
 function Layout({ children }) {
+  const location = useLocation();
+
+  // Scroll to top when route changes to prevent layout jumps
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
+
+  // Always reserve 120px top padding for nav bar, and add a class for sidebar margin
   return (
     <div
+      className="main-layout"
       style={{
         flex: 1,
         display: "flex",
         flexDirection: "column",
+        paddingTop: "120px", // Always reserve enough space for nav bar
         paddingBottom: "2.5rem",
+        minHeight: "100vh",
+        transition: "padding-left 0.3s ease"
       }}
     >
       <NavBar />
@@ -25,11 +38,11 @@ function Layout({ children }) {
       <footer
         className="site-footer"
         style={{
-          background: "rgba(30,34,60,0.82)",
-          backdropFilter: "blur(10px)",
-          WebkitBackdropFilter: "blur(10px)",
+          background: "rgba(30, 34, 60, 0.95)", // dark frosted glass
+          backdropFilter: "blur(18px)",
+          WebkitBackdropFilter: "blur(18px)",
           borderRadius: "18px",
-          boxShadow: "0 0 24px 2px #00eaff44",
+          boxShadow: "0 0 24px 2px #0008",
           maxWidth: "1100px",
           margin: "2rem auto 0 auto",
           width: "calc(100% - 3rem)",
@@ -49,8 +62,8 @@ function Layout({ children }) {
           style={{
             fontWeight: 600,
             fontSize: "1.08em",
-            color: "#7df9ff",
-            textShadow: "0 0 8px #00eaff",
+            color: "#a3e3ff",
+            textShadow: "none",
           }}
         >
           {" "}
@@ -60,7 +73,7 @@ function Layout({ children }) {
           style={{
             fontSize: "0.98em",
             color: "#a3e3ff",
-            textShadow: "0 0 6px #00eaff55",
+            textShadow: "none",
           }}
         >
           Built with React, Vite, TypeScript, and Cursor
@@ -73,7 +86,7 @@ function Layout({ children }) {
               color: "#a3e3ff",
               textDecoration: "none",
               fontSize: "1.3em",
-              textShadow: "0 0 6px #00eaff",
+              textShadow: "none",
             }}
           >
             📧
@@ -85,7 +98,7 @@ function Layout({ children }) {
               color: "#a3e3ff",
               textDecoration: "none",
               fontSize: "1.3em",
-              textShadow: "0 0 6px #00eaff",
+              textShadow: "none",
             }}
           >
             💬
@@ -97,7 +110,7 @@ function Layout({ children }) {
               color: "#a3e3ff",
               textDecoration: "none",
               fontSize: "1.3em",
-              textShadow: "0 0 6px #00eaff",
+              textShadow: "none",
             }}
           >
             <svg

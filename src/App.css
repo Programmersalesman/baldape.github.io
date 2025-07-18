@@ -6,3 +6,93 @@
 .hero::before {
   background: none;
 }
+
+/* Ensure consistent top margin for first section or hero on every page */
+.main-layout > .hero:first-child,
+.main-layout > .section:first-child {
+  margin-top: 0;
+}
+
+/* If you want a specific gap, e.g. 0, or set to 2rem for a gap */
+.main-layout > .hero:first-child,
+.main-layout > .section:first-child {
+  margin-top: 0;
+}
+
+/* Prevent layout shift caused by scroll bar appearance/disappearance */
+html {
+  overflow-y: scroll;
+}
+
+body {
+  overflow-y: scroll;
+}
+
+/* Custom Scrollbar Styles */
+/* Webkit browsers (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+  width: 12px;
+  background: rgba(30, 34, 60, 0.3);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(30, 34, 60, 0.1);
+  border-radius: 6px;
+  margin: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 6px;
+  border: 2px solid rgba(30, 34, 60, 0.3);
+  transition: all 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #5865f2 0%, #667eea 100%);
+  box-shadow: 0 0 10px rgba(88, 101, 242, 0.5);
+  transform: scale(1.05);
+}
+
+::-webkit-scrollbar-thumb:active {
+  background: linear-gradient(135deg, #4752c4 0%, #5865f2 100%);
+}
+
+::-webkit-scrollbar-corner {
+  background: rgba(30, 34, 60, 0.3);
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #667eea rgba(30, 34, 60, 0.3);
+}
+
+/* Smooth scrolling for the entire page */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar for specific containers (optional) */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(30, 34, 60, 0.1);
+  border-radius: 4px;
+  margin: 2px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 4px;
+  border: 1px solid rgba(30, 34, 60, 0.3);
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #5865f2 0%, #667eea 100%);
+  box-shadow: 0 0 8px rgba(88, 101, 242, 0.4);
+}
