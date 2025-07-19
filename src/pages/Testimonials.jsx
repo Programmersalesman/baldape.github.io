@@ -1,19 +1,64 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Modal from "../components/Modal";
 import TestimonialForm from "../components/TestimonialForm";
 import TestimonialAnalytics from "../components/TestimonialAnalytics";
 import TestimonialList from "../components/TestimonialList";
 import TestimonialWordCloud from "../components/TestimonialWordCloud";
 import FormDebugPanel from "../components/FormDebugPanel";
+import StatusMessage from "../components/StatusMessage";
 import testimonialsData from "../testimonialsData";
 import { sendToDiscord } from "../services/discordService";
+import { 
+  getPublicTestimonials, 
+  addTestimonial, 
+  getTestimonialStats,
+  exportTestimonials,
+  importTestimonials,
+  clearTestimonials 
+} from "../services/supabaseTestimonialService";
 
 function Testimonials() {
   const [modalOpen, setModalOpen] = useState(false);
-  const [testimonials, setTestimonials] = useState(testimonialsData);
+  const [testimonials, setTestimonials] = useState([]);
   const [submissionStatus, setSubmissionStatus] = useState({ type: null, message: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [debugFormData, setDebugFormData] = useState(null);
+  const [storageStats, setStorageStats] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Load testimonials on component mount
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        setIsLoading(true);
+        
+        // Load public testimonials from Supabase
+        const result = await getPublicTestimonials();
+        
+        if (result.success) {
+          console.log(`Loaded ${result.testimonials.length} testimonials from Supabase`);
+          setTestimonials(result.testimonials);
+        } else {
+          console.error('Error loading testimonials:', result.error);
+          // Fallback to sample data if Supabase fails
+          setTestimonials(testimonialsData);
+        }
+        
+        // Load statistics
+        const statsResult = await getTestimonialStats();
+        if (statsResult.success) {
+          setStorageStats(statsResult.stats);
+        }
+      } catch (error) {
+        console.error('Error loading testimonials:', error);
+        setTestimonials(testimonialsData);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    
+    loadData();
+  }, []);
 
   // Add new testimonial to the top of the list and send to Discord
   const handleTestimonialSubmit = async (data) => {
@@ -30,28 +75,32 @@ function Testimonials() {
       // Send to Discord webhook
       await sendToDiscord(data, 'testimonial');
       
-      // Add to local testimonials list
-      setTestimonials(prev => [
-        {
-          ...data,
-          id: Date.now().toString(),
-          featuresLiked: data.features || [],
-          text: data.message,
-          permission: data.permission === "yes" ? "public" : "private",
-        },
-        ...prev,
-      ]);
+      // Add to Supabase database
+      const result = await addTestimonial(data);
       
-      setSubmissionStatus({ type: 'success', message: 'Testimonial submitted successfully!' });
-      setTimeout(() => {
-        setModalOpen(false);
-        setSubmissionStatus({ type: null, message: '' });
-        setIsSubmitting(false);
-        setDebugFormData(null);
-      }, 2000);
+      if (result.success) {
+        // Update local state
+        setTestimonials(prev => [result.testimonial, ...prev]);
+        
+        // Update statistics
+        const statsResult = await getTestimonialStats();
+        if (statsResult.success) {
+          setStorageStats(statsResult.stats);
+        }
+        
+        setSubmissionStatus({ type: 'success', message: 'Testimonial submitted successfully!' });
+        setTimeout(() => {
+          setModalOpen(false);
+          setSubmissionStatus({ type: null, message: '' });
+          setIsSubmitting(false);
+          setDebugFormData(null);
+        }, 2000);
+      } else {
+        throw new Error(result.error);
+      }
     } catch (error) {
       console.error('Testimonial submission error:', error);
-      setSubmissionStatus({ type: 'error', message: 'Failed to submit testimonial. Please try again.' });
+      setSubmissionStatus({ type: 'error', message: `Failed to submit testimonial: ${error.message}` });
       setTimeout(() => {
         setSubmissionStatus({ type: null, message: '' });
         setIsSubmitting(false);
@@ -106,6 +155,61 @@ function Testimonials() {
     alert('Form data logged to console. Check browser console for details.');
   };
 
+  // Data management functions
+  const handleExportData = () => {
+    const result = exportTestimonials();
+    if (result.success) {
+      alert('Testimonials exported successfully!');
+    } else {
+      alert('Export failed: ' + result.error);
+    }
+  };
+
+  const handleImportData = async (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+    
+    const result = await importTestimonials(file);
+    if (result.success) {
+      alert(`Successfully imported ${result.count} testimonials!`);
+      // Reload testimonials
+      const reloadResult = await getPublicTestimonials();
+      if (reloadResult.success) {
+        setTestimonials(reloadResult.testimonials);
+      }
+      const statsResult = await getTestimonialStats();
+      if (statsResult.success) {
+        setStorageStats(statsResult.stats);
+      }
+    } else {
+      alert('Import failed: ' + result.error);
+    }
+  };
+
+  const handleClearData = async () => {
+    if (confirm('Are you sure you want to clear all testimonials? This action cannot be undone.')) {
+      const result = await clearTestimonials();
+      if (result.success) {
+        alert('All testimonials cleared successfully!');
+        setTestimonials([]);
+        setStorageStats(null);
+      } else {
+        alert('Clear failed: ' + result.error);
+      }
+    }
+  };
+
+  const handleViewStats = async () => {
+    const statsResult = await getTestimonialStats();
+    if (statsResult.success) {
+      const stats = statsResult.stats;
+      console.log('📊 Supabase Statistics:', stats);
+      alert(`Supabase Stats:\nTotal: ${stats.total}\nApproved: ${stats.approved}\nPending: ${stats.pending}\nAvg Rating: ${stats.averageRating}`);
+    } else {
+      alert('Failed to load statistics: ' + statsResult.error);
+    }
+  };
+
   return (
     <>
       {/* Debug Panel - Only shows when modal is open */}
@@ -116,28 +220,19 @@ function Testimonials() {
         onTestDiscordWebhook={handleTestDiscordWebhook}
         onReviewFormData={handleReviewFormData}
         formData={debugFormData}
+        onExportData={handleExportData}
+        onImportData={handleImportData}
+        onClearData={handleClearData}
+        onViewStats={handleViewStats}
+        storageStats={storageStats}
       />
 
       {/* Status Messages */}
-      {submissionStatus.message && (
-        <div
-          style={{
-            position: "fixed",
-            top: 20,
-            right: 20,
-            zIndex: 3001,
-            background: submissionStatus.type === 'success' ? "#43b581" : "#f04747",
-            color: "#fff",
-            padding: "12px 20px",
-            borderRadius: 8,
-            fontWeight: 600,
-            fontSize: "1.1em",
-            boxShadow: "0 4px 12px rgba(0,0,0,0.3)",
-          }}
-        >
-          {submissionStatus.message}
-        </div>
-      )}
+      <StatusMessage
+        message={submissionStatus.message}
+        type={submissionStatus.type}
+        onClose={() => setSubmissionStatus({ type: null, message: '' })}
+      />
 
       <section className="section testimonials-section" style={{ minHeight: "100vh", background: "#181a20" }}>
         {/* Hero Content - in a .container, above the main content container */}
@@ -186,9 +281,24 @@ function Testimonials() {
 
         {/* Testimonials Content */}
         <div className="container">
-          <TestimonialAnalytics testimonials={testimonials} />
-          <TestimonialWordCloud testimonials={testimonials} />
-          <TestimonialList testimonials={testimonials} />
+          {isLoading ? (
+            <div style={{ 
+              display: 'flex', 
+              justifyContent: 'center', 
+              alignItems: 'center', 
+              minHeight: '200px',
+              color: '#b9bbbe',
+              fontSize: '1.2em'
+            }}>
+              Loading testimonials...
+            </div>
+          ) : (
+            <>
+              <TestimonialAnalytics testimonials={testimonials} />
+              <TestimonialWordCloud testimonials={testimonials} />
+              <TestimonialList testimonials={testimonials} />
+            </>
+          )}
         </div>
 
         {/* Modal for testimonial form */}

@@ -4,7 +4,13 @@ import TestimonialForm from "../components/TestimonialForm";
 import ConsultationForm from "../components/ConsultationForm";
 import HeroSection from "../components/HeroSection";
 import FormDebugPanel from "../components/FormDebugPanel";
+import ContactInfoCard from "../components/ContactInfoCard";
+import CTACard from "../components/CTACard";
+import FAQCard from "../components/FAQCard";
+import StatusMessage from "../components/StatusMessage";
 import { sendToDiscord } from "../services/discordService";
+import { addTestimonial, exportTestimonials, importTestimonials, clearTestimonials, getTestimonialStats } from "../services/supabaseTestimonialService";
+import { addConsultation, exportConsultations, importConsultations, clearConsultations, getConsultationStats } from "../services/supabaseConsultationService";
 
 function Contact() {
   const [openModal, setOpenModal] = useState(null); // 'consultation' | 'testimonial' | null
@@ -24,16 +30,24 @@ function Contact() {
     try {
       console.log('📤 Sending testimonial to Discord:', testimonialData);
       await sendToDiscord(testimonialData, 'testimonial');
-      setSubmissionStatus({ type: 'success', message: 'Testimonial submitted successfully!' });
-      setTimeout(() => {
-        setOpenModal(null);
-        setSubmissionStatus({ type: null, message: '' });
-        setIsSubmitting(false);
-        setDebugFormData(null);
-      }, 2000);
+      
+      // Add to persistent storage
+      const result = addTestimonial(testimonialData);
+      
+      if (result.success) {
+        setSubmissionStatus({ type: 'success', message: 'Testimonial submitted successfully!' });
+        setTimeout(() => {
+          setOpenModal(null);
+          setSubmissionStatus({ type: null, message: '' });
+          setIsSubmitting(false);
+          setDebugFormData(null);
+        }, 2000);
+      } else {
+        throw new Error(result.error);
+      }
     } catch (error) {
       console.error('Testimonial submission error:', error);
-      setSubmissionStatus({ type: 'error', message: 'Failed to submit testimonial. Please try again.' });
+      setSubmissionStatus({ type: 'error', message: `Failed to submit testimonial: ${error.message}` });
       setTimeout(() => {
         setSubmissionStatus({ type: null, message: '' });
         setIsSubmitting(false);
@@ -53,16 +67,24 @@ function Contact() {
     try {
       console.log('📤 Sending consultation to Discord:', consultationData);
       await sendToDiscord(consultationData, 'consultation');
-      setSubmissionStatus({ type: 'success', message: 'Consultation request submitted successfully!' });
-      setTimeout(() => {
-        setOpenModal(null);
-        setSubmissionStatus({ type: null, message: '' });
-        setIsSubmitting(false);
-        setDebugFormData(null);
-      }, 2000);
+      
+      // Add to Supabase database
+      const result = await addConsultation(consultationData);
+      
+      if (result.success) {
+        setSubmissionStatus({ type: 'success', message: 'Consultation request submitted successfully!' });
+        setTimeout(() => {
+          setOpenModal(null);
+          setSubmissionStatus({ type: null, message: '' });
+          setIsSubmitting(false);
+          setDebugFormData(null);
+        }, 2000);
+      } else {
+        throw new Error(result.error);
+      }
     } catch (error) {
       console.error('Consultation submission error:', error);
-      setSubmissionStatus({ type: 'error', message: 'Failed to submit consultation request. Please try again.' });
+      setSubmissionStatus({ type: 'error', message: `Failed to submit consultation request: ${error.message}` });
       setTimeout(() => {
         setSubmissionStatus({ type: null, message: '' });
         setIsSubmitting(false);
@@ -137,6 +159,80 @@ function Contact() {
     alert('Form data logged to console. Check browser console for details.');
   };
 
+  // Data management functions
+  const handleExportData = async () => {
+    if (openModal === 'testimonial') {
+      const result = await exportTestimonials();
+      if (result.success) {
+        alert('Testimonials exported successfully!');
+      } else {
+        alert('Export failed: ' + result.error);
+      }
+    } else if (openModal === 'consultation') {
+      const result = await exportConsultations();
+      if (result.success) {
+        alert('Consultations exported successfully!');
+      } else {
+        alert('Export failed: ' + result.error);
+      }
+    }
+  };
+
+  const handleImportData = async (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+    
+    if (openModal === 'testimonial') {
+      const result = await importTestimonials(file);
+      if (result.success) {
+        alert(`Successfully imported ${result.count} testimonials!`);
+      } else {
+        alert('Import failed: ' + result.error);
+      }
+    } else if (openModal === 'consultation') {
+      const result = await importConsultations(file);
+      if (result.success) {
+        alert(`Successfully imported ${result.count} consultations!`);
+      } else {
+        alert('Import failed: ' + result.error);
+      }
+    }
+  };
+
+  const handleClearData = async () => {
+    const dataType = openModal === 'testimonial' ? 'testimonials' : 'consultations';
+    if (confirm(`Are you sure you want to clear all ${dataType}? This action cannot be undone.`)) {
+      const result = openModal === 'testimonial' ? await clearTestimonials() : await clearConsultations();
+      if (result.success) {
+        alert(`All ${dataType} cleared successfully!`);
+      } else {
+        alert('Clear failed: ' + result.error);
+      }
+    }
+  };
+
+  const handleViewStats = async () => {
+    if (openModal === 'testimonial') {
+      const statsResult = await getTestimonialStats();
+      if (statsResult.success) {
+        const stats = statsResult.stats;
+        console.log('📊 Testimonial Statistics:', stats);
+        alert(`Testimonial Stats:\nTotal: ${stats.total}\nApproved: ${stats.approved}\nPending: ${stats.pending}\nAvg Rating: ${stats.averageRating}`);
+      } else {
+        alert('Failed to load testimonial statistics: ' + statsResult.error);
+      }
+    } else if (openModal === 'consultation') {
+      const statsResult = await getConsultationStats();
+      if (statsResult.success) {
+        const stats = statsResult.stats;
+        console.log('📊 Consultation Statistics:', stats);
+        alert(`Consultation Stats:\nTotal: ${stats.total}\nPending: ${stats.statusStats.pending || 0}\nCompleted: ${stats.statusStats.completed || 0}\nAvg Budget: $${stats.averageBudget}`);
+      } else {
+        alert('Failed to load consultation statistics: ' + statsResult.error);
+      }
+    }
+  };
+
   return (
     <div>
       <HeroSection 
@@ -149,21 +245,23 @@ function Contact() {
         <div className="container">
           <h2 className="section-header">Contact Information</h2>
           <div className="faq-grid">
-            <div className="frosted-card" style={{ textAlign: "center", minHeight: 220, display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-              <div style={{ fontSize: 40, marginBottom: 12 }}>📧</div>
-              <h3 style={{ fontWeight: 700, fontSize: "1.2em", marginBottom: 4 }}>Email</h3>
-              <div style={{ color: "#444", fontSize: "1.05em" }}>baldape@example.com</div>
-            </div>
-            <div className="frosted-card" style={{ textAlign: "center", minHeight: 220, display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-              <div style={{ fontSize: 40, marginBottom: 12 }}>💬</div>
-              <h3 style={{ fontWeight: 700, fontSize: "1.2em", marginBottom: 4 }}>Discord</h3>
-              <div style={{ color: "#444", fontSize: "1.05em" }}>BaldApe#1234</div>
-            </div>
-            <div className="frosted-card" style={{ textAlign: "center", minHeight: 220, display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-              <div style={{ fontSize: 40, marginBottom: 12 }}>🌐</div>
-              <h3 style={{ fontWeight: 700, fontSize: "1.2em", marginBottom: 4 }}>Website</h3>
-              <div style={{ color: "#444", fontSize: "1.05em" }}>www.baldapeservices.com</div>
-            </div>
+            <ContactInfoCard 
+              icon="📧" 
+              title="Email" 
+              value="baldape@example.com"
+              link="mailto:baldape@example.com"
+            />
+            <ContactInfoCard 
+              icon="💬" 
+              title="Discord" 
+              value="BaldApe#1234"
+            />
+            <ContactInfoCard 
+              icon="🌐" 
+              title="Website" 
+              value="www.baldapeservices.com"
+              link="https://www.baldapeservices.com"
+            />
           </div>
         </div>
       </section>
@@ -176,64 +274,22 @@ function Contact() {
             Ready to transform your Discord server? Let's discuss your needs.
           </div>
           <div className="faq-grid">
-            <div
-              className="cta-square-card"
-              style={{
-                cursor: "pointer",
-                minHeight: 220,
-                minWidth: 220,
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
-                textAlign: "center",
-                background: "linear-gradient(120deg, #a3e3ff 0%, #f0e9ff 100%)",
-                color: "#23272a",
-                fontWeight: 700,
-                fontSize: "1.15em",
-                borderRadius: 18,
-                boxShadow: "0 8px 32px rgba(88, 101, 242, 0.13), 0 2px 16px #0002",
-                transition: "transform 0.25s cubic-bezier(.4,2,.6,1), box-shadow 0.25s cubic-bezier(.4,2,.6,1)",
-              }}
+            <CTACard
+              icon="📅"
+              title="Book a Consultation"
+              description="Schedule a free consultation to discuss your community's needs."
               onClick={() => setOpenModal("consultation")}
-              onMouseOver={e => e.currentTarget.style.transform = "scale(1.06)"}
-              onMouseOut={e => e.currentTarget.style.transform = "scale(1)"}
-            >
-              <div style={{ fontSize: 48, marginBottom: 16 }}>📅</div>
-              <div style={{ fontWeight: 800, fontSize: "1.18em", marginBottom: 8 }}>Book a Consultation</div>
-              <div style={{ color: "#444", fontWeight: 500, fontSize: "1.05em" }}>
-                Schedule a free consultation to discuss your community's needs.
-              </div>
-            </div>
-            <div
-              className="cta-square-card"
-              style={{
-                cursor: "pointer",
-                minHeight: 220,
-                minWidth: 220,
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
-                textAlign: "center",
-                background: "linear-gradient(120deg, #ffe082 0%, #a3e3ff 100%)",
-                color: "#23272a",
-                fontWeight: 700,
-                fontSize: "1.15em",
-                borderRadius: 18,
-                boxShadow: "0 8px 32px rgba(242, 201, 76, 0.13), 0 2px 16px #0002",
-                transition: "transform 0.25s cubic-bezier(.4,2,.6,1), box-shadow 0.25s cubic-bezier(.4,2,.6,1)",
-              }}
+              gradient="linear-gradient(120deg, #a3e3ff 0%, #f0e9ff 100%)"
+              shadowColor="rgba(88, 101, 242, 0.13)"
+            />
+            <CTACard
+              icon="⭐"
+              title="Leave a Testimonial"
+              description="Share your experience working with BaldApe Services."
               onClick={() => setOpenModal("testimonial")}
-              onMouseOver={e => e.currentTarget.style.transform = "scale(1.06)"}
-              onMouseOut={e => e.currentTarget.style.transform = "scale(1)"}
-            >
-              <div style={{ fontSize: 48, marginBottom: 16 }}>⭐</div>
-              <div style={{ fontWeight: 800, fontSize: "1.18em", marginBottom: 8 }}>Leave a Testimonial</div>
-              <div style={{ color: "#444", fontWeight: 500, fontSize: "1.05em" }}>
-                Share your experience working with BaldApe Services.
-              </div>
-            </div>
+              gradient="linear-gradient(120deg, #ffe082 0%, #a3e3ff 100%)"
+              shadowColor="rgba(242, 201, 76, 0.13)"
+            />
           </div>
         </div>
       </section>
@@ -243,30 +299,30 @@ function Contact() {
         <div className="container">
           <h2 className="section-header">Frequently Asked Questions</h2>
           <div className="faq-grid">
-            <div className="faq-white-card" style={{ minHeight: 180, display: "flex", flexDirection: "column", justifyContent: "center" }}>
-              <h3>How quickly can you start working on my server?</h3>
-              <p>I typically can begin work within 1-3 days of receiving your requirements. For urgent projects, I can start the same day.</p>
-            </div>
-            <div className="faq-white-card" style={{ minHeight: 180, display: "flex", flexDirection: "column", justifyContent: "center" }}>
-              <h3>Do you work with all types of communities?</h3>
-              <p>Yes! I've worked with gaming communities, educational groups, business networks, and more. Every community is unique.</p>
-            </div>
-            <div className="faq-white-card" style={{ minHeight: 180, display: "flex", flexDirection: "column", justifyContent: "center" }}>
-              <h3>What if I'm not satisfied with the results?</h3>
-              <p>I offer revisions and adjustments to ensure you're completely happy with the final result. Your satisfaction is my priority.</p>
-            </div>
-            <div className="faq-white-card" style={{ minHeight: 180, display: "flex", flexDirection: "column", justifyContent: "center" }}>
-              <h3>Can you help with ongoing management?</h3>
-              <p>Absolutely! I offer ongoing management services to help maintain and grow your community over time.</p>
-            </div>
-            <div className="faq-white-card" style={{ minHeight: 180, display: "flex", flexDirection: "column", justifyContent: "center" }}>
-              <h3>Do you provide training for your team?</h3>
-              <p>Yes, I can train your moderators and administrators on best practices for community management.</p>
-            </div>
-            <div className="faq-white-card" style={{ minHeight: 180, display: "flex", flexDirection: "column", justifyContent: "center" }}>
-              <h3>What's included in the consultation?</h3>
-              <p>The free consultation includes a detailed analysis of your current setup, goal setting, and a customized action plan.</p>
-            </div>
+            <FAQCard
+              question="How quickly can you start working on my server?"
+              answer="I typically can begin work within 1-3 days of receiving your requirements. For urgent projects, I can start the same day."
+            />
+            <FAQCard
+              question="Do you work with all types of communities?"
+              answer="Yes! I've worked with gaming communities, educational groups, business networks, and more. Every community is unique."
+            />
+            <FAQCard
+              question="What if I'm not satisfied with the results?"
+              answer="I offer revisions and adjustments to ensure you're completely happy with the final result. Your satisfaction is my priority."
+            />
+            <FAQCard
+              question="Can you help with ongoing management?"
+              answer="Absolutely! I offer ongoing management services to help maintain and grow your community over time."
+            />
+            <FAQCard
+              question="Do you provide training for your team?"
+              answer="Yes, I can train your moderators and administrators on best practices for community management."
+            />
+            <FAQCard
+              question="What's included in the consultation?"
+              answer="The free consultation includes a detailed analysis of your current setup, goal setting, and a customized action plan."
+            />
           </div>
         </div>
       </section>
@@ -279,28 +335,19 @@ function Contact() {
         onTestDiscordWebhook={handleTestDiscordWebhook}
         onReviewFormData={handleReviewFormData}
         formData={debugFormData}
+        onExportData={handleExportData}
+        onImportData={handleImportData}
+        onClearData={handleClearData}
+        onViewStats={handleViewStats}
+        storageStats={openModal === 'testimonial' ? getTestimonialStats() : getConsultationStats()}
       />
 
       {/* Status Messages */}
-      {submissionStatus.message && (
-        <div
-          style={{
-            position: "fixed",
-            top: 20,
-            right: 20,
-            zIndex: 3001,
-            background: submissionStatus.type === 'success' ? "#43b581" : "#f04747",
-            color: "#fff",
-            padding: "12px 20px",
-            borderRadius: 8,
-            fontWeight: 600,
-            fontSize: "1.1em",
-            boxShadow: "0 4px 12px rgba(0,0,0,0.3)",
-          }}
-        >
-          {submissionStatus.message}
-        </div>
-      )}
+      <StatusMessage
+        message={submissionStatus.message}
+        type={submissionStatus.type}
+        onClose={() => setSubmissionStatus({ type: null, message: '' })}
+      />
 
       {/* Modals for forms */}
       <Modal open={openModal === "consultation"} onClose={() => setOpenModal(null)}>

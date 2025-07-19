@@ -6,7 +6,12 @@ function FormDebugPanel({
   onFillForm,
   onTestDiscordWebhook, 
   onReviewFormData,
-  formData = null 
+  formData = null,
+  onExportData,
+  onImportData,
+  onClearData,
+  onViewStats,
+  storageStats = null
 }) {
   if (!formType) return null;
 
@@ -100,6 +105,94 @@ function FormDebugPanel({
         >
           📋 View Data
         </button>
+
+        {/* Data Management Section */}
+        {(formType === 'testimonial' || formType === 'consultation') && (
+          <>
+            <div style={{ 
+              marginTop: 8, 
+              padding: 4, 
+              background: "rgba(255, 255, 255, 0.05)", 
+              borderRadius: 4,
+              borderTop: "1px solid #444"
+            }}>
+              <div style={{ color: "#a3e3ff", fontSize: "0.8em", fontWeight: 600, marginBottom: 4 }}>
+                💾 Data Management
+              </div>
+            </div>
+
+            <button
+              onClick={() => onExportData()}
+              style={{
+                background: "#43b581",
+                color: "#fff",
+                border: "none",
+                borderRadius: 4,
+                padding: "6px 10px",
+                fontSize: "0.85em",
+                fontWeight: 600,
+                cursor: "pointer",
+              }}
+            >
+              📤 Export Data
+            </button>
+
+            <label
+              style={{
+                background: "#faa61a",
+                color: "#fff",
+                border: "none",
+                borderRadius: 4,
+                padding: "6px 10px",
+                fontSize: "0.85em",
+                fontWeight: 600,
+                cursor: "pointer",
+                display: "block",
+                textAlign: "center",
+              }}
+            >
+              📥 Import Data
+              <input
+                type="file"
+                accept=".json"
+                onChange={onImportData}
+                style={{ display: "none" }}
+              />
+            </label>
+
+            <button
+              onClick={() => onViewStats()}
+              style={{
+                background: "#5865F2",
+                color: "#fff",
+                border: "none",
+                borderRadius: 4,
+                padding: "6px 10px",
+                fontSize: "0.85em",
+                fontWeight: 600,
+                cursor: "pointer",
+              }}
+            >
+              📊 View Stats
+            </button>
+
+            <button
+              onClick={() => onClearData()}
+              style={{
+                background: "#f04747",
+                color: "#fff",
+                border: "none",
+                borderRadius: 4,
+                padding: "6px 10px",
+                fontSize: "0.85em",
+                fontWeight: 600,
+                cursor: "pointer",
+              }}
+            >
+              🗑️ Clear All
+            </button>
+          </>
+        )}
       </div>
 
       {formData && (
@@ -117,6 +210,24 @@ function FormDebugPanel({
           <pre style={{ margin: 2, fontSize: "0.7em" }}>
             {JSON.stringify(formData, null, 1)}
           </pre>
+        </div>
+      )}
+
+      {storageStats && (
+        <div style={{ 
+          marginTop: 8, 
+          padding: 4, 
+          background: "rgba(255, 255, 255, 0.05)", 
+          borderRadius: 4,
+          fontSize: "0.75em",
+          color: "#b9bbbe"
+        }}>
+          <strong>Storage:</strong>
+          <div style={{ fontSize: "0.7em", marginTop: 2 }}>
+            Total: {storageStats.totalTestimonials}<br/>
+            Public: {storageStats.publicTestimonials}<br/>
+            Size: {storageStats.storageSizeKB}KB
+          </div>
         </div>
       )}
     </div>

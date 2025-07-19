@@ -4,7 +4,7 @@ function HeroSection({
   title, 
   subtitle, 
   showProfile = true, 
-  profileImage = "/images/profile-pic.jpg",
+  profileImage = "/images/profile-pic.png",
   profileAlt = "BaldApe - Discord Services Professional"
 }) {
   return (
