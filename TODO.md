@@ -35,6 +35,11 @@
 
 ### Technical Improvements
 
+- [x] **Refactor codebase into reusable components** - Completed all 4 major refactoring tasks
+  - [x] Created reusable HeroSection component for all pages
+  - [x] Extracted BotSection data and created BotCard component
+  - [x] Broke down Testimonials page into TestimonialAnalytics, TestimonialList, and TestimonialWordCloud components
+  - [x] Refactored ManagedServersSection with ServerCard and ServerWidgetModal components
 - [ ] **Add meta descriptions** for SEO on all pages
 - [ ] **Optimize images** for web performance (compress, resize)
 - [ ] **Add loading states** for form submissions

@@ -1,0 +1,51 @@
+export const bots = [
+  {
+    href: "https://cakey.bot/",
+    img: "/images/portfolio/bots/cakeybot.webp",
+    alt: "Cakey Bot Logo",
+    name: "Cakey Bot",
+    desc: "Advanced moderation and utility bot with custom commands",
+  },
+  {
+    href: "https://invitemanager.xyz/",
+    img: "/images/portfolio/bots/invite-management.gif",
+    alt: "Invite Management Logo",
+    name: "Invite Management",
+    desc: "Professional invite tracking and management system",
+  },
+  {
+    href: "https://security.gg/",
+    img: "/images/portfolio/bots/security.png",
+    alt: "Security.gg Logo",
+    name: "Security.gg",
+    desc: "Advanced security and anti-raid protection",
+  },
+  {
+    href: "https://quarklogger.com/",
+    img: "/images/portfolio/bots/quark.png",
+    alt: "Quark Logger Logo",
+    name: "Quark Logger",
+    desc: "Comprehensive logging and audit trail system",
+  },
+  {
+    href: "https://rss.app/",
+    img: "/images/portfolio/bots/rss-app.png",
+    alt: "RSS.app Logo",
+    name: "RSS.app",
+    desc: "Automated content delivery and news updates (paid service)",
+  },
+  {
+    href: "https://autopublisher.com/",
+    img: "/images/portfolio/bots/auto-publisher.png",
+    alt: "Auto Publisher Logo",
+    name: "Auto Publisher",
+    desc: "Automated content publishing and scheduling",
+  },
+  {
+    href: "https://statbot.net/",
+    img: "/images/portfolio/bots/statbot.png",
+    alt: "Stat Bot Logo",
+    name: "Stat Bot",
+    desc: "Server analytics and member statistics",
+  },
+]; 
