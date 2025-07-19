@@ -165,27 +165,29 @@ body::before {
 /* ===== BUTTON STYLES ===== */
 .cta-button {
   display: inline-block;
-  background: var(--discord-primary);
-  color: var(--color-white);
-  padding: var(--spacing-sm) var(--spacing-lg);
+  background: linear-gradient(90deg, #23272a 0%, #5865f2 100%);
+  color: #fff;
+  padding: 1.3em 0;
   text-decoration: none;
-  border-radius: var(--border-radius-full);
-  font-weight: var(--font-weight-bold);
-  transition: all var(--transition-normal);
-  box-shadow: var(--shadow-button);
+  border-radius: 18px;
+  font-weight: 700;
+  font-size: 1.25em;
+  box-shadow: 0 2px 16px #5865f299;
   border: none;
   cursor: pointer;
-  font-size: var(--font-size-base);
+  letter-spacing: 0.5px;
+  width: 100%;
+  margin-top: 18px;
+  transition: none;
 }
-
-.cta-button:hover {
-  background: var(--discord-primary-hover);
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-button-hover);
-}
-
+.cta-button:hover,
+.cta-button:focus,
 .cta-button:active {
-  transform: translateY(0);
+  background: linear-gradient(90deg, #23272a 0%, #5865f2 100%);
+  color: #fff;
+  box-shadow: 0 2px 16px #5865f299;
+  outline: none;
+  border: none;
 }
 
 .cta-button.secondary {
@@ -1031,12 +1033,94 @@ footer span {
   cursor: pointer;
   border: 2px solid var(--color-gray-light);
   position: relative;
+  min-height: 420px;
+  height: 420px;
+  width: 320px;
+  max-width: 90vw;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: stretch;
+  box-sizing: border-box;
+}
+.server-card .portfolio-image,
+.dark-glass-card .portfolio-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 12px;
+  display: block;
+  box-sizing: border-box;
 }
 
-.server-card:hover {
-  transform: translateY(-5px);
-  box-shadow: var(--shadow-card-hover);
-  border-color: var(--discord-primary);
+@media (max-width: 700px) {
+  .server-card,
+  .dark-glass-card {
+    width: 100%;
+    aspect-ratio: 1/1;
+    height: auto;
+    min-width: 0;
+    max-width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: stretch;
+  }
+  .server-card .portfolio-image,
+  .dark-glass-card .portfolio-image {
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+    border-radius: 12px;
+    min-height: 0;
+    min-width: 0;
+    max-width: 100%;
+    max-height: 100%;
+    display: block;
+  }
+  .server-showcase {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.2rem;
+  }
+}
+@media (max-width: 480px) {
+  .server-card,
+  .dark-glass-card {
+    width: 100%;
+    aspect-ratio: 1/1;
+    height: auto;
+    min-width: 0;
+    max-width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: stretch;
+  }
+  .server-card .portfolio-image,
+  .dark-glass-card .portfolio-image {
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+    border-radius: 12px;
+    min-height: 0;
+    min-width: 0;
+    max-width: 100%;
+    max-height: 100%;
+    display: block;
+  }
+  .server-showcase {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.7rem;
+  }
 }
 
 .screenshot-placeholder {
@@ -1112,18 +1196,22 @@ footer span {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.8);
+  background: rgba(20, 20, 30, 0.85);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
   backdrop-filter: blur(5px);
   opacity: 0;
-  transition: opacity 0.3s ease;
+  transform: scale(0.97);
+  pointer-events: none;
+  transition: opacity 0.38s cubic-bezier(.4,2,.6,1), transform 0.38s cubic-bezier(.4,2,.6,1);
 }
 
 .server-modal.show {
   opacity: 1;
+  transform: scale(1);
+  pointer-events: auto;
 }
 
 .server-modal-content {
@@ -1401,21 +1489,25 @@ footer span {
 
 /* Frosted Card Utility (for reuse) */
 .frosted-card {
-  background: rgba(255, 255, 255, 0.18);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1.5px solid rgba(255, 255, 255, 0.22);
-  color: #fff;
+  background: rgba(255, 255, 255, 0.92) !important;
+  color: #222 !important;
+  border-radius: var(--border-radius-md);
   box-shadow: var(--shadow-card);
-  transition: all var(--transition-normal);
+  border: 1.5px solid rgba(255, 255, 255, 0.22);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   position: relative;
   overflow: hidden;
+  transition: box-shadow var(--transition-normal),
+    transform var(--transition-normal),
+    background 0.5s cubic-bezier(.4,2,.6,1),
+    border 0.5s cubic-bezier(.4,2,.6,1);
 }
 .frosted-card:hover {
-  background: rgba(255, 255, 255, 0.22);
-  border: 1.5px solid rgba(255, 255, 255, 0.32);
-  box-shadow: var(--shadow-card-hover);
-  transform: translateY(-6px) scale(1.03);
+  background: linear-gradient(120deg, #f0e9ff 0%, #e0f7fa 100%) !important;
+  border: 1.5px solid #a3e3ff;
+  box-shadow: 0 8px 32px rgba(88, 101, 242, 0.13), var(--shadow-card-hover);
+  transform: translateY(-6px) scale(1.035);
 }
 
 /* Improved Animated Gradient Card for Contrast */
@@ -1708,8 +1800,8 @@ footer span {
 /* Star Rating (1-5) */
 .star-rating {
   display: flex;
-  flex-direction: row-reverse;
-  justify-content: flex-end;
+  flex-direction: row;
+  justify-content: flex-start;
   gap: 0.4rem;
   font-size: 2rem;
   margin-top: 0.2rem;
@@ -1728,6 +1820,18 @@ footer span {
 .star-rating label:hover,
 .star-rating label:hover ~ label {
   color: #ffd700;
+}
+/* Fix: highlight left-to-right */
+.star-rating label:has(~ input[type="radio"]:checked),
+.star-rating label:hover,
+.star-rating label:hover ~ label {
+  color: #ffd700;
+}
+.star-rating {
+  margin-bottom: 0;
+}
+.rating-group {
+  margin-bottom: 0.1rem;
 }
 
 /* Form Layout Improvements */
@@ -1824,28 +1928,61 @@ footer span {
 
 /* ===== RESPONSIVE DESIGN ===== */
 @media (max-width: 700px) {
-  .server-card {
-    max-width: 95vw;
-    height: 250px;
-  }
-  .screenshot-placeholder {
-    min-height: 100%;
-  }
-  .portfolio-image {
-    min-height: 100%;
-  }
-  .navigation-grid {
-    grid-template-columns: 1fr;
-    gap: var(--spacing-md);
-    justify-content: center;
-  }
-  .nav-card {
-    padding: var(--spacing-md);
+  .server-card,
+  .dark-glass-card {
+    width: 100%;
+    aspect-ratio: 1/1;
+    height: auto;
+    min-width: 0;
+    max-width: 100%;
     margin-left: 0;
     margin-right: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: stretch;
   }
-  .section-cards {
-    padding: var(--spacing-lg) var(--spacing-sm);
+  .server-card .portfolio-image,
+  .dark-glass-card .portfolio-image {
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+    border-radius: 12px;
+    min-height: 0;
+    min-width: 0;
+    max-width: 100%;
+    max-height: 100%;
+    display: block;
+  }
+}
+@media (max-width: 480px) {
+  .server-card,
+  .dark-glass-card {
+    width: 100%;
+    aspect-ratio: 1/1;
+    height: auto;
+    min-width: 0;
+    max-width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: stretch;
+  }
+  .server-card .portfolio-image,
+  .dark-glass-card .portfolio-image {
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+    border-radius: 12px;
+    min-height: 0;
+    min-width: 0;
+    max-width: 100%;
+    max-height: 100%;
+    display: block;
   }
 }
 
@@ -1990,22 +2127,32 @@ footer span {
 /* --- FORCE OVERRIDE: Managed Server Cards Height & Overlay Gradient --- */
 .dark-glass-card,
 .server-card {
-  min-height: 420px !important;
-  height: 420px !important;
+  aspect-ratio: 1/1;
+  width: 100%;
+  height: auto;
+  min-height: 0;
+  max-width: 100%;
+  margin-left: 0;
+  margin-right: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: stretch;
+  box-sizing: border-box;
 }
 .dark-glass-card .portfolio-image,
 .server-card .portfolio-image {
-  min-height: 420px !important;
-  height: 100% !important;
-}
-.dark-glass-card .server-overlay-content,
-.server-card .server-overlay-content {
-  background: linear-gradient(
-    0deg,
-    rgba(24, 24, 24, 0.92) 65%,
-    rgba(24, 24, 24, 0.45) 85%,
-    rgba(24, 24, 24, 0) 100%
-  ) !important;
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 1/1;
+  object-fit: cover;
+  border-radius: 12px;
+  min-height: 0;
+  min-width: 0;
+  max-width: 100%;
+  max-height: 100%;
+  display: block;
+  box-sizing: border-box;
 }
 
 .modal {
@@ -2984,4 +3131,261 @@ footer span {
   #transformations .frosted-text-card {
     min-height: 160px;
   }
+}
+
+/* Soft fade/slide for mobile nav overlay */
+.mobile-menu-overlay {
+  animation: fadeSlideInMenu 0.38s cubic-bezier(.4,2,.6,1);
+}
+
+@keyframes fadeSlideInMenu {
+  0% {
+    opacity: 0;
+    transform: translateY(-24px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.faq-white-card {
+  background-color: #fff;
+  color: #23272a;
+  border-radius: var(--border-radius-md);
+  box-shadow: 0 2px 12px rgba(88, 101, 242, 0.06), var(--shadow-card);
+  border: 1.5px solid #f0f0f0;
+  padding: 2.2rem 1.6rem 1.6rem 1.6rem;
+  margin: 0.2rem;
+  transition: background-color 0.7s cubic-bezier(.4,2,.6,1), border 0.7s cubic-bezier(.4,2,.6,1), box-shadow 0.7s cubic-bezier(.4,2,.6,1);
+  position: relative;
+  overflow: hidden;
+}
+.faq-white-card:hover {
+  background-color: #fff0f7;
+  border: 1.5px solid #f7c4e3;
+  box-shadow: 0 6px 24px rgba(242, 76, 170, 0.10), var(--shadow-card-hover);
+}
+.faq-white-card h3 {
+  color: #23272a;
+  font-weight: 700;
+  font-size: 1.13em;
+  margin-bottom: 0.5em;
+}
+.faq-white-card p {
+  color: #444;
+  font-size: 1.01em;
+}
+.faq-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2.5rem;
+  margin-top: var(--spacing-xl);
+  margin-bottom: var(--spacing-xl);
+}
+
+/* Enforce 1:1 square cards for managed servers at all sizes */
+.server-card,
+.dark-glass-card {
+  width: 100%;
+  aspect-ratio: 1/1;
+  height: auto;
+  min-width: 0;
+  max-width: 100%;
+  margin-left: 0;
+  margin-right: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: stretch;
+  box-sizing: border-box;
+}
+.server-card .portfolio-image,
+.dark-glass-card .portfolio-image {
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 1/1;
+  object-fit: cover;
+  border-radius: 12px;
+  min-height: 0;
+  min-width: 0;
+  max-width: 100%;
+  max-height: 100%;
+  display: block;
+  box-sizing: border-box;
+}
+
+/* Restore rectangle cards on desktop */
+.dark-glass-card,
+.server-card {
+  min-height: 420px;
+  height: 420px;
+}
+.dark-glass-card .portfolio-image,
+.server-card .portfolio-image {
+  min-height: 420px;
+  height: 100%;
+}
+.dark-glass-card .server-overlay-content,
+.server-card .server-overlay-content {
+  background: linear-gradient(
+    0deg,
+    rgba(24, 24, 24, 0.92) 55%,
+    rgba(24, 24, 24, 0.45) 80%,
+    rgba(24, 24, 24, 0.08) 95%,
+    rgba(24, 24, 24, 0) 100%
+  );
+}
+@media (max-width: 700px) {
+  .server-card,
+  .dark-glass-card {
+    width: 100%;
+    aspect-ratio: 1/1;
+    height: auto;
+    min-width: 0;
+    max-width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: stretch;
+  }
+  .server-card .portfolio-image,
+  .dark-glass-card .portfolio-image {
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+    border-radius: 12px;
+    min-height: 0;
+    min-width: 0;
+    max-width: 100%;
+    max-height: 100%;
+    display: block;
+  }
+  .server-showcase {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.2rem;
+  }
+}
+@media (max-width: 480px) {
+  .server-card,
+  .dark-glass-card {
+    width: 100%;
+    aspect-ratio: 1/1;
+    height: auto;
+    min-width: 0;
+    max-width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: stretch;
+  }
+  .server-card .portfolio-image,
+  .dark-glass-card .portfolio-image {
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+    border-radius: 12px;
+    min-height: 0;
+    min-width: 0;
+    max-width: 100%;
+    max-height: 100%;
+    display: block;
+  }
+  .server-showcase {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.7rem;
+  }
+}
+
+/* Fix cta-button color shift and focus/active states */
+.cta-button {
+  display: inline-block;
+  background: linear-gradient(90deg, #23272a 0%, #5865f2 100%);
+  color: #fff;
+  padding: 1.3em 0;
+  text-decoration: none;
+  border-radius: 18px;
+  font-weight: 700;
+  font-size: 1.25em;
+  box-shadow: 0 2px 16px #5865f299;
+  border: none;
+  cursor: pointer;
+  letter-spacing: 0.5px;
+  width: 100%;
+  margin-top: 18px;
+  transition: none;
+}
+.cta-button:hover,
+.cta-button:focus,
+.cta-button:active {
+  background: linear-gradient(90deg, #23272a 0%, #5865f2 100%);
+  color: #fff;
+  box-shadow: 0 2px 16px #5865f299;
+  outline: none;
+  border: none;
+}
+
+/* Modal form container always fits and glows */
+.form-modal-bg {
+  padding: 3.5rem 2.5rem;
+  min-height: 80vh;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  border-radius: 32px;
+  background: rgba(30,34,44,0.92);
+  box-shadow: 0 12px 64px 0 rgba(88,101,242,0.22), 0 0 0 2px #5865f2;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #f3f6fa;
+  height: 100%;
+  justify-content: center;
+  position: relative;
+  margin: 0 auto;
+  min-height: 0;
+  max-height: 100%;
+}
+
+.server-widget-modal-content {
+  background: rgba(35, 39, 42, 0.97);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 18px;
+  box-shadow: 0 2px 16px #0006, 0 0 0 2px rgba(88,101,242,0.08);
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #fff;
+  padding: 2.2rem 2rem 1.5rem 2rem;
+  min-height: 400px;
+  transition: none;
+}
+@media (max-width: 600px) {
+  .server-widget-modal-content {
+    max-width: 98vw;
+    min-height: 98vh;
+    padding: 1.2rem 0.5rem 1.2rem 0.5rem;
+    border-radius: 10px;
+  }
+}
+
+.checkbox-group {
+  margin-top: 0.2rem;
+}
+.testimonial-form .radio-group {
+  margin-bottom: 1.5rem;
 }

@@ -1,30 +1,140 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import Modal from "../components/Modal";
 import TestimonialForm from "../components/TestimonialForm";
 import ConsultationForm from "../components/ConsultationForm";
 import HeroSection from "../components/HeroSection";
+import FormDebugPanel from "../components/FormDebugPanel";
+import { sendToDiscord } from "../services/discordService";
 
 function Contact() {
   const [openModal, setOpenModal] = useState(null); // 'consultation' | 'testimonial' | null
+  const [submissionStatus, setSubmissionStatus] = useState({ type: null, message: '' });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [debugFormData, setDebugFormData] = useState(null);
 
-  const handleTestimonialSubmit = (testimonialData) => {
-    // Handle testimonial submission
-    console.log('Testimonial submitted:', testimonialData);
-    // Here you would typically send the data to your backend or API
-    // For now, we'll just log it and close the modal after a delay
-    setTimeout(() => {
-      setOpenModal(null);
-    }, 2000);
+  const handleTestimonialSubmit = async (testimonialData) => {
+    if (isSubmitting) {
+      console.log('🚫 Submission blocked - already submitting');
+      return;
+    }
+    
+    setIsSubmitting(true);
+    setDebugFormData(testimonialData);
+    
+    try {
+      console.log('📤 Sending testimonial to Discord:', testimonialData);
+      await sendToDiscord(testimonialData, 'testimonial');
+      setSubmissionStatus({ type: 'success', message: 'Testimonial submitted successfully!' });
+      setTimeout(() => {
+        setOpenModal(null);
+        setSubmissionStatus({ type: null, message: '' });
+        setIsSubmitting(false);
+        setDebugFormData(null);
+      }, 2000);
+    } catch (error) {
+      console.error('Testimonial submission error:', error);
+      setSubmissionStatus({ type: 'error', message: 'Failed to submit testimonial. Please try again.' });
+      setTimeout(() => {
+        setSubmissionStatus({ type: null, message: '' });
+        setIsSubmitting(false);
+      }, 3000);
+    }
   };
 
-  const handleConsultationSubmit = (consultationData) => {
-    // Handle consultation submission
-    console.log('Consultation submitted:', consultationData);
-    // Here you would typically send the data to your backend or API
-    // For now, we'll just log it and close the modal after a delay
-    setTimeout(() => {
-      setOpenModal(null);
-    }, 2000);
+  const handleConsultationSubmit = async (consultationData) => {
+    if (isSubmitting) {
+      console.log('🚫 Submission blocked - already submitting');
+      return;
+    }
+    
+    setIsSubmitting(true);
+    setDebugFormData(consultationData);
+    
+    try {
+      console.log('📤 Sending consultation to Discord:', consultationData);
+      await sendToDiscord(consultationData, 'consultation');
+      setSubmissionStatus({ type: 'success', message: 'Consultation request submitted successfully!' });
+      setTimeout(() => {
+        setOpenModal(null);
+        setSubmissionStatus({ type: null, message: '' });
+        setIsSubmitting(false);
+        setDebugFormData(null);
+      }, 2000);
+    } catch (error) {
+      console.error('Consultation submission error:', error);
+      setSubmissionStatus({ type: 'error', message: 'Failed to submit consultation request. Please try again.' });
+      setTimeout(() => {
+        setSubmissionStatus({ type: null, message: '' });
+        setIsSubmitting(false);
+      }, 3000);
+    }
+  };
+
+  // Debug Functions
+  const handleFillForm = () => {
+    const testData = openModal === 'testimonial' 
+      ? {
+          name: "Test User",
+          discord: "testuser#1234",
+          community: "baldapes-lab",
+          role: "member",
+          email: "test@example.com",
+          message: "This is a test testimonial submission.",
+          rating: 5,
+          features: ["organization", "bots"],
+          permission: "yes",
+          anonymous: "public",
+          date: new Date().toISOString().slice(0, 10)
+        }
+      : {
+          name: "Test User",
+          email: "test@example.com",
+          discord: "testuser#1234",
+          community: "Test Community",
+          memberCount: "101-500",
+          services: ["quick-setup", "premium-setup"],
+          goals: "Improve community engagement and organization",
+          challenges: "Disorganized channels and low activity",
+          timeline: "1-2-weeks",
+          budget: "100-200",
+          preferredTime: "afternoon",
+          additionalInfo: "This is a test consultation request.",
+          date: new Date().toISOString().slice(0, 10)
+        };
+    
+    console.log('📝 Filling form with test data:', testData);
+    setDebugFormData(testData);
+    alert('Form filled with test data! You can now submit or modify the form.');
+  };
+
+  const handleTestSubmission = () => {
+    if (!debugFormData) {
+      alert('No form data to submit. Use "Fill Form" first.');
+      return;
+    }
+    
+    console.log('🧪 Testing form submission with:', debugFormData);
+    if (openModal === 'testimonial') {
+      handleTestimonialSubmit(debugFormData);
+    } else {
+      handleConsultationSubmit(debugFormData);
+    }
+  };
+
+  const handleTestDiscordWebhook = async () => {
+    console.log('🧪 Testing Discord webhook...');
+    try {
+      const testData = { name: "Webhook Test", message: "Testing Discord webhook functionality" };
+      await sendToDiscord(testData, openModal);
+      alert('Discord webhook test successful!');
+    } catch (error) {
+      alert('Discord webhook test failed: ' + error.message);
+    }
+  };
+
+  const handleReviewFormData = () => {
+    console.log('📋 Current form data:', debugFormData);
+    alert('Form data logged to console. Check browser console for details.');
   };
 
   return (
@@ -62,6 +172,9 @@ function Contact() {
       <section className="section">
         <div className="container">
           <h2 className="section-header">Get in Touch</h2>
+          <div className="section-subtitle">
+            Ready to transform your Discord server? Let's discuss your needs.
+          </div>
           <div className="faq-grid">
             <div
               className="cta-square-card"
@@ -147,7 +260,7 @@ function Contact() {
               <p>Absolutely! I offer ongoing management services to help maintain and grow your community over time.</p>
             </div>
             <div className="faq-white-card" style={{ minHeight: 180, display: "flex", flexDirection: "column", justifyContent: "center" }}>
-              <h3>Do you provide training for my team?</h3>
+              <h3>Do you provide training for your team?</h3>
               <p>Yes, I can train your moderators and administrators on best practices for community management.</p>
             </div>
             <div className="faq-white-card" style={{ minHeight: 180, display: "flex", flexDirection: "column", justifyContent: "center" }}>
@@ -157,6 +270,37 @@ function Contact() {
           </div>
         </div>
       </section>
+
+      {/* Debug Panel - Only shows when modals are open */}
+      <FormDebugPanel
+        formType={openModal}
+        onFillForm={handleFillForm}
+        onTestSubmission={handleTestSubmission}
+        onTestDiscordWebhook={handleTestDiscordWebhook}
+        onReviewFormData={handleReviewFormData}
+        formData={debugFormData}
+      />
+
+      {/* Status Messages */}
+      {submissionStatus.message && (
+        <div
+          style={{
+            position: "fixed",
+            top: 20,
+            right: 20,
+            zIndex: 3001,
+            background: submissionStatus.type === 'success' ? "#43b581" : "#f04747",
+            color: "#fff",
+            padding: "12px 20px",
+            borderRadius: 8,
+            fontWeight: 600,
+            fontSize: "1.1em",
+            boxShadow: "0 4px 12px rgba(0,0,0,0.3)",
+          }}
+        >
+          {submissionStatus.message}
+        </div>
+      )}
 
       {/* Modals for forms */}
       <Modal open={openModal === "consultation"} onClose={() => setOpenModal(null)}>
