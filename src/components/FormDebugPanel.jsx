@@ -38,7 +38,7 @@ function FormDebugPanel({
         borderBottom: "1px solid #444",
         paddingBottom: 4
       }}>
-        🐛 Debug - {formType}
+        🐛 Debug - {formType} (Supabase)
       </div>
       
       <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
@@ -106,7 +106,7 @@ function FormDebugPanel({
           📋 View Data
         </button>
 
-        {/* Data Management Section */}
+        {/* Development Tools */}
         {(formType === 'testimonial' || formType === 'consultation') && (
           <>
             <div style={{ 
@@ -117,48 +117,9 @@ function FormDebugPanel({
               borderTop: "1px solid #444"
             }}>
               <div style={{ color: "#a3e3ff", fontSize: "0.8em", fontWeight: 600, marginBottom: 4 }}>
-                💾 Data Management
+                🛠️ Development Tools
               </div>
             </div>
-
-            <button
-              onClick={() => onExportData()}
-              style={{
-                background: "#43b581",
-                color: "#fff",
-                border: "none",
-                borderRadius: 4,
-                padding: "6px 10px",
-                fontSize: "0.85em",
-                fontWeight: 600,
-                cursor: "pointer",
-              }}
-            >
-              📤 Export Data
-            </button>
-
-            <label
-              style={{
-                background: "#faa61a",
-                color: "#fff",
-                border: "none",
-                borderRadius: 4,
-                padding: "6px 10px",
-                fontSize: "0.85em",
-                fontWeight: 600,
-                cursor: "pointer",
-                display: "block",
-                textAlign: "center",
-              }}
-            >
-              📥 Import Data
-              <input
-                type="file"
-                accept=".json"
-                onChange={onImportData}
-                style={{ display: "none" }}
-              />
-            </label>
 
             <button
               onClick={() => onViewStats()}
@@ -173,13 +134,13 @@ function FormDebugPanel({
                 cursor: "pointer",
               }}
             >
-              📊 View Stats
+              📊 Database Stats
             </button>
 
             <button
-              onClick={() => onClearData()}
+              onClick={() => onExportData()}
               style={{
-                background: "#f04747",
+                background: "#43b581",
                 color: "#fff",
                 border: "none",
                 borderRadius: 4,
@@ -189,7 +150,7 @@ function FormDebugPanel({
                 cursor: "pointer",
               }}
             >
-              🗑️ Clear All
+              📤 Export JSON
             </button>
           </>
         )}
@@ -222,11 +183,12 @@ function FormDebugPanel({
           fontSize: "0.75em",
           color: "#b9bbbe"
         }}>
-          <strong>Storage:</strong>
+          <strong>Database:</strong>
           <div style={{ fontSize: "0.7em", marginTop: 2 }}>
-            Total: {storageStats.totalTestimonials}<br/>
-            Public: {storageStats.publicTestimonials}<br/>
-            Size: {storageStats.storageSizeKB}KB
+            Total: {storageStats.total || storageStats.totalTestimonials}<br/>
+            Approved: {storageStats.approved}<br/>
+            Pending: {storageStats.pending}<br/>
+            Avg Rating: {storageStats.averageRating || storageStats.avgRating}
           </div>
         </div>
       )}
