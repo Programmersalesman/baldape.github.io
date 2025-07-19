@@ -1,0 +1,6 @@
+.faqCard {
+  min-height: 180px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+} 

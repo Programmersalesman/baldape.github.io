@@ -1,0 +1,39 @@
+/* Testimonial Card - Clean styling without shadows */
+
+.testimonialCard {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 1.5rem;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+  cursor: pointer;
+  box-shadow: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.testimonialCard:hover {
+  background: #f8f9fa;
+  border-color: rgba(88, 101, 242, 0.3);
+  transform: translateY(-2px);
+  box-shadow: none;
+}
+
+.testimonialCard:active {
+  transform: translateY(-1px);
+  box-shadow: none;
+}
+
+.testimonialCard:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+/* Ensure no shadows are applied in any state */
+.testimonialCard,
+.testimonialCard:hover,
+.testimonialCard:active,
+.testimonialCard:focus,
+.testimonialCard:visited {
+  box-shadow: none !important;
+} 

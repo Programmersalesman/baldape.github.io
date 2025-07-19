@@ -1,0 +1,332 @@
+/* ServerWidgetModal.module.css - Replaces inline styles in ServerWidgetModal.jsx */
+
+/* Modal overlay */
+.serverModal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.serverModal.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Close button */
+.serverModalClose {
+  position: absolute;
+  top: 30px;
+  right: 40px;
+  font-size: 2.5rem;
+  color: #a3e3ff;
+  cursor: pointer;
+  z-index: 2100;
+  background: none;
+  border: none;
+  transition: color 0.2s ease;
+}
+
+.serverModalClose:hover {
+  color: #fff;
+}
+
+/* Modal content */
+.serverWidgetModalContent {
+  background: linear-gradient(135deg, #23272a 0%, #2c2f33 100%);
+  border-radius: 20px;
+  padding: 2rem;
+  max-width: 500px;
+  width: 90vw;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(88, 101, 242, 0.2);
+  position: relative;
+}
+
+/* Loading state */
+.loadingContainer {
+  text-align: center;
+}
+
+.spinner {
+  margin: 1.5rem auto;
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(88, 101, 242, 0.3);
+  border-top: 4px solid #5865f2;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Error state */
+.errorMessage {
+  color: #f04747;
+  margin-top: 20px;
+  text-align: center;
+}
+
+/* Server header */
+.serverHeader {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.serverIcon {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  border: 2px solid #5865F2;
+  background: #2c2f33;
+}
+
+.serverInfo {
+  flex: 1;
+}
+
+.serverName {
+  font-size: 1.5em;
+  font-weight: bold;
+  color: #a3e3ff;
+  margin-bottom: 0.25rem;
+}
+
+.serverMemberCount {
+  font-size: 1em;
+  color: #aaa;
+}
+
+/* Server description */
+.serverDescription {
+  width: 100%;
+  margin: 1.1rem 0 0.7rem 0;
+  color: #b9bbbe;
+  font-size: 1.08em;
+  line-height: 1.5;
+}
+
+/* Members section */
+.membersSection {
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+.membersTitle {
+  width: 100%;
+  margin-bottom: 8px;
+  font-size: 1.08em;
+  color: #fff;
+  font-weight: 600;
+}
+
+.membersList {
+  width: 100%;
+  max-height: 180px;
+  overflow-y: auto;
+}
+
+.memberItem {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin-bottom: 0.5rem;
+}
+
+.memberAvatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+}
+
+.memberName {
+  color: #fff;
+  font-weight: 500;
+}
+
+.memberStatus {
+  font-size: 1.2em;
+}
+
+.memberStatus.online {
+  color: #43b581;
+}
+
+.memberStatus.idle {
+  color: #faa61a;
+}
+
+.memberStatus.offline {
+  color: #f04747;
+}
+
+.noMembersMessage {
+  color: #aaa;
+  font-size: 0.98em;
+  text-align: center;
+  padding: 1rem;
+}
+
+.moreMembersMessage {
+  color: #aaa;
+  font-size: 0.95em;
+  margin-top: 0.5rem;
+  text-align: center;
+}
+
+/* Featured member */
+.featuredMember {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin: 1.2rem 0 0.5rem 0;
+  padding: 0.7rem 1rem;
+  background: #2c2f33;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.featuredMemberAvatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+}
+
+.featuredMemberInfo {
+  flex: 1;
+}
+
+.featuredMemberName {
+  color: #fff;
+  font-weight: bold;
+  margin-bottom: 0.25rem;
+}
+
+.featuredMemberLabel {
+  color: #aaa;
+  font-size: 0.95em;
+}
+
+.featuredMemberStatus {
+  font-size: 1.3em;
+  margin-left: auto;
+}
+
+/* Join button */
+.joinButton {
+  display: block;
+  margin: 1.2rem auto 0 auto;
+  width: 100%;
+  text-align: center;
+  background: #5865F2;
+  color: #fff;
+  font-weight: bold;
+  padding: 0.9em 0;
+  border-radius: 10px;
+  text-decoration: none;
+  font-size: 1.15em;
+  transition: all 0.2s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.joinButton:hover {
+  background: #4752c4;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(88, 101, 242, 0.3);
+}
+
+/* Footer info */
+.footerInfo {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1.2rem;
+  font-size: 0.98em;
+  color: #aaa;
+}
+
+.footerLeft {
+  display: flex;
+  align-items: center;
+  gap: 0.7em;
+}
+
+.footerRight {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}
+
+.refreshButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 6px;
+  transition: background 0.2s ease;
+}
+
+.refreshButton:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.lastUpdated {
+  width: 100%;
+  margin-top: 0.7em;
+  font-size: 0.93em;
+  color: #888;
+  text-align: center;
+}
+
+/* Responsive styles */
+@media (max-width: 600px) {
+  .serverWidgetModalContent {
+    width: 95vw;
+    padding: 1.5rem;
+    margin: 1rem;
+  }
+  
+  .serverModalClose {
+    top: 15px;
+    right: 20px;
+    font-size: 2rem;
+  }
+  
+  .serverHeader {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.8rem;
+  }
+  
+  .serverIcon {
+    width: 48px;
+    height: 48px;
+  }
+  
+  .footerInfo {
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: center;
+  }
+} 

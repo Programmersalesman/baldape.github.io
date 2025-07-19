@@ -1,0 +1,105 @@
+/* TestimonialList.module.css - Replaces inline styles in TestimonialList.jsx */
+
+/* Testimonials scroll container */
+.testimonialsScrollBox {
+  background: transparent;
+  padding: 0;
+  margin: 0 0 3.5rem 0;
+  max-height: 600px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+/* Empty state */
+.emptyState {
+  text-align: center;
+  padding: 3rem;
+  color: #b9bbbe;
+  font-size: 1.2em;
+}
+
+.emptyStateIcon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+/* Testimonial card header */
+.testimonialHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+/* Author info section */
+.authorInfo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* Author name */
+.authorName {
+  color: #2c2f33;
+  font-weight: 700;
+  font-size: 1.1em;
+}
+
+/* Community badge */
+.communityBadge {
+  color: #43b581;
+  font-size: 0.95em;
+  font-weight: 600;
+  background: rgba(67, 181, 129, 0.1);
+  padding: 4px 8px;
+  border-radius: 8px;
+}
+
+/* Features badge */
+.featuresBadge {
+  color: #5865f2;
+  font-size: 0.9em;
+  font-weight: 500;
+  background: rgba(88, 101, 242, 0.1);
+  padding: 2px 6px;
+  border-radius: 6px;
+}
+
+/* Date badge */
+.dateBadge {
+  color: #666;
+  font-size: 0.9em;
+  font-weight: 500;
+  background: rgba(0, 0, 0, 0.05);
+  padding: 4px 8px;
+  border-radius: 8px;
+}
+
+/* Testimonial text */
+.testimonialText {
+  color: #2c2f33;
+  font-size: 1.1em;
+  line-height: 1.7;
+  font-weight: 400;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .testimonialHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .authorInfo {
+    gap: 8px;
+  }
+  
+  .testimonialText {
+    font-size: 1em;
+  }
+} 

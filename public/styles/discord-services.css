@@ -2631,7 +2631,6 @@ footer span {
     padding-left: var(--spacing-md, 1rem);
     padding-right: var(--spacing-md, 1rem);
     box-sizing: border-box;
-    overflow-x: hidden;
   }
 }
 

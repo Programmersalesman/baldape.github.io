@@ -1,0 +1,13 @@
+.serverCard {
+  cursor: pointer;
+  width: 320px;
+  max-width: 90vw;
+  margin-bottom: 20px;
+  transition: transform 0.2s;
+}
+
+.serverImage {
+  border-radius: 12px;
+}
+
+ 

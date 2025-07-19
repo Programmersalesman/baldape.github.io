@@ -6,14 +6,15 @@ const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
 console.log('🔍 Supabase Config Check:', {
   url: supabaseUrl,
   keyExists: !!supabaseAnonKey,
-  keyStart: supabaseAnonKey?.substring(0, 20) + '...'
+  keyStart: supabaseAnonKey?.substring(0, 20) + '...',
+  keyType: supabaseAnonKey?.startsWith('sb_publishable_') ? 'publishable' : 'unknown'
 })
 
 if (!supabaseUrl || !supabaseAnonKey) {
   console.error('❌ Missing Supabase environment variables!')
   console.log('Please create a .env file with:')
-  console.log('VITE_SUPABASE_URL=https://bb0u-wazolq0zfgvwkcwlg.supabase.co')
-  console.log('VITE_SUPABASE_ANON_KEY=sb_publishable_BB0u-waZOlq0zfgVwkCWlg_D5R0oJX4')
+  console.log('VITE_SUPABASE_URL=your_supabase_project_url')
+  console.log('VITE_SUPABASE_ANON_KEY=your_supabase_anon_key')
 }
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {

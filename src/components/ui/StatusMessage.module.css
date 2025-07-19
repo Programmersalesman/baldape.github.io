@@ -1,0 +1,48 @@
+.statusMessage {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 3001;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1.1em;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 200px;
+  max-width: 400px;
+}
+
+.statusMessage.success {
+  background: #43b581;
+  color: #fff;
+}
+
+.statusMessage.error {
+  background: #f04747;
+  color: #fff;
+}
+
+.message {
+  flex: 1;
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.2em;
+  cursor: pointer;
+  padding: 0;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.closeButton:hover {
+  opacity: 0.8;
+} 

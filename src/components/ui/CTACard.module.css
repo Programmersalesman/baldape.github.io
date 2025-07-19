@@ -1,0 +1,36 @@
+.ctaCard {
+  cursor: pointer;
+  min-height: 220px;
+  min-width: 220px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: #23272a;
+  font-weight: 700;
+  font-size: 1.15em;
+  border-radius: 18px;
+  transition: transform 0.25s cubic-bezier(.4,2,.6,1), box-shadow 0.25s cubic-bezier(.4,2,.6,1);
+}
+
+.ctaCard:hover {
+  transform: scale(1.06);
+}
+
+.icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.title {
+  font-weight: 800;
+  font-size: 1.18em;
+  margin-bottom: 8px;
+}
+
+.description {
+  color: #444;
+  font-weight: 500;
+  font-size: 1.05em;
+} 

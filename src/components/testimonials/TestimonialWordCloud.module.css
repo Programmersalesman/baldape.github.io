@@ -1,0 +1,122 @@
+/* TestimonialWordCloud.module.css - Replaces inline styles in TestimonialWordCloud.jsx */
+
+/* Main container */
+.wordCloudContainer {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 36px;
+  flex-wrap: wrap;
+}
+
+/* Word cloud card */
+.wordCloudCard {
+  flex: 2;
+  min-width: 280px;
+  background: linear-gradient(135deg, #23272a 0%, #2c2f33 100%);
+  border-radius: 18px;
+  padding: 2rem;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(88, 101, 242, 0.1);
+}
+
+.wordCloudTitle {
+  color: #a3e3ff;
+  margin-bottom: 20px;
+  font-size: 1.3em;
+  font-weight: 600;
+}
+
+.wordCloudContent {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  justify-content: center;
+  align-items: center;
+  min-height: 120px;
+}
+
+/* Word cloud tags */
+.wordTag {
+  background: rgba(88, 101, 242, 0.6);
+  color: #fff;
+  border-radius: 20px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid rgba(88, 101, 242, 0.5);
+}
+
+.wordTag:hover {
+  transform: scale(1.1);
+}
+
+/* Feature tags card */
+.featureTagsCard {
+  flex: 1;
+  min-width: 200px;
+  background: linear-gradient(135deg, #23272a 0%, #2c2f33 100%);
+  border-radius: 18px;
+  padding: 2rem;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(88, 101, 242, 0.1);
+}
+
+.featureTagsTitle {
+  color: #a3e3ff;
+  margin-bottom: 20px;
+  font-size: 1.3em;
+  font-weight: 600;
+}
+
+.featureTagsContent {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+
+/* Feature tag */
+.featureTag {
+  background: linear-gradient(135deg, #5865F2 0%, #667eea 100%);
+  color: #fff;
+  border-radius: 12px;
+  padding: 8px 16px;
+  font-size: 0.95em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(88, 101, 242, 0.3);
+  border: 1px solid rgba(88, 101, 242, 0.5);
+}
+
+.featureTag:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(88, 101, 242, 0.5);
+}
+
+.featureTagCount {
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 400;
+  margin-left: 6px;
+  font-size: 0.9em;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .wordCloudContainer {
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .wordCloudCard,
+  .featureTagsCard {
+    flex: 1;
+    min-width: auto;
+  }
+  
+  .wordCloudContent {
+    min-height: 100px;
+  }
+} 

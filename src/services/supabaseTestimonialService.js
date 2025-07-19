@@ -1,5 +1,7 @@
 import { supabase, handleSupabaseError, formatDate, getTimeAgo } from './supabaseClient'
 
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
+
 // Data validation
 const validateTestimonial = (testimonial) => {
   const required = ['name', 'community', 'text', 'rating', 'permission']
@@ -22,7 +24,7 @@ const validateTestimonial = (testimonial) => {
 
 // Normalize testimonial data structure for Supabase
 const normalizeTestimonial = (testimonial) => {
-  return {
+  const normalized = {
     name: testimonial.name || testimonial.discordUsername || 'Anonymous',
     discord_username: testimonial.discordUsername || testimonial.discord || null,
     community: testimonial.community,
@@ -36,22 +38,43 @@ const normalizeTestimonial = (testimonial) => {
     approved: testimonial.approved || false,
     admin_notes: testimonial.admin_notes || null,
   }
+  
+  console.log('🔧 Normalization details:');
+  console.log('  - Original permission:', testimonial.permission);
+  console.log('  - Normalized permission:', normalized.permission);
+  console.log('  - Original rating:', testimonial.rating);
+  console.log('  - Normalized rating:', normalized.rating);
+  console.log('  - Features array:', normalized.features_liked);
+  
+  return normalized;
 }
 
 // Add a new testimonial
 export const addTestimonial = async (testimonialData) => {
   try {
+    console.log('🔧 Raw testimonial data:', testimonialData);
+    
     const normalizedData = normalizeTestimonial(testimonialData)
+    console.log('🔧 Normalized data for Supabase:', normalizedData);
+    
     validateTestimonial(normalizedData)
     
+    console.log('🔧 Attempting to insert into Supabase...');
+    console.log('🔧 Using supabase client:', !!supabase);
+    console.log('🔧 Supabase URL:', supabase.supabaseUrl);
+    console.log('🔧 Supabase Key type:', supabaseAnonKey?.startsWith('sb_publishable_') ? 'publishable' : 'unknown');
     const { data, error } = await supabase
       .from('testimonials')
       .insert([normalizedData])
       .select()
       .single()
     
-    if (error) throw error
+    if (error) {
+      console.error('🔧 Supabase insert error:', error);
+      throw error;
+    }
     
+    console.log('🔧 Successfully inserted testimonial:', data);
     return { success: true, testimonial: data }
   } catch (error) {
     console.error('Error adding testimonial:', error)

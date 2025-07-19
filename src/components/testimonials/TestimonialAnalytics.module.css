@@ -1,0 +1,192 @@
+/* TestimonialAnalytics.module.css - Replaces inline styles in TestimonialAnalytics.jsx */
+
+/* Main analytics container */
+.analyticsContainer {
+  display: flex;
+  gap: 24px;
+  justify-content: space-between;
+  align-items: stretch;
+  background: linear-gradient(135deg, #23272a 0%, #2c2f33 100%);
+  border-radius: 20px;
+  padding: 2.5rem;
+  margin-bottom: 36px;
+  flex-wrap: wrap;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(88, 101, 242, 0.1);
+}
+
+/* Analytics card base styles */
+.analyticsCard {
+  flex: 1;
+  min-width: 160px;
+  text-align: center;
+  border-radius: 16px;
+  padding: 1.5rem;
+  border: 1px solid;
+}
+
+/* Average rating card */
+.averageRatingCard {
+  background: rgba(251, 191, 36, 0.1);
+  border-color: rgba(251, 191, 36, 0.2);
+}
+
+.averageRatingNumber {
+  font-size: 3rem;
+  font-weight: 900;
+  color: #fbbf24;
+  margin-bottom: 4px;
+}
+
+.averageRatingLabel {
+  color: #a3e3ff;
+  font-weight: 600;
+  font-size: 1.1em;
+  margin-bottom: 8px;
+}
+
+.averageRatingStars {
+  font-size: 1.8em;
+  color: #fbbf24;
+}
+
+.averageRatingStarsEmpty {
+  color: #444;
+}
+
+/* Total reviews card */
+.totalReviewsCard {
+  background: rgba(67, 181, 129, 0.1);
+  border-color: rgba(67, 181, 129, 0.2);
+}
+
+.totalReviewsNumber {
+  font-size: 3rem;
+  font-weight: 900;
+  color: #43b581;
+  margin-bottom: 4px;
+}
+
+.totalReviewsLabel {
+  color: #a3e3ff;
+  font-weight: 600;
+  font-size: 1.1em;
+  margin-bottom: 8px;
+}
+
+.totalReviewsSubtext {
+  color: #b9bbbe;
+  font-size: 0.95em;
+}
+
+/* Top community card */
+.topCommunityCard {
+  background: rgba(88, 101, 242, 0.1);
+  border-color: rgba(88, 101, 242, 0.2);
+}
+
+.topCommunityNumber {
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: #5865f2;
+  margin-bottom: 4px;
+}
+
+.topCommunityLabel {
+  color: #a3e3ff;
+  font-weight: 600;
+  font-size: 1.1em;
+  margin-bottom: 8px;
+}
+
+.topCommunityName {
+  color: #b9bbbe;
+  font-size: 0.95em;
+}
+
+/* Rating distribution card */
+.ratingDistributionCard {
+  flex: 2;
+  min-width: 280px;
+  background: rgba(30, 34, 60, 0.3);
+  border-color: rgba(88, 101, 242, 0.1);
+}
+
+.ratingDistributionTitle {
+  color: #a3e3ff;
+  font-weight: 600;
+  margin-bottom: 12px;
+  font-size: 1.1em;
+}
+
+.ratingDistributionList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ratingDistributionItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ratingLabel {
+  color: #fbbf24;
+  font-size: 1.1em;
+  width: 28px;
+  font-weight: 600;
+}
+
+.ratingBarContainer {
+  background: #2c2f33;
+  border-radius: 8px;
+  height: 18px;
+  flex: 1;
+  margin-right: 10px;
+  overflow: hidden;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.ratingBar {
+  background: linear-gradient(90deg, #5865F2 0%, #667eea 100%);
+  height: 18px;
+  border-radius: 8px;
+  min-width: 4px;
+  transition: width 0.5s ease;
+  box-shadow: 0 1px 3px rgba(88, 101, 242, 0.3);
+}
+
+.ratingCount {
+  color: #b9bbbe;
+  width: 36px;
+  font-weight: 600;
+  font-size: 0.95em;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .analyticsContainer {
+    flex-direction: column;
+    gap: 16px;
+    padding: 1.5rem;
+  }
+  
+  .analyticsCard {
+    min-width: auto;
+  }
+  
+  .ratingDistributionCard {
+    flex: 1;
+    min-width: auto;
+  }
+  
+  .averageRatingNumber,
+  .totalReviewsNumber {
+    font-size: 2.5rem;
+  }
+  
+  .topCommunityNumber {
+    font-size: 2rem;
+  }
+} 

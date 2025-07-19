@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { servers } from "./data/servers";
-import ServerCard from "./components/ServerCard";
-import ServerWidgetModal from "./components/ServerWidgetModal";
+import ServerCard from "./components/servers/ServerCard";
+import ServerWidgetModal from "./components/servers/ServerWidgetModal";
+import styles from "./ManagedServersSection.module.css";
 
 function ManagedServersSection() {
   const [modalServer, setModalServer] = useState(null);
@@ -18,15 +19,7 @@ function ManagedServersSection() {
             Each server is tailored for engagement, clarity, and growth.
           </span>
         </div>
-        <div
-          className="server-showcase"
-          style={{
-            display: "flex",
-            flexWrap: "wrap",
-            gap: "2.5rem",
-            justifyContent: "center",
-          }}
-        >
+        <div className={`server-showcase ${styles.serverShowcase}`}>
           {servers.map((server, idx) => (
             <ServerCard 
               key={server.key} 

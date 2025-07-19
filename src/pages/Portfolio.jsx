@@ -1,5 +1,5 @@
 import React from "react";
-import HeroSection from "../components/HeroSection";
+import HeroSection from "../components/ui/HeroSection";
 import ManagedServersSection from "../ManagedServersSection";
 import OrganizationSection from "../OrganizationSection";
 import BotSection from "../BotSection";
