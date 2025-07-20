@@ -1,15 +1,19 @@
 import React, { useState, useEffect } from "react";
 import Modal from "../components/ui/Modal";
-import TestimonialForm from "../components/testimonials/TestimonialForm";
-import TestimonialAnalytics from "../components/testimonials/TestimonialAnalytics";
-import TestimonialList from "../components/testimonials/TestimonialList";
-import TestimonialWordCloud from "../components/testimonials/TestimonialWordCloud";
-import TestimonialCarousel from "../components/testimonials/TestimonialCarousel";
+import { LoadingSpinner } from "../components/ui";
+import { 
+  TestimonialForm,
+  TestimonialAnalytics,
+  TestimonialList,
+  TestimonialWordCloud,
+  TestimonialCarousel,
+  TestimonialsHero
+} from "../components/testimonials";
 import FormDebugPanel from "../components/forms/FormDebugPanel";
 import StatusMessage from "../components/ui/StatusMessage";
 import testimonialsData from "../testimonialsData";
 import { sendToDiscord } from "../services/discordService";
-import styles from "../components/testimonials/TestimonialsSection.module.css";
+import styles from "./Testimonials.module.css";
 import { 
   getPublicTestimonials, 
   addTestimonial, 
@@ -30,6 +34,9 @@ function Testimonials() {
   const [debugFormData, setDebugFormData] = useState(null);
   const [storageStats, setStorageStats] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [sortBy, setSortBy] = useState('newest');
+  const [featureFilter, setFeatureFilter] = useState(null);
+  const [currentFilter, setCurrentFilter] = useState('all');
 
   // Load testimonials on component mount and set up real-time subscriptions
   // Note: React StrictMode causes this to run twice in development
@@ -227,6 +234,24 @@ function Testimonials() {
     alert(`Connection test completed. Check console for details.\nSuccess: ${result.success}\nInsert Error: ${result.insertError?.message || 'None'}`);
   };
 
+  // Handle star rating filtering from analytics
+  const handleStarFilter = (rating) => {
+    console.log('⭐ Star filter clicked:', rating);
+    if (rating === null) {
+      console.log('🔄 Clearing star filter, setting to newest');
+      setSortBy('newest'); // Clear filter and go back to newest first
+    } else {
+      console.log(`⭐ Setting star filter to rating-${rating}`);
+      setSortBy(`rating-${rating}`);
+    }
+  };
+
+  // Handle feature filtering from word cloud
+  const handleFeatureFilter = (feature) => {
+    // This will be passed to TestimonialList
+    setFeatureFilter(feature);
+  };
+
   return (
     <>
       {/* Debug Panel - Only shows when modal is open */}
@@ -248,34 +273,8 @@ function Testimonials() {
         onClose={() => setSubmissionStatus({ type: null, message: '' })}
       />
 
-      {/* Hero Content - title, description, and button between nav bar and testimonials section */}
-      <div className={`container ${styles.heroContainer}`}>
-        <div className={styles.testimonialsHeroBar}>
-          {/* Profile Picture */}
-          <div className={styles.profilePicture}>
-            <img 
-              src="/images/profile-pic.png" 
-              alt="Profile" 
-            />
-          </div>
-
-          {/* Content */}
-          <div className={styles.heroContent}>
-            <h2 className={styles.heroTitle}>
-              Testimonials & Reviews
-            </h2>
-            <div className={styles.heroDescription}>
-              Real feedback from communities and clients. Discover what makes our service stand out.
-            </div>
-            <button
-              onClick={() => setModalOpen(true)}
-              className={styles.submitButton}
-            >
-              Leave a Testimonial
-            </button>
-          </div>
-        </div>
-      </div>
+      {/* Hero Section */}
+      <TestimonialsHero onOpenModal={() => setModalOpen(true)} />
 
       {/* Main Testimonials Section */}
       <section className="section">
@@ -289,14 +288,26 @@ function Testimonials() {
 
           {/* Testimonials Content */}
           {isLoading ? (
-            <div className={styles.loadingContainer}>
-              Loading testimonials...
-            </div>
+            <LoadingSpinner message="Loading testimonials..." size="large" />
           ) : (
             <>
-              <TestimonialAnalytics testimonials={testimonials} />
-              <TestimonialWordCloud testimonials={testimonials} />
-              <TestimonialList testimonials={testimonials} />
+              <TestimonialWordCloud 
+                testimonials={testimonials}
+                onFeatureClick={handleFeatureFilter}
+                selectedFeature={featureFilter}
+              />
+              <TestimonialAnalytics 
+                testimonials={testimonials} 
+                onStarClick={handleStarFilter}
+                currentSort={sortBy}
+              />
+              <TestimonialList 
+                testimonials={testimonials} 
+                sortBy={sortBy}
+                onSortChange={setSortBy}
+                featureFilter={featureFilter}
+                onFeatureFilterChange={setFeatureFilter}
+              />
             </>
           )}
         </div>

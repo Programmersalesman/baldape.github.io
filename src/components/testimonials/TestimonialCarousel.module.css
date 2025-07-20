@@ -6,7 +6,7 @@
   max-width: 1000px;
   margin: 0 auto;
   position: relative;
-  height: 280px;
+  min-height: 450px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -61,12 +61,12 @@
   width: 100%;
   max-width: 800px;
   min-width: 700px;
-  height: 160px;
+  height: 350px;
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
   backdrop-filter: blur(25px);
   -webkit-backdrop-filter: blur(25px);
   border-radius: 20px;
-  padding: 2rem 2.5rem;
+  padding: 3rem 3.5rem;
   box-shadow: 
     0 8px 32px rgba(0, 0, 0, 0.12),
     0 0 0 1px rgba(255, 255, 255, 0.1),
@@ -110,16 +110,57 @@
 /* Testimonial text */
 .testimonialText {
   color: rgba(255, 255, 255, 0.95);
-  font-size: 1.1em;
-  line-height: 1.6;
+  font-size: 1.2em;
+  line-height: 1.8;
   text-align: center;
   font-style: italic;
   flex: 1;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   max-width: 100%;
-  padding: 0 0.5rem;
+  padding: 0 1.5rem;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+  position: relative;
+}
+
+.testimonialText::before {
+  content: '"';
+  position: absolute;
+  top: 0;
+  left: 0;
+  font-size: 2em;
+  color: rgba(255, 255, 255, 0.3);
+  font-family: serif;
+}
+
+.testimonialText::after {
+  content: '"';
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  font-size: 2em;
+  color: rgba(255, 255, 255, 0.3);
+  font-family: serif;
+}
+
+.testimonialText::-webkit-scrollbar {
+  width: 6px;
+}
+
+.testimonialText::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.testimonialText::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 3px;
+}
+
+.testimonialText::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
 }
 
 
@@ -130,7 +171,10 @@
   justify-content: space-between;
   align-items: center;
   margin-top: 1rem;
+  gap: 1rem;
 }
+
+
 
 /* Author info */
 .authorInfo {
@@ -154,6 +198,9 @@
   -webkit-backdrop-filter: blur(5px);
   color: white;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  position: relative;
+  z-index: 10;
+  transition: none !important;
 }
 
 /* Rating display */
@@ -161,16 +208,33 @@
   display: flex;
   align-items: center;
   gap: 0.8rem;
-  background: linear-gradient(135deg, rgba(251, 191, 36, 0.15), rgba(245, 158, 11, 0.15));
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.15), rgba(245, 158, 11, 0.15)) !important;
   padding: 0.5rem 0.8rem;
   border-radius: 12px;
-  border: 1px solid rgba(251, 191, 36, 0.3);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  transition: none;
+  border: 1px solid rgba(251, 191, 36, 0.3) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  transition: none !important;
   position: relative;
-  z-index: 10;
+  z-index: 20;
   isolation: isolate;
+  transform: none !important;
+  pointer-events: none;
+}
+
+/* Prevent any hover effects on rating display elements */
+.ratingDisplay * {
+  transition: none !important;
+  transform: none !important;
+}
+
+/* Ensure rating display maintains its styling on card hover */
+.testimonialCard:hover .ratingDisplay {
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.15), rgba(245, 158, 11, 0.15)) !important;
+  border: 1px solid rgba(251, 191, 36, 0.3) !important;
+  transform: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
 }
 
 .ratingStars {
@@ -181,7 +245,7 @@
 
 .star {
   font-size: 1.1em;
-  transition: color 0.2s ease;
+  transition: none !important;
 }
 
 .star.filled {
@@ -262,14 +326,14 @@
 /* Responsive styles */
 @media (max-width: 768px) {
   .carousel {
-    height: 280px;
+    min-height: 350px;
   }
   
   .testimonialCard {
     min-width: 90vw;
     max-width: 90vw;
-    height: 200px;
-    padding: 1.8rem 2rem;
+    height: 280px;
+    padding: 2rem 2.5rem;
   }
   
   .navButton {
@@ -291,4 +355,6 @@
     gap: 0.8rem;
     align-items: flex-start;
   }
+  
+
 } 

@@ -18,6 +18,7 @@
   text-align: center;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
   border: 1px solid rgba(88, 101, 242, 0.1);
+  overflow: hidden;
 }
 
 .wordCloudTitle {
@@ -28,12 +29,15 @@
 }
 
 .wordCloudContent {
+  position: relative;
   display: flex;
   flex-wrap: wrap;
   gap: 8px 12px;
   justify-content: center;
   align-items: center;
-  min-height: 120px;
+  min-height: 200px;
+  padding: 20px;
+  overflow: visible;
 }
 
 /* Word cloud tags */
@@ -43,12 +47,35 @@
   border-radius: 20px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
   border: 1px solid rgba(88, 101, 242, 0.5);
+  display: inline-block;
+  white-space: nowrap;
+  animation: float 6s ease-in-out infinite;
+  animation-delay: var(--animation-delay, 0s);
+  filter: drop-shadow(0 0 8px rgba(88, 101, 242, 0.3));
 }
 
 .wordTag:hover {
-  transform: scale(1.1);
+  transform: scale(1.15) rotate(2deg);
+  box-shadow: 0 8px 25px rgba(88, 101, 242, 0.6);
+  z-index: 1000;
+}
+
+/* Floating animation for cloud effect */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px) rotate(var(--rotation, 0deg));
+  }
+  25% {
+    transform: translateY(-4px) rotate(calc(var(--rotation, 0deg) + 2deg));
+  }
+  50% {
+    transform: translateY(-2px) rotate(var(--rotation, 0deg));
+  }
+  75% {
+    transform: translateY(-3px) rotate(calc(var(--rotation, 0deg) - 2deg));
+  }
 }
 
 /* Feature tags card */
@@ -96,6 +123,18 @@
   box-shadow: 0 4px 12px rgba(88, 101, 242, 0.5);
 }
 
+.activeFeatureTag {
+  background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+  border-color: rgba(255, 107, 53, 0.5);
+  box-shadow: 0 4px 16px rgba(255, 107, 53, 0.4);
+  transform: scale(1.05);
+}
+
+.activeFeatureTag:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 20px rgba(255, 107, 53, 0.6);
+}
+
 .featureTagCount {
   color: rgba(255, 255, 255, 0.8);
   font-weight: 400;
@@ -117,6 +156,11 @@
   }
   
   .wordCloudContent {
-    min-height: 100px;
+    min-height: 150px;
+  }
+  
+  .wordTag {
+    transform: none !important;
+    animation: none;
   }
 } 

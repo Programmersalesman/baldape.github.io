@@ -1,0 +1,66 @@
+/* DropdownExample.module.css */
+
+.exampleContainer {
+  background: #36393f;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin: 1rem 0;
+  border: 1px solid #40444b;
+}
+
+.exampleContainer h3 {
+  color: #dcddde;
+  margin: 0 0 1rem 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.controlsRow {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-end;
+  margin-bottom: 1rem;
+}
+
+.controlGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.label {
+  color: #b9bbbe;
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin: 0;
+}
+
+.selectedValues {
+  background: #2f3136;
+  padding: 1rem;
+  border-radius: 6px;
+  border: 1px solid #40444b;
+}
+
+.selectedValues p {
+  color: #dcddde;
+  margin: 0.25rem 0;
+  font-size: 0.9rem;
+}
+
+.selectedValues strong {
+  color: #b9bbbe;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .controlsRow {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+  
+  .controlGroup {
+    gap: 0.25rem;
+  }
+} 

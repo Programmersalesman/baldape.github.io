@@ -1,0 +1,123 @@
+/* Testimonials Hero - Frosted Glass White Theme */
+
+.heroContainer {
+  max-width: 1200px;
+  margin: 0.5rem auto 1rem auto;
+}
+
+.testimonialsHeroBar {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border-radius: 20px;
+  padding: 2.2rem 2.5rem 1.5rem 2.5rem;
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.1),
+    0 2px 8px rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  margin-bottom: 2rem;
+  transition: all 0.3s ease;
+}
+
+.testimonialsHeroBar:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+  box-shadow: 
+    0 12px 40px rgba(0, 0, 0, 0.15),
+    0 4px 12px rgba(255, 255, 255, 0.15);
+}
+
+.profilePicture {
+  flex-shrink: 0;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid rgba(88, 101, 242, 0.6);
+  box-shadow: 0 4px 16px rgba(88, 101, 242, 0.3);
+}
+
+.profilePicture img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.heroContent {
+  flex: 1;
+}
+
+.heroTitle {
+  font-size: 2.5rem;
+  color: #2c3e50;
+  margin-bottom: 8px;
+  font-weight: 700;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.heroDescription {
+  color: #34495e;
+  font-size: 1.2em;
+  margin-bottom: 18px;
+  line-height: 1.5;
+}
+
+.submitButton {
+  background: linear-gradient(90deg, #5865F2 60%, #43b581 100%);
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.1em;
+  border: none;
+  border-radius: 10px;
+  padding: 0.7em 2.1em;
+  box-shadow: 0 4px 12px rgba(88, 101, 242, 0.3);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 4px;
+}
+
+.submitButton:hover {
+  background: linear-gradient(90deg, #4752c4 60%, #3ca374 100%);
+  box-shadow: 0 6px 16px rgba(88, 101, 242, 0.4);
+  transform: translateY(-2px);
+}
+
+.submitButton:active {
+  transform: translateY(0);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .testimonialsHeroBar {
+    flex-direction: column;
+    text-align: center;
+    padding: 1.5rem;
+    gap: 1rem;
+  }
+  
+  .heroTitle {
+    font-size: 2rem;
+  }
+  
+  .heroDescription {
+    font-size: 1.1em;
+  }
+}
+
+@media (max-width: 480px) {
+  .testimonialsHeroBar {
+    padding: 1rem;
+  }
+  
+  .heroTitle {
+    font-size: 1.8rem;
+  }
+  
+  .profilePicture {
+    width: 60px;
+    height: 60px;
+  }
+} 

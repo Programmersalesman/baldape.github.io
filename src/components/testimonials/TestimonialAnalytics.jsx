@@ -17,7 +17,7 @@ const getRatingDistribution = (data) => {
   return dist;
 };
 
-function TestimonialAnalytics({ testimonials }) {
+function TestimonialAnalytics({ testimonials, onStarClick, currentSort }) {
   const avgRating = getAverageRating(testimonials);
   const ratingDist = getRatingDistribution(testimonials);
   
@@ -42,9 +42,20 @@ function TestimonialAnalytics({ testimonials }) {
         <div className={styles.averageRatingNumber}>{avgRating}</div>
         <div className={styles.averageRatingLabel}>Average Rating</div>
         <div className={styles.averageRatingStars}>
-          {"★".repeat(Math.round(avgRating))}
-          <span className={styles.averageRatingStarsEmpty}>{"★".repeat(5 - Math.round(avgRating))}</span>
+          {[1, 2, 3, 4, 5].map((star) => (
+            <span
+              key={star}
+              className={`${styles.clickableStar} ${
+                star <= Math.round(avgRating) ? styles.filledStar : styles.emptyStar
+              } ${currentSort === `rating-${star}` ? styles.activeStar : ''}`}
+              onClick={() => onStarClick && onStarClick(star)}
+              title={`Click to filter by ${star} star reviews`}
+            >
+              ★
+            </span>
+          ))}
         </div>
+
       </div>
       
       {/* Total Reviews */}
@@ -69,20 +80,41 @@ function TestimonialAnalytics({ testimonials }) {
       
       {/* Rating Distribution */}
       <div className={`${styles.analyticsCard} ${styles.ratingDistributionCard}`}>
-        <div className={styles.ratingDistributionTitle}>Rating Distribution</div>
+        <div className={styles.ratingDistributionTitle}>
+          Rating Distribution
+          {currentSort && currentSort.startsWith('rating-') && (
+            <button
+              className={styles.clearFilterButton}
+              onClick={() => onStarClick && onStarClick(null)}
+              title="Clear star filter"
+            >
+              Clear Filter
+            </button>
+          )}
+        </div>
         <div className={styles.ratingDistributionList}>
-          {ratingDist.map((count, i) => (
-            <div key={i} className={styles.ratingDistributionItem}>
-              <span className={styles.ratingLabel}>{5 - i}★</span>
-              <div className={styles.ratingBarContainer}>
-                <div 
-                  className={styles.ratingBar}
-                  style={{ width: `${(count / testimonials.length) * 100 || 2}%` }}
-                />
+          {ratingDist.map((count, i) => {
+            const starRating = i + 1;
+            return (
+              <div 
+                key={i} 
+                className={`${styles.ratingDistributionItem} ${
+                  currentSort === `rating-${starRating}` ? styles.activeRatingItem : ''
+                }`}
+                onClick={() => onStarClick && onStarClick(starRating)}
+                title={`Click to filter by ${starRating} star reviews`}
+              >
+                <span className={styles.ratingLabel}>{starRating}★</span>
+                <div className={styles.ratingBarContainer}>
+                  <div 
+                    className={styles.ratingBar}
+                    style={{ width: `${(count / testimonials.length) * 100 || 2}%` }}
+                  />
+                </div>
+                <span className={styles.ratingCount}>{count}</span>
               </div>
-              <span className={styles.ratingCount}>{count}</span>
-            </div>
-          )).reverse()}
+            );
+          }).reverse()}
         </div>
       </div>
     </section>

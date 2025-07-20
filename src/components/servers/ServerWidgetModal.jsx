@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
+import { LoadingSpinner } from "../ui";
 import styles from "./ServerWidgetModal.module.css";
 
 function ServerWidgetModal({ open, onClose, server }) {
@@ -84,10 +85,7 @@ function ServerWidgetModal({ open, onClose, server }) {
       </span>
       <div className={styles.serverWidgetModalContent}>
         {loading && (
-          <div className={styles.loadingContainer}>
-            <div className={styles.spinner}></div>
-            Loading server information...
-          </div>
+          <LoadingSpinner message="Loading server information..." size="medium" />
         )}
         {error && (
           <div className={styles.errorMessage}>{error}</div>

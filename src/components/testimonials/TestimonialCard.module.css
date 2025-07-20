@@ -3,13 +3,14 @@
 .testimonialCard {
   background: #ffffff;
   border-radius: 16px;
-  padding: 1.5rem;
+  padding: 2rem;
   border: 1px solid rgba(0, 0, 0, 0.1);
   transition: all 0.2s ease;
   cursor: pointer;
   box-shadow: none;
   position: relative;
   overflow: hidden;
+  min-height: 200px;
 }
 
 .testimonialCard:hover {

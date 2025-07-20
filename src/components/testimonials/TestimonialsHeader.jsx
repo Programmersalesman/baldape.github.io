@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { Dropdown } from '../ui';
 import styles from './TestimonialsHeader.module.css';
 
-function TestimonialsHeader({ testimonials, onSortChange, onFilterChange, currentSort, currentFilter }) {
-  const [isFilterOpen, setIsFilterOpen] = useState(false);
-
+function TestimonialsHeader({ testimonials, onSortChange, onFilterChange, onCommunityChange, currentSort, currentFilter, currentCommunity }) {
   const sortOptions = [
     { value: 'newest', label: 'Newest First' },
     { value: 'oldest', label: 'Oldest First' },
@@ -14,19 +13,33 @@ function TestimonialsHeader({ testimonials, onSortChange, onFilterChange, curren
 
   const filterOptions = [
     { value: 'all', label: 'All Testimonials' },
-    { value: '5-star', label: '5 Star Reviews' },
-    { value: '4-star', label: '4+ Star Reviews' },
+    { value: 'featured', label: 'Featured' },
     { value: 'recent', label: 'Last 30 Days' },
-    { value: 'community', label: 'Community Specific' }
+    { value: 'anonymous', label: 'Anonymous Reviews' },
+    { value: 'named', label: 'Named Reviews' }
   ];
 
-  const handleSortChange = (e) => {
-    onSortChange(e.target.value);
+  // Real servers only (the 6 actual communities)
+  const communityOptions = [
+    { value: 'all', label: 'All Communities' },
+    { value: 'baldapes-lab', label: "BaldApe's Lab" },
+    { value: 'panda-picks', label: 'Panda Picks' },
+    { value: 'cloak-line-bets', label: 'Cloak Line Bets' },
+    { value: 'sportsscijacob', label: 'SportsSciJacob' },
+    { value: 'cantstopthecaptv', label: 'CantStopTheCapTV' },
+    { value: 'betsbyraven', label: 'BetsByRaven' }
+  ];
+
+  const handleSortChange = (option) => {
+    onSortChange(option.value);
   };
 
-  const handleFilterChange = (filterValue) => {
-    onFilterChange(filterValue);
-    setIsFilterOpen(false);
+  const handleFilterChange = (option) => {
+    onFilterChange(option.value);
+  };
+
+  const handleCommunityChange = (option) => {
+    onCommunityChange(option.value);
   };
 
   return (
@@ -44,53 +57,44 @@ function TestimonialsHeader({ testimonials, onSortChange, onFilterChange, curren
         <div className={styles.controlsSection}>
           {/* Sort Dropdown */}
           <div className={styles.sortContainer}>
-            <label htmlFor="sort-select" className={styles.sortLabel}>
+            <label className={styles.sortLabel}>
               Sort by:
             </label>
-            <select
-              id="sort-select"
+            <Dropdown
+              options={sortOptions}
               value={currentSort}
               onChange={handleSortChange}
-              className={styles.sortSelect}
-            >
-              {sortOptions.map(option => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
+              placeholder="Select sort option"
+              id="sort-dropdown"
+            />
+          </div>
+
+          {/* Community Dropdown */}
+          <div className={styles.communityContainer}>
+            <label className={styles.communityLabel}>
+              Community:
+            </label>
+            <Dropdown
+              options={communityOptions}
+              value={currentCommunity}
+              onChange={handleCommunityChange}
+              placeholder="Select community"
+              id="community-dropdown"
+            />
           </div>
 
           {/* Filter Dropdown */}
           <div className={styles.filterContainer}>
-            <button
-              className={styles.filterButton}
-              onClick={() => setIsFilterOpen(!isFilterOpen)}
-            >
-              <span>Filter</span>
-              <svg 
-                className={`${styles.filterIcon} ${isFilterOpen ? styles.rotated : ''}`}
-                width="12" 
-                height="12" 
-                viewBox="0 0 12 12"
-              >
-                <path d="M2 4l4 4 4-4" stroke="currentColor" strokeWidth="2" fill="none"/>
-              </svg>
-            </button>
-            
-            {isFilterOpen && (
-              <div className={styles.filterDropdown}>
-                {filterOptions.map(option => (
-                  <button
-                    key={option.value}
-                    className={`${styles.filterOption} ${currentFilter === option.value ? styles.active : ''}`}
-                    onClick={() => handleFilterChange(option.value)}
-                  >
-                    {option.label}
-                  </button>
-                ))}
-              </div>
-            )}
+            <label className={styles.filterLabel}>
+              Filter:
+            </label>
+            <Dropdown
+              options={filterOptions}
+              value={currentFilter}
+              onChange={handleFilterChange}
+              placeholder="Select filter option"
+              id="filter-dropdown"
+            />
           </div>
         </div>
       </div>

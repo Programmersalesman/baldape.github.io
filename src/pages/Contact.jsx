@@ -108,11 +108,11 @@ function Contact() {
           anonymous: "public",
           date: new Date().toISOString().slice(0, 10)
         }
-      : {
+              : {
           name: "Test User",
           email: "test@example.com",
           discord: "testuser#1234",
-          community: "Test Community",
+          community: "baldapes-lab",
           memberCount: "101-500",
           services: ["quick-setup", "premium-setup"],
           goals: "Improve community engagement and organization",

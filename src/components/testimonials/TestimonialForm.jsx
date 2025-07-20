@@ -27,6 +27,7 @@ const featureOptions = [
 const communityOptions = [
   { value: "baldapes-lab", label: "BaldApe's Lab" },
   { value: "panda-picks", label: "Panda Picks" },
+  { value: "cloak-line-bets", label: "Cloak Line Bets" },
   { value: "sportsscijacob", label: "SportsSciJacob" },
   { value: "cantstopthecaptv", label: "CantStopTheCapTV" },
   { value: "betsbyraven", label: "BetsByRaven" },
