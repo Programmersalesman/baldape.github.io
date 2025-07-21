@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
-import styles from "./Modal.module.css";
+import styles from '../../styles/components/Modal.module.css';
 
 function Modal({ open, onClose, children, width = "100%", maxWidth = 1200, maxHeight }) {
   const [visible, setVisible] = useState(open);

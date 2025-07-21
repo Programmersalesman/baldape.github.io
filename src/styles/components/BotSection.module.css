@@ -1,0 +1,26 @@
+/* Mobile-first: block layout, edge-to-edge, with glow padding */
+.botsGrid {
+  width: 100%;
+  box-sizing: border-box;
+  display: block;
+  padding-bottom: 2rem;
+}
+
+.botsGrid > * {
+  margin-bottom: 1.5rem;
+}
+.botsGrid > *:last-child {
+  margin-bottom: 0;
+}
+
+@media (min-width: 768px) {
+  .botsGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-lg);
+    justify-items: center;
+    width: 100%;
+    align-items: stretch;
+    padding-bottom: 0;
+  }
+} 

@@ -1,0 +1,21 @@
+/* Mobile-first: block layout, full width */
+.serverShowcase {
+  display: block;
+  width: 100%;
+  padding: 1rem 0.5rem;
+  box-sizing: border-box;
+}
+
+/* Desktop: row wrap, centered, larger gaps */
+@media (min-width: 768px) {
+  .serverShowcase {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 2.5rem;
+    width: 100%;
+    padding: 0;
+  }
+} 

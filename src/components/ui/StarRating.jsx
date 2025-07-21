@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./StarRating.module.css";
+import styles from '../../styles/components/StarRating.module.css';
 
 function StarRating({ value, onChange, readOnly }) {
   const containerClass = `${styles.starRating} ${readOnly ? styles.readOnly : styles.interactive}`;

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import ProgressBar from "../ui/ProgressBar";
 import { calculateFormProgress, fieldValidators } from "../../utils/formProgress";
-import styles from "./ConsultationForm.module.css";
+import styles from '../../styles/components/ConsultationForm.module.css';
 
 const defaultFields = {
   name: "",

@@ -1,0 +1,163 @@
+[
+    {
+      "report_type": "Database Schema Overview",
+      "schema_details": {
+        "tables": [
+          {
+            "name": "testimonial_reactions",
+            "schema": "public",
+            "columns": [
+              "id: uuid (NOT NULL) DEFAULT gen_random_uuid()",
+              "testimonial_id: integer (NOT NULL)",
+              "user_id: text (NOT NULL) DEFAULT 'anonymous'::text",
+              "reaction_type: text (NOT NULL)",
+              "created_at: timestamp with time zone DEFAULT now()",
+              "updated_at: timestamp with time zone DEFAULT now()"
+            ],
+            "indexes": [
+              "idx_testimonial_reactions_created_at: CREATE INDEX idx_testimonial_reactions_created_at ON public.testimonial_reactions USING btree (created_at)",
+              "testimonial_reactions_pkey: CREATE UNIQUE INDEX testimonial_reactions_pkey ON public.testimonial_reactions USING btree (id)",
+              "testimonial_reactions_testimonial_id_user_id_reaction_type_key: CREATE UNIQUE INDEX testimonial_reactions_testimonial_id_user_id_reaction_type_key ON public.testimonial_reactions USING btree (testimonial_id, user_id, reaction_type)",
+              "idx_testimonial_reactions_testimonial_id: CREATE INDEX idx_testimonial_reactions_testimonial_id ON public.testimonial_reactions USING btree (testimonial_id)",
+              "idx_testimonial_reactions_user_id: CREATE INDEX idx_testimonial_reactions_user_id ON public.testimonial_reactions USING btree (user_id)",
+              "idx_testimonial_reactions_reaction_type: CREATE INDEX idx_testimonial_reactions_reaction_type ON public.testimonial_reactions USING btree (reaction_type)"
+            ],
+            "policies": [
+              "Users can update own reactions: UPDATE ((user_id = 'anonymous'::text) OR (user_id = (auth.uid())::text))",
+              "Users can delete own reactions: DELETE ((user_id = 'anonymous'::text) OR (user_id = (auth.uid())::text))",
+              "Public read access to reactions: SELECT true",
+              "Public insert access to reactions: INSERT No specific condition"
+            ]
+          },
+          {
+            "name": "testimonials",
+            "schema": "public",
+            "columns": [
+              "id: integer (NOT NULL) DEFAULT nextval('testimonials_id_seq'::regclass)",
+              "name: text (NOT NULL)",
+              "discord_username: text",
+              "community: text (NOT NULL)",
+              "role: text DEFAULT 'member'::text",
+              "email: text",
+              "rating: integer (NOT NULL)",
+              "text: text (NOT NULL)",
+              "features_liked: ARRAY DEFAULT '{}'::text[]",
+              "permission: text DEFAULT 'public'::text",
+              "anonymous: boolean DEFAULT false",
+              "approved: boolean DEFAULT false",
+              "admin_notes: text",
+              "created_at: timestamp with time zone DEFAULT now()",
+              "updated_at: timestamp with time zone DEFAULT now()"
+            ],
+            "indexes": [
+              "idx_testimonials_approved: CREATE INDEX idx_testimonials_approved ON public.testimonials USING btree (approved)",
+              "idx_testimonials_rating: CREATE INDEX idx_testimonials_rating ON public.testimonials USING btree (rating)",
+              "idx_testimonials_role: CREATE INDEX idx_testimonials_role ON public.testimonials USING btree (role)",
+              "idx_testimonials_community: CREATE INDEX idx_testimonials_community ON public.testimonials USING btree (community)",
+              "testimonials_pkey: CREATE UNIQUE INDEX testimonials_pkey ON public.testimonials USING btree (id)",
+              "idx_testimonials_created_at: CREATE INDEX idx_testimonials_created_at ON public.testimonials USING btree (created_at)"
+            ],
+            "policies": [
+              "Admins can delete testimonials: DELETE (EXISTS ( SELECT 1\n   FROM profiles\n  WHERE ((profiles.id = auth.uid()) AND (profiles.role = ANY (ARRAY['admin'::text, 'moderator'::text])))))",
+              "Admins can update testimonials: UPDATE (EXISTS ( SELECT 1\n   FROM profiles\n  WHERE ((profiles.id = auth.uid()) AND (profiles.role = ANY (ARRAY['admin'::text, 'moderator'::text])))))",
+              "Admins can read all testimonials: SELECT (EXISTS ( SELECT 1\n   FROM profiles\n  WHERE ((profiles.id = auth.uid()) AND (profiles.role = ANY (ARRAY['admin'::text, 'moderator'::text])))))",
+              "Public read approved testimonials: SELECT ((approved = true) AND (permission = 'public'::text))"
+            ]
+          },
+          {
+            "name": "testimonial_reaction_counts",
+            "schema": "public",
+            "columns": [
+              "testimonial_id: integer",
+              "reaction_type: text",
+              "count: bigint"
+            ],
+            "indexes": [],
+            "policies": []
+          },
+          {
+            "name": "testimonials_input",
+            "schema": "public",
+            "columns": [
+              "id: integer (NOT NULL) DEFAULT nextval('testimonials_input_id_seq'::regclass)",
+              "name: text (NOT NULL)",
+              "discord_username: text",
+              "community: text (NOT NULL)",
+              "role: text DEFAULT 'member'::text",
+              "email: text",
+              "rating: integer (NOT NULL)",
+              "text: text (NOT NULL)",
+              "features_liked: ARRAY DEFAULT '{}'::text[]",
+              "permission: text DEFAULT 'public'::text",
+              "anonymous: boolean DEFAULT false",
+              "admin_notes: text",
+              "created_at: timestamp with time zone DEFAULT now()",
+              "updated_at: timestamp with time zone DEFAULT now()"
+            ],
+            "indexes": [
+              "idx_testimonials_input_role: CREATE INDEX idx_testimonials_input_role ON public.testimonials_input USING btree (role)",
+              "idx_testimonials_input_community: CREATE INDEX idx_testimonials_input_community ON public.testimonials_input USING btree (community)",
+              "idx_testimonials_input_created_at: CREATE INDEX idx_testimonials_input_created_at ON public.testimonials_input USING btree (created_at)",
+              "testimonials_input_pkey: CREATE UNIQUE INDEX testimonials_input_pkey ON public.testimonials_input USING btree (id)"
+            ],
+            "policies": []
+          },
+          {
+            "name": "consultations",
+            "schema": "public",
+            "columns": [
+              "id: uuid (NOT NULL) DEFAULT gen_random_uuid()",
+              "name: text (NOT NULL)",
+              "email: text (NOT NULL)",
+              "discord: text",
+              "community: text (NOT NULL)",
+              "member_count: text",
+              "services: ARRAY (NOT NULL)",
+              "goals: text (NOT NULL)",
+              "challenges: text",
+              "timeline: text (NOT NULL)",
+              "budget: text (NOT NULL)",
+              "preferred_time: text DEFAULT 'flexible'::text",
+              "additional_info: text",
+              "status: text DEFAULT 'pending'::text",
+              "admin_notes: text",
+              "created_at: timestamp with time zone DEFAULT now()",
+              "updated_at: timestamp with time zone DEFAULT now()"
+            ],
+            "indexes": [
+              "consultations_pkey: CREATE UNIQUE INDEX consultations_pkey ON public.consultations USING btree (id)",
+              "idx_consultations_created_at: CREATE INDEX idx_consultations_created_at ON public.consultations USING btree (created_at)",
+              "idx_consultations_status: CREATE INDEX idx_consultations_status ON public.consultations USING btree (status)"
+            ],
+            "policies": [
+              "Admins can view consultations: SELECT (EXISTS ( SELECT 1\n   FROM profiles\n  WHERE ((profiles.id = auth.uid()) AND (profiles.role = ANY (ARRAY['admin'::text, 'moderator'::text])))))",
+              "Admins can update consultations: UPDATE (EXISTS ( SELECT 1\n   FROM profiles\n  WHERE ((profiles.id = auth.uid()) AND (profiles.role = ANY (ARRAY['admin'::text, 'moderator'::text])))))",
+              "Anyone can insert consultations: INSERT No specific condition",
+              "Admins can delete consultations: DELETE (EXISTS ( SELECT 1\n   FROM profiles\n  WHERE ((profiles.id = auth.uid()) AND (profiles.role = ANY (ARRAY['admin'::text, 'moderator'::text])))))"
+            ]
+          },
+          {
+            "name": "profiles",
+            "schema": "public",
+            "columns": [
+              "id: uuid (NOT NULL) DEFAULT gen_random_uuid()",
+              "email: text",
+              "full_name: text",
+              "role: text DEFAULT 'admin'::text",
+              "created_at: timestamp with time zone DEFAULT now()",
+              "updated_at: timestamp with time zone DEFAULT now()"
+            ],
+            "indexes": [
+              "idx_profiles_email: CREATE INDEX idx_profiles_email ON public.profiles USING btree (email)",
+              "profiles_email_key: CREATE UNIQUE INDEX profiles_email_key ON public.profiles USING btree (email)",
+              "profiles_pkey: CREATE UNIQUE INDEX profiles_pkey ON public.profiles USING btree (id)"
+            ],
+            "policies": [
+              "Users can view own profile: SELECT (auth.uid() = id)",
+              "Users can update own profile: UPDATE (auth.uid() = id)"
+            ]
+          }
+        ]
+      }
+    }
+  ]

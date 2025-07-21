@@ -1,7 +1,7 @@
 import React from "react";
 import { bots } from "./data/bots";
 import BotCard from "./components/bots/BotCard";
-import styles from "./BotSection.module.css";
+import styles from './styles/components/BotSection.module.css';
 
 function BotSection() {
   return (
@@ -11,10 +11,6 @@ function BotSection() {
         <div className="section-subtitle bots-subtitle">
           Each bot below is expertly integrated to elevate your server's
           features, security, and engagement.
-          <br />
-          <span className="subtitle-note">
-            More integrations are always being added.
-          </span>
         </div>
         <div className={`bots-grid ${styles.botsGrid}`}>
           {bots.map((bot, idx) => (
@@ -23,9 +19,9 @@ function BotSection() {
           {/* Two placeholder cards to fill the grid */}
           <BotCard isPlaceholder={true} />
           <BotCard isPlaceholder={true} />
+          {/* Mystery card should always be at the bottom of the grid */}
+          <BotCard isMystery={true} />
         </div>
-        {/* Mystery card below the grid, spanning 2/3rds of the row */}
-        <BotCard isMystery={true} />
       </div>
     </section>
   );

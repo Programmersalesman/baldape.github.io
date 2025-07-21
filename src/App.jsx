@@ -8,6 +8,7 @@ import Services from "./pages/Services";
 import Testimonials from "./pages/Testimonials";
 import Contact from "./pages/Contact";
 import Portfolio from "./pages/Portfolio";
+import { DebugToggleButton } from './context/DebugContext';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
           <Route path="/testimonials" element={<Testimonials />} />
           <Route path="/contact" element={<Contact />} />
         </Routes>
+        <DebugToggleButton />
       </Layout>
     </Router>
   );

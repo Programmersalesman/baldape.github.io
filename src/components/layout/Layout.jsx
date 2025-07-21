@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import NavBar from "./NavBar";
-import styles from "./Layout.module.css";
+import styles from '../../styles/components/Layout.module.css';
 
 function Layout({ children }) {
   const location = useLocation();

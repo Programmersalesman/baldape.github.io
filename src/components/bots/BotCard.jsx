@@ -1,5 +1,6 @@
 import React from "react";
-import styles from "./BotCard.module.css";
+import styles from '../../styles/components/BotCard.module.css';
+import mysteryStyles from "../../styles/components/mystery-effects.module.css";
 
 function BotCard({ bot, isPlaceholder = false, isMystery = false }) {
   if (isPlaceholder) {
@@ -20,12 +21,12 @@ function BotCard({ bot, isPlaceholder = false, isMystery = false }) {
 
   if (isMystery) {
     return (
-      <div className={`bot-card bot-card-mystery ${styles.mystery}`}>
-        <div className={styles.mysteryIcon}>
+      <div className={`bot-card ${mysteryStyles.mysteryCard}`}>
+        <div className={mysteryStyles.mysteryIcon}>
           &#10068;
         </div>
-        <h3 className={styles.mysteryTitle}>Your Dream Bot?</h3>
-        <p className={styles.mysteryDescription}>
+        <h3 className={mysteryStyles.mysteryTitle}>Your Dream Bot?</h3>
+        <p className={mysteryStyles.mysteryDescription}>
           Looking for something unique? Ask about custom bots or integrations
           tailored to your needs.
         </p>

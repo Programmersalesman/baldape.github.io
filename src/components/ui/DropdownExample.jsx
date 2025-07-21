@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Dropdown from "./Dropdown";
-import styles from "./DropdownExample.module.css";
+import styles from '../../styles/components/DropdownExample.module.css';
 
 function DropdownExample() {
   const [sortValue, setSortValue] = useState("newest");

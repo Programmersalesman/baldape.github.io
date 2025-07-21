@@ -4,6 +4,7 @@ import TestimonialForm from "../components/testimonials/TestimonialForm";
 import ConsultationForm from "../components/forms/ConsultationForm";
 import HeroSection from "../components/ui/HeroSection";
 import FormDebugPanel from "../components/forms/FormDebugPanel";
+import DebuggerPanel from "../components/debug/DebuggerPanel";
 import ContactInfoCard from "../components/ui/ContactInfoCard";
 import CTACard from "../components/ui/CTACard";
 import FAQCard from "../components/ui/FAQCard";
@@ -239,7 +240,23 @@ function Contact() {
         title="Contact"
         subtitle="Get in touch to discuss your Discord server needs or request a consultation."
       />
-
+      {/* DebuggerPanel wraps all debug tools */}
+      <DebuggerPanel>
+        <FormDebugPanel
+          formType={openModal}
+          onFillForm={handleFillForm}
+          onTestSubmission={handleTestSubmission}
+          onTestDiscordWebhook={handleTestDiscordWebhook}
+          onReviewFormData={handleReviewFormData}
+          formData={debugFormData}
+          onExportData={handleExportData}
+          onImportData={handleImportData}
+          onClearData={handleClearData}
+          onViewStats={handleViewStats}
+          storageStats={openModal === 'testimonial' ? getTestimonialStats() : getConsultationStats()}
+        />
+        {/* Add more debug panels here if needed */}
+      </DebuggerPanel>
       {/* Contact Info Section */}
       <section className="section">
         <div className="container">
@@ -326,21 +343,6 @@ function Contact() {
           </div>
         </div>
       </section>
-
-      {/* Debug Panel - Only shows when modals are open */}
-      <FormDebugPanel
-        formType={openModal}
-        onFillForm={handleFillForm}
-        onTestSubmission={handleTestSubmission}
-        onTestDiscordWebhook={handleTestDiscordWebhook}
-        onReviewFormData={handleReviewFormData}
-        formData={debugFormData}
-        onExportData={handleExportData}
-        onImportData={handleImportData}
-        onClearData={handleClearData}
-        onViewStats={handleViewStats}
-        storageStats={openModal === 'testimonial' ? getTestimonialStats() : getConsultationStats()}
-      />
 
       {/* Status Messages */}
       <StatusMessage

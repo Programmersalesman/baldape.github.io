@@ -1,0 +1,219 @@
+/* Mystery Effects Module - Shared styles for mystery bot and testimonial highlights */
+
+/* Mobile-first: edge-to-edge mystery card with full styling and glow padding */
+.mysteryCard {
+  width: 100%;
+  max-width: none;
+  padding: 1.5rem 1rem 2rem 1rem;
+  min-height: 220px;
+  box-sizing: border-box;
+  background: linear-gradient(135deg, #232946 60%, #764ba2 100%);
+  box-shadow: 0 0 32px 0 rgba(88, 101, 242, 0.22),
+    0 2px 16px 0 rgba(0, 0, 0, 0.18), 0 0 48px 8px rgba(163, 227, 255, 0.18);
+  border: 2px dashed #a3e3ff;
+  color: #fff;
+  opacity: 0.97;
+  position: relative;
+  z-index: 2;
+  transition: box-shadow 0.32s cubic-bezier(0.4, 0.2, 0.2, 1),
+    border-color 0.32s cubic-bezier(0.4, 0.2, 0.2, 1),
+    transform 0.18s cubic-bezier(0.4, 0.2, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  animation: mysteryGlow 2.5s ease-in-out infinite alternate;
+  margin: 2.5rem 0 0 0;
+  padding-bottom: 2rem;
+  margin-bottom: 2rem;
+}
+
+.mysteryCard {
+  padding-bottom: 2rem;
+}
+
+@media (orientation: landscape) and (max-width: 900px) {
+  .mysteryCard {
+    max-width: 480px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+@media (min-width: 768px) {
+  .mysteryCard {
+    grid-column: 1 / -1;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 1.5rem 2rem 2rem 2rem;
+  }
+  .mysteryCard {
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+.mysteryCard:hover {
+  border-color: #a3e3ff;
+  box-shadow: 0 0 18px 2px #a3e3ff, 0 2px 12px 0 rgba(0, 0, 0, 0.13),
+    0 0 28px 4px #e0f7ff;
+  animation: mysteryGlow 2.5s ease-in-out infinite alternate;
+}
+
+.mysteryIcon {
+  font-size: 3.5rem;
+  color: #a3e3ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 64px;
+  margin-bottom: var(--spacing-sm);
+  transition: transform var(--transition-normal);
+}
+
+.mysteryTitle {
+  letter-spacing: 2px;
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--spacing-sm);
+  color: var(--color-white);
+}
+
+.mysteryDescription {
+  font-style: italic;
+  color: #fff;
+  opacity: 0.85;
+  font-size: var(--font-size-small);
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* ===== TESTIMONIAL HIGHLIGHT EFFECTS ===== */
+
+/* Option 1: Mystery Bot Style (Current) */
+.testimonialHighlightMystery {
+  border: 2px dashed #a3e3ff !important;
+  background: linear-gradient(135deg, rgba(35, 41, 70, 0.8) 60%, rgba(118, 75, 162, 0.4) 100%) !important;
+  box-shadow: 0 0 32px 0 rgba(88, 101, 242, 0.22),
+    0 2px 16px 0 rgba(0, 0, 0, 0.18), 
+    0 0 48px 8px rgba(163, 227, 255, 0.18) !important;
+  animation: testimonialMysteryGlow 2.5s ease-in-out infinite alternate;
+  position: relative;
+  z-index: 2;
+  transition: box-shadow 0.32s cubic-bezier(0.4, 0.2, 0.2, 1),
+    border-color 0.32s cubic-bezier(0.4, 0.2, 0.2, 1),
+    transform 0.18s cubic-bezier(0.4, 0.2, 0.2, 1);
+  padding: 4rem 4.5rem !important;
+}
+
+/* Option 2: Subtle Glow Style */
+.testimonialHighlightSubtle {
+  border: 2px solid rgba(88, 101, 242, 0.6) !important;
+  background: linear-gradient(135deg, rgba(88, 101, 242, 0.08) 0%, rgba(125, 249, 255, 0.04) 100%) !important;
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.12),
+    0 0 0 1px rgba(255, 255, 255, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    0 0 20px rgba(88, 101, 242, 0.3) !important;
+  animation: testimonialSubtleGlow 3s ease-in-out infinite;
+  position: relative;
+  z-index: 2;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 4rem 4.5rem !important;
+}
+
+/* Option 3: Pulsing Border Style */
+.testimonialHighlightPulse {
+  border: 2px solid transparent !important;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%) !important;
+  background-clip: padding-box !important;
+  position: relative;
+  z-index: 2;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 4rem 4.5rem !important;
+}
+
+.testimonialHighlightPulse::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg, #5865f2, #7df9ff, #5865f2);
+  border-radius: inherit;
+  z-index: -1;
+  animation: testimonialPulseBorder 2s ease-in-out infinite;
+}
+
+/* ===== ANIMATIONS ===== */
+
+@keyframes mysteryGlow {
+  0% {
+    box-shadow: 0 0 18px 2px #a3e3ff, 0 2px 12px 0 rgba(0, 0, 0, 0.13),
+      0 0 28px 4px #e0f7ff;
+  }
+  100% {
+    box-shadow: 0 0 28px 6px #b9eaff, 0 2px 16px 0 rgba(0, 0, 0, 0.15),
+      0 0 40px 8px #e0f7ff;
+  }
+}
+
+@keyframes testimonialMysteryGlow {
+  0% {
+    box-shadow: 0 0 18px 2px #a3e3ff, 
+      0 2px 12px 0 rgba(0, 0, 0, 0.13),
+      0 0 28px 4px #e0f7ff;
+  }
+  100% {
+    box-shadow: 0 0 28px 6px #b9eaff, 
+      0 2px 16px 0 rgba(0, 0, 0, 0.15),
+      0 0 40px 8px #e0f7ff;
+  }
+}
+
+@keyframes testimonialSubtleGlow {
+  0%, 100% {
+    box-shadow: 
+      0 8px 32px rgba(0, 0, 0, 0.12),
+      0 0 0 1px rgba(255, 255, 255, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2),
+      0 0 20px rgba(88, 101, 242, 0.3);
+  }
+  50% {
+    box-shadow: 
+      0 8px 32px rgba(0, 0, 0, 0.12),
+      0 0 0 1px rgba(255, 255, 255, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2),
+      0 0 30px rgba(125, 249, 255, 0.5);
+  }
+}
+
+@keyframes testimonialPulseBorder {
+  0%, 100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.02);
+  }
+}
+
+/* ===== UTILITY CLASSES ===== */
+
+.pulse {
+  animation: pulse 1s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.05);
+  }
+} 

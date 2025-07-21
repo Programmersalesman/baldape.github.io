@@ -1,0 +1,57 @@
+.debugPanel {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 3100;
+  background: rgba(0, 0, 0, 0.9);
+  border: 2px solid #5865F2;
+  border-radius: 8px;
+  padding: 12px;
+  min-width: 200px;
+  backdrop-filter: blur(10px);
+}
+
+.header {
+  color: #a3e3ff;
+  font-weight: 700;
+  font-size: 1em;
+  margin-bottom: 8px;
+  border-bottom: 1px solid #444;
+  padding-bottom: 4px;
+}
+
+.buttonContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.dataPreview {
+  margin-top: 8px;
+  padding: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  font-size: 0.75em;
+  color: #b9bbbe;
+  max-height: 80px;
+  overflow-y: auto;
+}
+
+.dataContent {
+  margin: 2px;
+  font-size: 0.7em;
+}
+
+.statsPreview {
+  margin-top: 8px;
+  padding: 4px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+  font-size: 0.75em;
+  color: #b9bbbe;
+}
+
+.statsContent {
+  font-size: 0.7em;
+  margin-top: 2px;
+} 

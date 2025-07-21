@@ -1,0 +1,263 @@
+/* TestimonialList.module.css - Replaces inline styles in TestimonialList.jsx */
+
+/* Main container */
+.testimonialsScrollBox {
+  background: linear-gradient(135deg, #23272a 0%, #2c2f33 100%);
+  border-radius: 18px;
+  padding: 2rem;
+  max-height: 600px;
+  overflow-y: auto;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(88, 101, 242, 0.1);
+}
+
+/* Testimonial cards */
+.testimonialCard {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.2s ease;
+}
+
+.testimonialCard:hover {
+  background: rgba(255, 255, 255, 0.08);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.testimonialCard:last-child {
+  margin-bottom: 0;
+}
+
+
+
+/* Testimonial header */
+.testimonialHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.authorInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: flex-start;
+}
+
+.authorBadges {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.authorName {
+  color: #a3e3ff;
+  font-weight: 600;
+  font-size: 1.1em;
+}
+
+.communityBadge {
+  background: linear-gradient(135deg, #5865F2 0%, #667eea 100%);
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.85em;
+  font-weight: 600;
+  border: 1px solid rgba(88, 101, 242, 0.5);
+  box-shadow: 0 2px 4px rgba(88, 101, 242, 0.3);
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.dateBadge {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.9em;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 0.25rem 0.75rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.shareButton {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.7);
+  border-radius: 8px;
+  padding: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 1.1em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+}
+
+.shareButton:hover {
+  background: rgba(88, 101, 242, 0.3);
+  border-color: rgba(88, 101, 242, 0.5);
+  color: white;
+  transform: scale(1.1);
+}
+
+/* Testimonial text */
+.testimonialText {
+  color: #ffffff;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+  font-size: 1em;
+}
+
+/* Features section */
+.featuresSection {
+  margin-bottom: 1rem;
+}
+
+.featuresBadge {
+  background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.9em;
+  font-weight: 600;
+  display: inline-block;
+  border: 1px solid rgba(255, 107, 53, 0.5);
+  box-shadow: 0 2px 8px rgba(255, 107, 53, 0.3);
+}
+
+/* Empty state */
+.emptyState {
+  text-align: center;
+  padding: 3rem 2rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.emptyStateIcon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  opacity: 0.5;
+}
+
+/* Loading more indicator */
+.loadingMore {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 2rem;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.95em;
+}
+
+.loadingSpinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(88, 101, 242, 0.3);
+  border-top: 2px solid #5865F2;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* End of results indicator */
+.endOfResults {
+  text-align: center;
+  padding: 2rem;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.9em;
+  font-style: italic;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin-top: 1rem;
+}
+
+
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .testimonialsScrollBox {
+    padding: 1.5rem;
+    max-height: 500px;
+  }
+  
+  .testimonialCard {
+    padding: 1rem;
+  }
+  
+  .testimonialHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+  
+  .authorInfo {
+    gap: 0.5rem;
+  }
+  
+  .authorName {
+    font-size: 1em;
+  }
+  
+  .communityBadge {
+    font-size: 0.8em;
+    padding: 0.2rem 0.6rem;
+  }
+  
+  .headerActions {
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  .dateBadge {
+    font-size: 0.85em;
+    padding: 0.2rem 0.6rem;
+  }
+  
+  .shareButton {
+    width: 32px;
+    height: 32px;
+    font-size: 1em;
+  }
+  
+  .testimonialText {
+    font-size: 0.95em;
+  }
+  
+  .featuresBadge {
+    font-size: 0.85em;
+    padding: 0.4rem 0.8rem;
+  }
+} 
+
+@media (max-width: 600px) {
+  .testimonialsScrollBox {
+    padding: 0.7rem 0.2rem;
+    border-radius: 8px;
+    max-height: none;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+  }
+  .testimonialCard {
+    padding: 0.7rem 0.5rem;
+    border-radius: 7px;
+    margin-bottom: 0.7rem;
+  }
+  .testimonialCard:last-child {
+    margin-bottom: 0;
+  }
+} 

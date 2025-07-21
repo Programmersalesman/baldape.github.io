@@ -3,89 +3,114 @@ import {
   addReaction, 
   getTestimonialReactions, 
   getUserReactions,
-  REACTION_TYPES 
+  toggleReaction,
+  REACTION_TYPES,
+  getEmojiForKey
 } from "../../services/supabaseReactionService";
-import styles from "./TestimonialReactions.module.css";
+import { getUserId } from "../../utils/userIdentifier";
+import { log, warn, error as logError } from '../../utils/logger';
+import styles from '../../styles/components/TestimonialReactions.module.css';
 
 const reactions = [
-  { emoji: REACTION_TYPES.HELPFUL, label: "Helpful", color: "#43b581" },
-  { emoji: REACTION_TYPES.LOVE, label: "Love it", color: "#f04747" },
-  { emoji: REACTION_TYPES.FIRE, label: "Fire", color: "#f59e0b" },
-  { emoji: REACTION_TYPES.PERFECT, label: "Perfect", color: "#5865f2" },
-  { emoji: REACTION_TYPES.NOT_HELPFUL, label: "Not helpful", color: "#747f8d" },
-  { emoji: REACTION_TYPES.HMM, label: "Hmm", color: "#faa61a" }
+  { key: REACTION_TYPES.LIKE.key, label: "Like", color: "linear-gradient(135deg, #43b581, #3ca374)" },
+  { key: REACTION_TYPES.LOVE.key, label: "Love", color: "linear-gradient(135deg, #f04747, #d84040)" },
+  { key: REACTION_TYPES.HAHA.key, label: "Haha", color: "linear-gradient(135deg, #f59e0b, #d97706)" },
+  { key: REACTION_TYPES.YAY.key, label: "Yay", color: "linear-gradient(135deg, #5865f2, #4752c4)" },
+  { key: REACTION_TYPES.WOW.key, label: "Wow", color: "linear-gradient(135deg, #747f8d, #5f6b7a)" },
+  { key: REACTION_TYPES.SAD.key, label: "Sad", color: "linear-gradient(135deg, #faa61a, #f59e0b)" },
+  { key: REACTION_TYPES.ANGRY.key, label: "Angry", color: "linear-gradient(135deg, #f5533d, #d84040)" }
 ];
 
 function TestimonialReactions({ testimonialId, onReaction }) {
-  const [selectedReactions, setSelectedReactions] = useState([]);
+  // Safety check - don't render if testimonialId is invalid
+  if (!testimonialId || (typeof testimonialId !== 'number' && typeof testimonialId !== 'string')) {
+    warn('TestimonialReactions: Invalid testimonialId:', testimonialId);
+    return null;
+  }
+
+  const [selectedReactions, setSelectedReactions] = useState([]); // keys
   const [reactionCounts, setReactionCounts] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   // Load reactions on component mount
   useEffect(() => {
     const loadReactions = async () => {
-      // console.log('🔄 Loading reactions for testimonial:', testimonialId);
+      if (!testimonialId) return;
+      setError(null);
+      const currentUserId = getUserId();
+      log('🆔 Current user ID:', currentUserId);
+      log('🔄 Loading reactions for testimonial:', testimonialId);
       try {
         // Get reaction counts for this testimonial
         const countsResult = await getTestimonialReactions(testimonialId);
-        // console.log('📊 Counts result:', countsResult);
-        if (countsResult.success) {
-          setReactionCounts(countsResult.counts);
+        log('📊 Counts result:', countsResult);
+        if (countsResult.success && countsResult.counts) {
+          const countsMap = {};
+          countsResult.counts.forEach(count => {
+            if (count && count.reaction_type && typeof count.count === 'number') {
+              countsMap[count.reaction_type] = count.count;
+            }
+          });
+          setReactionCounts(countsMap);
+        } else if (!countsResult.success) {
+          logError('Failed to load reaction counts:', countsResult.error);
+          setError('Failed to load reactions');
         }
-
-        // Get user's reactions for this testimonial
+        // Get user's reactions for this testimonial (returns keys)
         const userResult = await getUserReactions(testimonialId);
-        // console.log('👤 User reactions result:', userResult);
-        if (userResult.success) {
-          // console.log('✅ Setting selected reactions:', userResult.reactionTypes);
-          setSelectedReactions(userResult.reactionTypes);
+        log('👤 User reactions result:', userResult);
+        if (userResult.success && userResult.reactions) {
+          log('✅ Setting selected reactions:', userResult.reactions);
+          setSelectedReactions(userResult.reactions.filter(r => r && typeof r === 'string'));
+        } else if (!userResult.success) {
+          logError('Failed to load user reactions:', userResult.error);
+          setError('Failed to load user reactions');
         }
       } catch (error) {
-        console.error('Error loading reactions:', error);
+        logError('Error loading reactions:', error);
+        setError('Error loading reactions');
+        setReactionCounts({});
+        setSelectedReactions([]);
       }
     };
-
-    if (testimonialId) {
-      loadReactions();
-    }
+    loadReactions();
   }, [testimonialId]);
 
   const handleReaction = async (reaction) => {
     if (isLoading) return;
-    
-    // console.log('🎯 Handling reaction:', reaction.emoji, 'Current selected:', selectedReactions);
-    
     setIsLoading(true);
-    
+    setError(null);
     try {
-      const result = await addReaction(testimonialId, reaction.emoji);
-      // console.log('📝 Reaction result:', result);
-      
+      const result = await toggleReaction(testimonialId, reaction.key);
       if (result.success) {
-        if (result.action === 'added') {
-          // Add reaction
-          const newSelected = [...selectedReactions, reaction.emoji];
-          // console.log('➕ Adding reaction, new selected:', newSelected);
-          setSelectedReactions(newSelected);
-          setReactionCounts(prev => ({
-            ...prev,
-            [reaction.emoji]: (prev[reaction.emoji] || 0) + 1
-          }));
-          onReaction?.(testimonialId, reaction.emoji, 'add');
-        } else {
+        const isSelected = selectedReactions.includes(reaction.key);
+        if (isSelected) {
           // Remove reaction
-          const newSelected = selectedReactions.filter(r => r !== reaction.emoji);
-          // console.log('➖ Removing reaction, new selected:', newSelected);
+          const newSelected = selectedReactions.filter(r => r !== reaction.key);
           setSelectedReactions(newSelected);
           setReactionCounts(prev => ({
             ...prev,
-            [reaction.emoji]: Math.max(0, (prev[reaction.emoji] || 0) - 1)
+            [reaction.key]: Math.max(0, (prev[reaction.key] || 0) - 1)
           }));
-          onReaction?.(testimonialId, reaction.emoji, 'remove');
+          onReaction?.(testimonialId, reaction.key, 'remove');
+        } else {
+          // Add reaction
+          const newSelected = [...selectedReactions, reaction.key];
+          setSelectedReactions(newSelected);
+          setReactionCounts(prev => ({
+            ...prev,
+            [reaction.key]: (prev[reaction.key] || 0) + 1
+          }));
+          onReaction?.(testimonialId, reaction.key, 'add');
         }
+      } else {
+        logError('Reaction toggle failed:', result.error);
+        setError('Failed to update reaction');
       }
     } catch (error) {
-      console.error('Error handling reaction:', error);
+      logError('Error handling reaction:', error);
+      setError('Error updating reaction');
     } finally {
       setIsLoading(false);
     }
@@ -94,28 +119,28 @@ function TestimonialReactions({ testimonialId, onReaction }) {
   return (
     <div className={styles.reactionsContainer}>
       <div className={styles.reactionsLabel}>Was this helpful?</div>
+      {error && (
+        <div className={styles.errorMessage} style={{ color: 'red', fontSize: '12px', marginBottom: '8px' }}>
+          {error}
+        </div>
+      )}
       <div className={styles.reactionsList}>
-        {reactions.map((reaction) => (
-          <button
-            key={reaction.emoji}
-            className={`${styles.reactionButton} ${
-              selectedReactions.includes(reaction.emoji) ? styles.selected : ''
-            } ${isLoading ? styles.loading : ''}`}
-            onClick={() => handleReaction(reaction)}
-            style={{
-              '--reaction-color': reaction.color
-            }}
-            title={reaction.label}
-            disabled={isLoading}
-          >
-            <span className={styles.reactionEmoji}>{reaction.emoji}</span>
-            {reactionCounts[reaction.emoji] > 0 && (
-              <span className={styles.reactionCount}>
-                {reactionCounts[reaction.emoji]}
-              </span>
-            )}
-          </button>
-        ))}
+        {reactions.map((reaction) => {
+          const isSelected = selectedReactions.includes(reaction.key);
+          return (
+            <button
+              key={reaction.key}
+              className={`${styles.reactionButton} ${isSelected ? styles.selected : ''}`}
+              onClick={() => handleReaction(reaction)}
+              disabled={isLoading}
+              title={reaction.label}
+              style={{ '--reaction-color': reaction.color }}
+            >
+              <span className={styles.reactionEmoji}>{getEmojiForKey(reaction.key)}</span>
+              <span className={styles.reactionCount}>{reactionCounts[reaction.key] > 0 ? reactionCounts[reaction.key] : '\u00A0'}</span>
+            </button>
+          );
+        })}
       </div>
     </div>
   );

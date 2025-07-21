@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './Scrollbar.module.css';
+import styles from '../../styles/components/Scrollbar.module.css';
 
 const ScrollbarTest = () => {
   return (

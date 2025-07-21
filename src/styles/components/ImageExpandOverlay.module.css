@@ -1,0 +1,47 @@
+.imageOverlayContainer {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  display: block;
+}
+.imageOverlay {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(30, 34, 40, 0.32);
+  color: #fff;
+  opacity: 1;
+  transition: opacity 0.25s;
+  border-radius: 16px;
+  pointer-events: none;
+  z-index: 2;
+}
+.overlayIcon {
+  font-size: 2.2rem;
+  margin-bottom: 0.3rem;
+  filter: drop-shadow(0 2px 8px #0008);
+}
+.overlayText {
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-shadow: 0 2px 8px #0008;
+}
+@media (hover: hover) and (pointer: fine) {
+  .imageOverlay {
+    display: flex;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .imageOverlayContainer:hover .imageOverlay {
+    opacity: 1;
+    pointer-events: none;
+  }
+} 

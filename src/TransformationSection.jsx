@@ -1,4 +1,8 @@
-import React from "react";
+import React, { useContext, useState } from "react";
+import styles from "./styles/components/TransformationSection.module.css";
+import ImageExpandOverlay from "./components/ui/ImageExpandOverlay";
+import { DebugContext } from "./context/DebugContext";
+import FullSizeImageModal from "./components/ui/FullSizeImageModal";
 
 const transformations = [
   {
@@ -31,49 +35,9 @@ const transformations = [
   },
 ];
 
-function TransformationCard({
-  badge,
-  badgeClass,
-  image,
-  alt,
-  issues,
-  improvements,
-  description,
-}) {
-  return (
-    <div className="transformation-group">
-      <div className="transformation-card dark-glass-card no-hover equal-size">
-        <div className="image-badge-wrapper">
-          <span className={`transformation-badge ${badgeClass}`}>{badge}</span>
-          <img
-            src={image}
-            alt={alt}
-            className="transformation-image fill-card-image"
-          />
-        </div>
-      </div>
-      <div className="transformation-details frosted-text-card">
-        {issues && (
-          <ul className="transformation-issues">
-            {issues.map((item, idx) => (
-              <li key={idx}>{item}</li>
-            ))}
-          </ul>
-        )}
-        {improvements && (
-          <ul className="transformation-improvements">
-            {improvements.map((item, idx) => (
-              <li key={idx}>{item}</li>
-            ))}
-          </ul>
-        )}
-        <p>{description}</p>
-      </div>
-    </div>
-  );
-}
-
 function TransformationSection() {
+  const { debug } = useContext(DebugContext);
+  const [modalImg, setModalImg] = useState(null);
   return (
     <section id="transformations" className="section section-light">
       <div className="container">
@@ -82,11 +46,51 @@ function TransformationSection() {
           See the dramatic improvements in server organization, user experience,
           and community engagement
         </div>
-        <div className="grid-2">
-          {transformations.map((t, idx) => (
-            <TransformationCard key={idx} {...t} />
+        <div className={styles.transformationGrid}>
+          {transformations.map((item, idx) => (
+            <div className={styles.transformationPair} key={idx}>
+              <div className={styles.transformationCardImage}>
+                {item.badge && (
+                  <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+                    <span className={`transformation-badge ${item.badgeClass}`}>{item.badge}</span>
+                  </div>
+                )}
+                <ImageExpandOverlay onClick={() => setModalImg(item)}>
+                  <img
+                    src={item.image}
+                    alt={item.alt}
+                    className={styles.fillTransformationImage}
+                    style={{ cursor: 'zoom-in' }}
+                  />
+                </ImageExpandOverlay>
+              </div>
+              <div className={styles.transformationDetails + " frosted-text-card"}>
+                {item.issues && (
+                  <ul className="transformation-issues">
+                    {item.issues.map((issue, i) => (
+                      <li key={i}>{issue}</li>
+                    ))}
+                  </ul>
+                )}
+                {item.improvements && (
+                  <ul className="transformation-improvements">
+                    {item.improvements.map((impr, i) => (
+                      <li key={i}>{impr}</li>
+                    ))}
+                  </ul>
+                )}
+                <p>{item.description}</p>
+              </div>
+            </div>
           ))}
         </div>
+        <FullSizeImageModal
+          open={!!modalImg}
+          onClose={() => setModalImg(null)}
+          src={modalImg?.image}
+          alt={modalImg?.alt}
+          caption={modalImg?.badge}
+        />
       </div>
     </section>
   );

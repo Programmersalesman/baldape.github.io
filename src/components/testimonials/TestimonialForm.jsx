@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import StarRating from "../ui/StarRating";
 import ProgressBar from "../ui/ProgressBar";
 import { calculateFormProgress, fieldValidators } from "../../utils/formProgress";
-import styles from "./TestimonialForm.module.css";
+import styles from '../../styles/components/TestimonialForm.module.css';
 
 const defaultFields = {
   name: "",
@@ -37,7 +37,7 @@ const roleOptions = [
   { value: "member", label: "Regular Member" },
   { value: "vip", label: "VIP Member" },
   { value: "moderator", label: "Moderator" },
-  { value: "admin-owner", label: "Admin/Owner" },
+  { value: "admin", label: "Admin" },
   { value: "other", label: "Other" },
 ];
 

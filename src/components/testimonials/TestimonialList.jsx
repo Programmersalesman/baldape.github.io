@@ -1,13 +1,15 @@
 import React, { useState, useMemo, useEffect, useRef, useCallback } from "react";
 import StarRating from "../ui/StarRating";
+import RoleBadge from "../ui/RoleBadge";
 import TestimonialsHeader from "./TestimonialsHeader";
 import TestimonialReactions from "./TestimonialReactions";
 import TestimonialShare from "./TestimonialShare";
+import Modal from "../ui/Modal";
 import { getTestimonialsReactions } from "../../services/supabaseReactionService";
-import styles from "./TestimonialList.module.css";
+import styles from '../../styles/components/TestimonialList.module.css';
 import { getCommunityInfo, communityMapping } from "../../utils/communityMapping";
 
-function TestimonialList({ testimonials, sortBy: externalSortBy, onSortChange, featureFilter: externalFeatureFilter, onFeatureFilterChange }) {
+function TestimonialList({ testimonials, sortBy: externalSortBy, onSortChange, featureFilter: externalFeatureFilter, onFeatureFilterChange, highlightedTestimonialId }) {
   const [internalSortBy, setInternalSortBy] = useState('newest');
   const [filterBy, setFilterBy] = useState('all');
   const [communityFilter, setCommunityFilter] = useState('all');
@@ -26,6 +28,7 @@ function TestimonialList({ testimonials, sortBy: externalSortBy, onSortChange, f
   // Share modal state
   const [shareModalOpen, setShareModalOpen] = useState(false);
   const [selectedTestimonial, setSelectedTestimonial] = useState(null);
+  const autoOpenedModalRef = useRef(false);
   
   // Use external sort if provided, otherwise use internal
   const currentSortBy = externalSortBy || internalSortBy;
@@ -34,6 +37,24 @@ function TestimonialList({ testimonials, sortBy: externalSortBy, onSortChange, f
   // Use external feature filter if provided, otherwise use internal
   const currentFeatureFilter = externalFeatureFilter !== undefined ? externalFeatureFilter : internalFeatureFilter;
   const setFeatureFilter = onFeatureFilterChange || setInternalFeatureFilter;
+
+  // Auto-open share modal for highlighted testimonial if share parameter is present
+  useEffect(() => {
+    if (highlightedTestimonialId && window.location.search.includes('share=true') && !autoOpenedModalRef.current) {
+      const targetTestimonial = testimonials.find(t => (t.id || t.id?.toString()) === highlightedTestimonialId);
+      if (targetTestimonial && !shareModalOpen) {
+        console.log('🔗 Auto-opening share modal for testimonial:', highlightedTestimonialId);
+        setSelectedTestimonial(targetTestimonial);
+        setShareModalOpen(true);
+        autoOpenedModalRef.current = true;
+      }
+    }
+  }, [highlightedTestimonialId, testimonials, shareModalOpen]);
+
+  // Reset auto-opened modal ref when highlighted testimonial changes
+  useEffect(() => {
+    autoOpenedModalRef.current = false;
+  }, [highlightedTestimonialId]);
 
   // Reset pagination when filters change
   useEffect(() => {
@@ -143,8 +164,13 @@ function TestimonialList({ testimonials, sortBy: externalSortBy, onSortChange, f
 
   // Handle share modal close
   const handleShareClose = () => {
-    setShareModalOpen(false);
-    setSelectedTestimonial(null);
+    try {
+      console.log('🔒 Closing share modal');
+      setShareModalOpen(false);
+      setSelectedTestimonial(null);
+    } catch (error) {
+      console.error('Error closing share modal:', error);
+    }
   };
 
   // Filter and sort testimonials
@@ -239,10 +265,14 @@ function TestimonialList({ testimonials, sortBy: externalSortBy, onSortChange, f
     const endIndex = currentPage * itemsPerPage;
     const paginated = filteredAndSortedTestimonials.slice(startIndex, endIndex);
     
-    // Update hasMore state
-    setHasMore(endIndex < filteredAndSortedTestimonials.length);
-    
     return paginated;
+  }, [filteredAndSortedTestimonials, currentPage, itemsPerPage]);
+
+  // Update hasMore state separately to avoid circular dependency
+  useEffect(() => {
+    const endIndex = currentPage * itemsPerPage;
+    const newHasMore = endIndex < filteredAndSortedTestimonials.length;
+    setHasMore(newHasMore);
   }, [filteredAndSortedTestimonials, currentPage, itemsPerPage]);
 
   // Simulate loading delay for better UX
@@ -289,6 +319,7 @@ function TestimonialList({ testimonials, sortBy: externalSortBy, onSortChange, f
               return (
                 <div
                   key={t.id || index}
+                  id={`testimonial-${t.id || index}`}
                   className={styles.testimonialCard}
                   ref={isLastElement ? lastElementRef : null}
                 >
@@ -298,15 +329,20 @@ function TestimonialList({ testimonials, sortBy: externalSortBy, onSortChange, f
                       <span className={styles.authorName}>
                         {getDisplayName(t)}
                       </span>
-                      <span 
-                        className={styles.communityBadge}
-                        style={{
-                          background: getCommunityInfo(t.community).gradient,
-                          borderColor: getCommunityInfo(t.community).borderColor,
-                        }}
-                      >
-                        {getCommunityInfo(t.community).name}
-                      </span>
+                      <div className={styles.authorBadges}>
+                        {t.role && (
+                          <RoleBadge role={t.role} size="small" />
+                        )}
+                        <span 
+                          className={styles.communityBadge}
+                          style={{
+                            background: getCommunityInfo(t.community).gradient,
+                            borderColor: getCommunityInfo(t.community).borderColor,
+                          }}
+                        >
+                          {getCommunityInfo(t.community).name}
+                        </span>
+                      </div>
                     </div>
                     <div className={styles.headerActions}>
                       <span className={styles.dateBadge}>
@@ -340,24 +376,39 @@ function TestimonialList({ testimonials, sortBy: externalSortBy, onSortChange, f
                   <TestimonialReactions 
                     testimonialId={t.id || index}
                     onReaction={(testimonialId, reaction, action) => {
-                      // console.log(`🔄 ${action} reaction ${reaction} for testimonial ${testimonialId}`);
-                      // Update local state when reaction changes
-                      if (action === 'add') {
-                        setReactionsData(prev => ({
-                          ...prev,
-                          [testimonialId]: {
-                            ...prev[testimonialId],
-                            [reaction]: (prev[testimonialId]?.[reaction] || 0) + 1
-                          }
-                        }));
-                      } else if (action === 'remove') {
-                        setReactionsData(prev => ({
-                          ...prev,
-                          [testimonialId]: {
-                            ...prev[testimonialId],
-                            [reaction]: Math.max(0, (prev[testimonialId]?.[reaction] || 0) - 1)
-                          }
-                        }));
+                      try {
+                        // console.log(`🔄 ${action} reaction ${reaction} for testimonial ${testimonialId}`);
+                        // Update local state when reaction changes
+                        if (action === 'add') {
+                          setReactionsData(prev => {
+                            // Ensure prev is always an object
+                            const safePrev = prev || {};
+                            const currentTestimonialData = safePrev[testimonialId] || {};
+                            return {
+                              ...safePrev,
+                              [testimonialId]: {
+                                ...currentTestimonialData,
+                                [reaction]: (currentTestimonialData[reaction] || 0) + 1
+                              }
+                            };
+                          });
+                        } else if (action === 'remove') {
+                          setReactionsData(prev => {
+                            // Ensure prev is always an object
+                            const safePrev = prev || {};
+                            const currentTestimonialData = safePrev[testimonialId] || {};
+                            return {
+                              ...safePrev,
+                              [testimonialId]: {
+                                ...currentTestimonialData,
+                                [reaction]: Math.max(0, (currentTestimonialData[reaction] || 0) - 1)
+                              }
+                            };
+                          });
+                        }
+                      } catch (error) {
+                        console.error('Error in onReaction callback:', error);
+                        // Don't crash the component, just log the error
                       }
                     }}
                   />
@@ -384,15 +435,17 @@ function TestimonialList({ testimonials, sortBy: externalSortBy, onSortChange, f
       </section>
 
       {/* Share Modal */}
-      {shareModalOpen && selectedTestimonial && (
-        <div className={styles.shareModalOverlay} onClick={handleShareClose}>
-          <div className={styles.shareModalContent} onClick={(e) => e.stopPropagation()}>
-            <TestimonialShare 
-              testimonial={selectedTestimonial}
-              onClose={handleShareClose}
-            />
-          </div>
-        </div>
+      {selectedTestimonial && (
+        <Modal
+          open={shareModalOpen}
+          onClose={handleShareClose}
+          maxWidth={600}
+        >
+          <TestimonialShare 
+            testimonial={selectedTestimonial}
+            onClose={handleShareClose}
+          />
+        </Modal>
       )}
     </>
   );

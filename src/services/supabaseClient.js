@@ -25,6 +25,11 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   }
 })
 
+// Make supabase available globally for testing
+if (typeof window !== 'undefined') {
+  window.supabase = supabase;
+}
+
 // Helper function to handle Supabase errors
 export const handleSupabaseError = (error) => {
   console.error('Supabase error:', error)

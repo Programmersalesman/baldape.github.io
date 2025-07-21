@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { LoadingSpinner } from "../ui";
-import styles from "./ServerWidgetModal.module.css";
+import styles from '../../styles/components/ServerWidgetModal.module.css';
 
 function ServerWidgetModal({ open, onClose, server }) {
   const [widget, setWidget] = useState(null);

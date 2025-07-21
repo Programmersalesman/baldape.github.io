@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import styles from "./NavBar.module.css";
+import styles from '../../styles/components/NavBar.module.css';
 
 function NavBar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -41,44 +41,42 @@ function NavBar() {
           onClick={() => setIsMenuOpen(!isMenuOpen)}
           aria-label="Open navigation menu"
         >
-          <span className={`${styles.hamburgerLine} ${isMenuOpen ? styles.open : ''}`} />
-          <span className={`${styles.hamburgerLine} ${isMenuOpen ? styles.open : ''}`} />
-          <span className={`${styles.hamburgerLine} ${isMenuOpen ? styles.open : ''}`} />
+          <span className={`${styles.hamburgerLine} ${styles.hamburgerLineTop} ${isMenuOpen ? styles.open : ''}`} />
+          <span className={`${styles.hamburgerLine} ${styles.hamburgerLineMiddle} ${isMenuOpen ? styles.open : ''}`} />
+          <span className={`${styles.hamburgerLine} ${styles.hamburgerLineBottom} ${isMenuOpen ? styles.open : ''}`} />
         </button>
       </nav>
-      {isMenuOpen && (
-        <div
-          className={styles.mobileMenuOverlay}
-          onClick={e => {
-            if (e.target.classList.contains(styles.mobileMenuOverlay)) {
-              setIsMenuOpen(false);
-            }
-          }}
+      <div
+        className={`${styles.mobileMenuOverlay} ${isMenuOpen ? styles.open : ''}`}
+        onClick={e => {
+          if (e.target.classList.contains(styles.mobileMenuOverlay)) {
+            setIsMenuOpen(false);
+          }
+        }}
+      >
+        {/* Close button in top-right */}
+        <button
+          onClick={() => setIsMenuOpen(false)}
+          aria-label="Close menu"
+          className={`${styles.closeBtn} ${isMenuOpen ? styles.open : ''}`}
         >
-          {/* Close button in top-right */}
-          <button
-            onClick={() => setIsMenuOpen(false)}
-            aria-label="Close menu"
-            className={styles.closeBtn}
-          >
-            &times;
-          </button>
-          <div className={styles.closeSpacer} />
-          <div className={styles.mobileMenuContainer}>
-            {navItems.filter(item => item.path !== "/").map((item) => (
-              <Link
-                key={item.path}
-                to={item.path}
-                onClick={() => setIsMenuOpen(false)}
-                className={`${styles.tab} ${isActive(item.path) ? styles.active : ''} ${styles.mobileTab}`}
-                tabIndex={0}
-              >
-                {item.label}
-              </Link>
-            ))}
-          </div>
+          &times;
+        </button>
+        <div className={styles.closeSpacer} />
+        <div className={styles.mobileMenuContainer}>
+          {navItems.filter(item => item.path !== "/").map((item) => (
+            <Link
+              key={item.path}
+              to={item.path}
+              onClick={() => setIsMenuOpen(false)}
+              className={`${styles.tab} ${isActive(item.path) ? styles.active : ''} ${styles.mobileTab}`}
+              tabIndex={0}
+            >
+              {item.label}
+            </Link>
+          ))}
         </div>
-      )}
+      </div>
     </>
   );
 

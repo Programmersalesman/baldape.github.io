@@ -23,29 +23,31 @@ const validateTestimonial = (testimonial) => {
 }
 
 // Normalize testimonial data structure for Supabase
-const normalizeTestimonial = (testimonial) => {
+const normalizeTestimonial = (testimonial, forInput = false) => {
   const normalized = {
     name: testimonial.name || testimonial.discordUsername || 'Anonymous',
     discord_username: testimonial.discordUsername || testimonial.discord || null,
     community: testimonial.community,
-    role: testimonial.role || 'Member',
+    role: testimonial.role || 'member',
     email: testimonial.email || null,
     rating: parseInt(testimonial.rating) || 0,
     text: testimonial.text || testimonial.message,
     features_liked: testimonial.featuresLiked || testimonial.features || [],
     permission: testimonial.permission === 'yes' ? 'public' : 'private',
-    anonymous: testimonial.anonymous || 'public',
-    approved: testimonial.approved || false,
+    // Fix: anonymous should be boolean, not string
+    anonymous: testimonial.anonymous === true || testimonial.anonymous === 'anonymous',
     admin_notes: testimonial.admin_notes || null,
+  };
+  // Only add 'approved' if not for input table
+  if (!forInput) {
+    normalized.approved = testimonial.approved || false;
   }
-  
   console.log('🔧 Normalization details:');
   console.log('  - Original permission:', testimonial.permission);
   console.log('  - Normalized permission:', normalized.permission);
   console.log('  - Original rating:', testimonial.rating);
   console.log('  - Normalized rating:', normalized.rating);
   console.log('  - Features array:', normalized.features_liked);
-  
   return normalized;
 }
 
@@ -53,27 +55,23 @@ const normalizeTestimonial = (testimonial) => {
 export const addTestimonial = async (testimonialData) => {
   try {
     console.log('🔧 Raw testimonial data:', testimonialData);
-    
-    const normalizedData = normalizeTestimonial(testimonialData)
+    // Use forInput=true to avoid 'approved' for testimonials_input
+    const normalizedData = normalizeTestimonial(testimonialData, true);
     console.log('🔧 Normalized data for Supabase:', normalizedData);
-    
     validateTestimonial(normalizedData)
-    
     console.log('🔧 Attempting to insert into Supabase...');
     console.log('🔧 Using supabase client:', !!supabase);
     console.log('🔧 Supabase URL:', supabase.supabaseUrl);
     console.log('🔧 Supabase Key type:', supabaseAnonKey?.startsWith('sb_publishable_') ? 'publishable' : 'unknown');
     const { data, error } = await supabase
-      .from('testimonials')
+      .from('testimonials_input')
       .insert([normalizedData])
       .select()
       .single()
-    
     if (error) {
       console.error('🔧 Supabase insert error:', error);
       throw error;
     }
-    
     console.log('🔧 Successfully inserted testimonial:', data);
     return { success: true, testimonial: data }
   } catch (error) {
@@ -82,11 +80,11 @@ export const addTestimonial = async (testimonialData) => {
   }
 }
 
-// Get testimonials with filtering
+// Get testimonials with filtering (from main testimonials table - approved only)
 export const getTestimonials = async (filters = {}) => {
   try {
     let query = supabase
-      .from('testimonials')
+      .from('testimonials') // This is correct - we read from main table
       .select('*')
     
     // Apply filters
@@ -333,12 +331,70 @@ export const clearTestimonials = async () => {
   }
 }
 
+// Get pending testimonials (from input table for admin review)
+export const getPendingTestimonials = async () => {
+  try {
+    const { data, error } = await supabase
+      .from('testimonials_input')
+      .select('*')
+      .order('created_at', { ascending: false })
+    
+    if (error) throw error
+    
+    return { success: true, testimonials: data || [] }
+  } catch (error) {
+    console.error('Error getting pending testimonials:', error)
+    return { success: false, error: handleSupabaseError(error), testimonials: [] }
+  }
+}
+
+// Approve testimonial (move from input to main table)
+export const approveTestimonialFromInput = async (inputId) => {
+  try {
+    const { data, error } = await supabase
+      .rpc('approve_testimonial', { input_id: inputId })
+    
+    if (error) throw error
+    
+    return { success: true, testimonial_id: data }
+  } catch (error) {
+    console.error('Error approving testimonial:', error)
+    return { success: false, error: handleSupabaseError(error) }
+  }
+}
+
+// Reject testimonial (add notes and optionally delete)
+export const rejectTestimonialFromInput = async (inputId, reason = '') => {
+  try {
+    const { error } = await supabase
+      .rpc('reject_testimonial', { input_id: inputId, reason: reason })
+    
+    if (error) throw error
+    
+    return { success: true }
+  } catch (error) {
+    console.error('Error rejecting testimonial:', error)
+    return { success: false, error: handleSupabaseError(error) }
+  }
+}
+
 // Subscribe to real-time testimonials updates
 export const subscribeToTestimonials = (callback) => {
   return supabase
     .channel('testimonials_changes')
     .on('postgres_changes', 
       { event: '*', schema: 'public', table: 'testimonials' }, 
+      callback
+    )
+    .subscribe()
+}
+
+// Subscribe to pending testimonials updates
+export const subscribeToPendingTestimonials = (callback) => {
+  return supabase
+    .channel('pending_testimonials_changes')
+    .on('postgres_changes', 
+      { event: '*', schema: 'public', table: 'testimonials_input' }, 
       callback
     )
     .subscribe()

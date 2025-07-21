@@ -1,9 +1,15 @@
 import React, { useState } from "react";
-import styles from "./TestimonialShare.module.css";
+import styles from '../../styles/components/TestimonialShare.module.css';
 
 function TestimonialShare({ testimonial, onClose }) {
   const [copied, setCopied] = useState(false);
   const [shareMethod, setShareMethod] = useState(null);
+
+  // Safety check for testimonial
+  if (!testimonial) {
+    console.error('TestimonialShare: No testimonial provided');
+    return null;
+  }
 
   const getDisplayName = (testimonial) => {
     if (testimonial.anonymous === 'anonymous' || testimonial.name === 'Anonymous') {
@@ -29,7 +35,7 @@ function TestimonialShare({ testimonial, onClose }) {
   const generateShareUrl = () => {
     // Create a shareable URL with testimonial ID
     const baseUrl = window.location.origin + window.location.pathname;
-    return `${baseUrl}?testimonial=${testimonial.id || 'shared'}`;
+    return `${baseUrl}?testimonial=${testimonial.id || 'shared'}&share=true`;
   };
 
   const shareOptions = [
@@ -103,17 +109,18 @@ function TestimonialShare({ testimonial, onClose }) {
   ];
 
   const handleShare = (option) => {
-    setShareMethod(option.name);
-    option.action();
+    try {
+      setShareMethod(option.name);
+      option.action();
+    } catch (error) {
+      console.error('Error sharing testimonial:', error);
+    }
   };
 
   return (
-    <div className={styles.shareContainer}>
+    <div className={styles.shareContent}>
       <div className={styles.shareHeader}>
         <h3 className={styles.shareTitle}>Share This Testimonial</h3>
-        <button className={styles.closeButton} onClick={onClose}>
-          ✕
-        </button>
       </div>
 
       <div className={styles.testimonialPreview}>

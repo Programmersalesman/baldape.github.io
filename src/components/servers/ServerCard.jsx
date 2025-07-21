@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./ServerCard.module.css";
+import styles from '../../styles/components/ServerCard.module.css';
 
 function ServerCard({ server, onClick }) {
   return (

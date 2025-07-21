@@ -1,218 +1,213 @@
-import { supabase } from './supabaseClient';
+import { supabase, handleSupabaseError } from './supabaseClient'
+import { getUserId } from '../utils/userIdentifier'
+import { log, warn, error as logError } from '../utils/logger';
 
-// Reaction types
+// Reaction types: key->emoji map
 export const REACTION_TYPES = {
-  HELPFUL: '👍',
-  LOVE: '❤️',
-  FIRE: '🔥',
-  PERFECT: '💯',
-  NOT_HELPFUL: '👎',
-  HMM: '🤔'
+  LIKE: { key: 'like', emoji: '👍' },
+  LOVE: { key: 'love', emoji: '❤️' },
+  HAHA: { key: 'haha', emoji: '😂' },
+  YAY: { key: 'yay', emoji: '🎉' },
+  WOW: { key: 'wow', emoji: '😮' },
+  SAD: { key: 'sad', emoji: '😢' },
+  ANGRY: { key: 'angry', emoji: '😠' }
 };
 
-// Add a reaction to a testimonial
-export const addReaction = async (testimonialId, reactionType, userId = null) => {
+// Helper to get emoji from key
+export const getEmojiForKey = (key) => {
+  const entry = Object.values(REACTION_TYPES).find(r => r.key === key);
+  return entry ? entry.emoji : key;
+};
+
+// Add a reaction to a testimonial (uses key)
+export const addReaction = async (testimonialId, reactionKey, userId = null) => {
   try {
-    // console.log('📝 Adding reaction:', { testimonialId, reactionType, userId });
-    
-    // Check if user already has this specific reaction
-    const { data: existingReactions, error: checkError } = await supabase
+    const currentUserId = userId || getUserId();
+    log('➕ Adding reaction:', { testimonialId, reactionKey, currentUserId });
+    const { data, error } = await supabase
       .from('testimonial_reactions')
-      .select('*')
-      .eq('testimonial_id', testimonialId)
-      .eq('user_id', userId || 'anonymous')
-      .eq('reaction_type', reactionType);
-
-    if (checkError) {
-      console.error('❌ Error checking existing reactions:', checkError);
-      return { success: false, error: checkError.message };
-    }
-
-    if (existingReactions && existingReactions.length > 0) {
-      // User already has this reaction, remove it (toggle off)
-      const { data, error } = await supabase
-        .from('testimonial_reactions')
-        .delete()
-        .eq('testimonial_id', testimonialId)
-        .eq('user_id', userId || 'anonymous')
-        .eq('reaction_type', reactionType)
-        .select();
-
-      if (error) {
-        console.error('❌ Error removing reaction:', error);
-        return { success: false, error: error.message };
-      }
-
-      // console.log('✅ Reaction removed (toggled off):', data);
-      return { success: true, reaction: data[0], action: 'removed' };
-    } else {
-      // Create new reaction
-      const { data, error } = await supabase
-        .from('testimonial_reactions')
-        .insert({
-          testimonial_id: testimonialId,
-          user_id: userId || 'anonymous',
-          reaction_type: reactionType,
-          created_at: new Date().toISOString()
-        })
-        .select();
-
-      if (error) {
-        console.error('❌ Error creating reaction:', error);
-        return { success: false, error: error.message };
-      }
-
-      // console.log('✅ Reaction created:', data[0]);
-      return { success: true, reaction: data[0], action: 'added' };
-    }
+      .insert([{
+        testimonial_id: testimonialId,
+        user_id: currentUserId,
+        reaction_type: reactionKey
+      }])
+      .select()
+      .single()
+    if (error) { logError('❌ Supabase error adding reaction:', error); throw error; }
+    log('✅ Reaction added successfully:', data);
+    return { success: true, reaction: data }
   } catch (error) {
-    console.error('❌ Error in addReaction:', error);
-    return { success: false, error: error.message };
+    logError('Error adding reaction:', error)
+    return { success: false, error: handleSupabaseError(error) }
   }
-};
+}
 
-// Remove a reaction from a testimonial
-export const removeReaction = async (testimonialId, userId = null) => {
+// Remove a reaction from a testimonial (uses key)
+export const removeReaction = async (testimonialId, reactionKey, userId = null) => {
   try {
-    // console.log('🗑️ Removing reaction:', { testimonialId, userId });
-    
+    const currentUserId = userId || getUserId();
+    log('🗑️ Removing reaction:', { testimonialId, reactionKey, currentUserId });
     const { data, error } = await supabase
       .from('testimonial_reactions')
       .delete()
       .eq('testimonial_id', testimonialId)
-      .eq('user_id', userId || 'anonymous')
-      .select();
-
-    if (error) {
-      console.error('❌ Error removing reaction:', error);
-      return { success: false, error: error.message };
-    }
-
-    // console.log('✅ Reaction removed:', data);
-    return { success: true, removed: data };
+      .eq('user_id', currentUserId)
+      .eq('reaction_type', reactionKey)
+      .select()
+    if (error) { logError('❌ Supabase error removing reaction:', error); throw error; }
+    log('✅ Reaction removed successfully:', data);
+    return { success: true, removedCount: data?.length || 0 }
   } catch (error) {
-    console.error('❌ Error in removeReaction:', error);
-    return { success: false, error: error.message };
+    logError('Error removing reaction:', error)
+    return { success: false, error: handleSupabaseError(error) }
   }
-};
+}
 
-// Get reactions for a testimonial
+// Get reaction counts for a testimonial (alias for getReactionCounts)
 export const getTestimonialReactions = async (testimonialId) => {
-  try {
-    // console.log('📊 Getting reactions for testimonial:', testimonialId);
-    
-    const { data, error } = await supabase
-      .from('testimonial_reactions')
-      .select('*')
-      .eq('testimonial_id', testimonialId);
+  return await getReactionCounts(testimonialId)
+}
 
-    if (error) {
-      console.error('❌ Error getting reactions:', error);
-      return { success: false, error: error.message };
-    }
-
-    // Group reactions by type and count them
-    const reactionCounts = data.reduce((acc, reaction) => {
-      acc[reaction.reaction_type] = (acc[reaction.reaction_type] || 0) + 1;
-      return acc;
-    }, {});
-
-    // console.log('✅ Reactions retrieved:', reactionCounts);
-    return { success: true, reactions: data, counts: reactionCounts };
-  } catch (error) {
-    console.error('❌ Error in getTestimonialReactions:', error);
-    return { success: false, error: error.message };
-  }
-};
-
-// Get user's reactions for a testimonial
-export const getUserReactions = async (testimonialId, userId = null) => {
-  try {
-    // console.log('👤 Getting user reactions:', { testimonialId, userId });
-    
-    const { data, error } = await supabase
-      .from('testimonial_reactions')
-      .select('*')
-      .eq('testimonial_id', testimonialId)
-      .eq('user_id', userId || 'anonymous');
-
-    if (error) {
-      console.error('❌ Error getting user reactions:', error);
-      return { success: false, error: error.message };
-    }
-
-    // Return array of reaction types
-    const reactionTypes = data.map(reaction => reaction.reaction_type);
-    // console.log('✅ User reactions:', reactionTypes);
-    return { success: true, reactions: data, reactionTypes };
-  } catch (error) {
-    console.error('❌ Error in getUserReactions:', error);
-    return { success: false, error: error.message };
-  }
-};
-
-// Get all reactions for multiple testimonials
+// Get reaction counts for multiple testimonials
 export const getTestimonialsReactions = async (testimonialIds) => {
   try {
-    // console.log('📊 Getting reactions for testimonials:', testimonialIds);
+    const { data, error } = await supabase
+      .from('testimonial_reaction_counts')
+      .select('*')
+      .in('testimonial_id', testimonialIds)
     
+    if (error) throw error
+    
+    // Group by testimonial_id
+    const reactionsMap = {};
+    data.forEach(reaction => {
+      if (!reactionsMap[reaction.testimonial_id]) {
+        reactionsMap[reaction.testimonial_id] = {};
+      }
+      reactionsMap[reaction.testimonial_id][reaction.reaction_type] = reaction.count;
+    });
+    
+    return { success: true, reactions: reactionsMap }
+  } catch (error) {
+    logError('Error getting testimonials reactions:', error)
+    return { success: false, error: handleSupabaseError(error), reactions: {} }
+  }
+}
+
+// Get reaction counts for a testimonial
+export const getReactionCounts = async (testimonialId) => {
+  try {
+    const { data, error } = await supabase
+      .from('testimonial_reaction_counts')
+      .select('*')
+      .eq('testimonial_id', testimonialId)
+    
+    if (error) throw error
+    
+    return { success: true, counts: data || [] }
+  } catch (error) {
+    logError('Error getting reaction counts:', error)
+    return { success: false, error: handleSupabaseError(error), counts: [] }
+  }
+}
+
+// Get reaction summary for a testimonial (with user's reactions)
+export const getReactionSummary = async (testimonialId, userId = 'anonymous') => {
+  try {
+    const { data, error } = await supabase
+      .rpc('get_testimonial_reaction_summary', { testimonial_id: testimonialId })
+    
+    if (error) throw error
+    
+    return { success: true, summary: data || [] }
+  } catch (error) {
+    logError('Error getting reaction summary:', error)
+    return { success: false, error: handleSupabaseError(error), summary: [] }
+  }
+}
+
+// Get user's reactions for a testimonial (returns keys)
+export const getUserReactions = async (testimonialId, userId = null) => {
+  try {
+    const currentUserId = userId || getUserId();
     const { data, error } = await supabase
       .from('testimonial_reactions')
-      .select('*')
-      .in('testimonial_id', testimonialIds);
-
-    if (error) {
-      console.error('❌ Error getting testimonials reactions:', error);
-      return { success: false, error: error.message };
-    }
-
-    // Group by testimonial ID
-    const reactionsByTestimonial = data.reduce((acc, reaction) => {
-      if (!acc[reaction.testimonial_id]) {
-        acc[reaction.testimonial_id] = [];
-      }
-      acc[reaction.testimonial_id].push(reaction);
-      return acc;
-    }, {});
-
-    // Calculate counts for each testimonial
-    const countsByTestimonial = {};
-    Object.keys(reactionsByTestimonial).forEach(testimonialId => {
-      countsByTestimonial[testimonialId] = reactionsByTestimonial[testimonialId].reduce((acc, reaction) => {
-        acc[reaction.reaction_type] = (acc[reaction.reaction_type] || 0) + 1;
-        return acc;
-      }, {});
-    });
-
-    // console.log('✅ Testimonials reactions retrieved:', countsByTestimonial);
-    return { 
-      success: true, 
-      reactions: reactionsByTestimonial, 
-      counts: countsByTestimonial 
-    };
+      .select('reaction_type')
+      .eq('testimonial_id', testimonialId)
+      .eq('user_id', currentUserId)
+    if (error) throw error
+    return { success: true, reactions: data.map(r => r.reaction_type) || [] }
   } catch (error) {
-    console.error('❌ Error in getTestimonialsReactions:', error);
-    return { success: false, error: error.message };
+    logError('Error getting user reactions:', error)
+    return { success: false, error: handleSupabaseError(error), reactions: [] }
   }
-};
+}
 
-// Subscribe to reaction changes
-export const subscribeToReactions = (callback) => {
-  const subscription = supabase
-    .channel('testimonial_reactions_changes')
-    .on(
-      'postgres_changes',
-      {
-        event: '*',
-        schema: 'public',
-        table: 'testimonial_reactions'
-      },
-      (payload) => {
-        // console.log('🔄 Reaction change received:', payload);
-        callback(payload);
-      }
+// Toggle a reaction (add if not exists, remove if exists) (uses key)
+export const toggleReaction = async (testimonialId, reactionKey, userId = null) => {
+  try {
+    const currentUserId = userId || getUserId();
+    log('🔄 Toggling reaction:', { testimonialId, reactionKey, currentUserId });
+    const { data: existingReaction, error: checkError } = await supabase
+      .from('testimonial_reactions')
+      .select('id')
+      .eq('testimonial_id', testimonialId)
+      .eq('user_id', currentUserId)
+      .eq('reaction_type', reactionKey)
+      .single()
+    if (checkError && checkError.code !== 'PGRST116') { logError('❌ Error checking existing reaction:', checkError); throw checkError; }
+    log('🔍 Existing reaction found:', existingReaction);
+    if (existingReaction) {
+      log('🗑️ Removing existing reaction');
+      return await removeReaction(testimonialId, reactionKey, currentUserId)
+    } else {
+      log('➕ Adding new reaction');
+      return await addReaction(testimonialId, reactionKey, currentUserId)
+    }
+  } catch (error) {
+    logError('Error toggling reaction:', error)
+    return { success: false, error: handleSupabaseError(error) }
+  }
+}
+
+// Get all reaction types available
+export const getReactionTypes = () => {
+  return Object.values(REACTION_TYPES).map(r => r.key);
+}
+
+// Subscribe to reaction updates
+export const subscribeToReactions = (testimonialId, callback) => {
+  return supabase
+    .channel(`reactions_${testimonialId}`)
+    .on('postgres_changes', 
+      { 
+        event: '*', 
+        schema: 'public', 
+        table: 'testimonial_reactions',
+        filter: `testimonial_id=eq.${testimonialId}`
+      }, 
+      callback
     )
-    .subscribe();
+    .subscribe()
+}
 
-  return subscription;
-}; 
+// Get reaction statistics across all testimonials
+export const getReactionStats = async () => {
+  try {
+    const { data, error } = await supabase
+      .from('testimonial_reaction_counts')
+      .select('*')
+    
+    if (error) throw error
+    
+    const stats = data.reduce((acc, reaction) => {
+      acc[reaction.reaction_type] = (acc[reaction.reaction_type] || 0) + reaction.count
+      return acc
+    }, {})
+    
+    return { success: true, stats }
+  } catch (error) {
+    logError('Error getting reaction stats:', error)
+    return { success: false, error: handleSupabaseError(error), stats: {} }
+  }
+} 

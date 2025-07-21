@@ -1,0 +1,211 @@
+/* Mobile-first: stack cards, edge-to-edge, with spacing */
+.transformationGrid {
+  display: block;
+  width: 100%;
+  padding: 0;
+}
+.transformationCard {
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 0;
+}
+.transformationCardImage {
+  width: 100%;
+  display: block;
+  margin-bottom: 0.5rem;
+  position: relative;
+}
+.debugBorder {
+  border: 2px solid #0074d9 !important;
+}
+.transformation-card {
+  flex: 0 0 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #18181c;
+  border-radius: 14px 14px 0 0;
+  overflow: hidden;
+}
+.transformation-image {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  display: block;
+}
+.transformation-details.frosted-text-card {
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  background: #f8f9faee;
+  color: #23272a;
+  border-radius: 18px;
+  box-shadow: 0 4px 24px #00000018;
+  padding: 2rem 1.5rem 2rem 1.5rem;
+  margin: 0 auto 0 auto;
+  min-height: 180px;
+  border: 1.5px solid rgba(200,200,200,.18);
+}
+@media (min-width: 900px) {
+  .transformationGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+    align-items: stretch;
+  }
+  .transformationPair {
+    max-width: 540px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  .transformation-details.frosted-text-card {
+    max-width: 540px;
+    height: 100%;
+  }
+}
+.fillTransformationImage {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  object-fit: cover;
+  display: block;
+  border-radius: 16px;
+  margin: 0 auto;
+}
+@media (min-width: 700px) {
+  .transformationGrid {
+    padding: 0;
+  }
+  .transformationCard {
+    margin-bottom: 0;
+  }
+  .fillTransformationImage {
+    max-width: 420px;
+    left: unset;
+    transform: none;
+    border: none;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+.transformation-badge {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translate(-50%, -60%);
+  display: inline-block;
+  padding: 0.4em 1.2em;
+  font-size: 1rem;
+  font-weight: 700;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px #0002;
+  background: #fff;
+  color: #23272a;
+  z-index: 2;
+}
+.imageOverlayContainer {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  display: block;
+}
+.imageOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(30, 34, 40, 0.32);
+  color: #fff;
+  opacity: 1;
+  transition: opacity 0.25s;
+  border-radius: 16px;
+  pointer-events: none;
+  z-index: 2;
+}
+.overlayIcon {
+  font-size: 2.2rem;
+  margin-bottom: 0.3rem;
+  filter: drop-shadow(0 2px 8px #0008);
+}
+.overlayText {
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-shadow: 0 2px 8px #0008;
+}
+@media (hover: hover) and (pointer: fine) {
+  .imageOverlay {
+    display: flex;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .imageOverlayContainer:hover .imageOverlay {
+    opacity: 1;
+    pointer-events: none;
+  }
+}
+.transformationPair {
+  width: 100%;
+  margin: 0 auto 2.5rem auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+@media (min-width: 900px) {
+  .transformationPair {
+    max-width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    gap: 2rem;
+  }
+  .transformationCardImage, .transformationDetails.frosted-text-card {
+    height: 100%;
+    flex: 1 1 0;
+  }
+  .transformationCardImage {
+    max-width: 50%;
+    margin-bottom: 0;
+    display: block;
+    min-height: 220px;
+    aspect-ratio: 4/3;
+  }
+  .transformationDetails.frosted-text-card {
+    max-width: 50%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+  .fillTransformationImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    border-radius: 16px;
+    margin: 0 auto;
+  }
+}
+@media (min-width: 768px) {
+  .transformationGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+    width: 100%;
+    padding: 0;
+  }
+  .transformationCard {
+    margin-bottom: 0;
+    height: 100%;
+  }
+} 

@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./ContactInfoCard.module.css";
+import styles from '../../styles/components/ContactInfoCard.module.css';
 
 function ContactInfoCard({ icon, title, value, link }) {
   const cardContent = (
@@ -26,4 +26,4 @@ function ContactInfoCard({ icon, title, value, link }) {
   return cardContent;
 }
 
-export default ContactInfoCard; 
+export default ContactInfoCard;

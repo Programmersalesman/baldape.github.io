@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./TestimonialWordCloud.module.css";
+import styles from '../../styles/components/TestimonialWordCloud.module.css';
 
 function TestimonialWordCloud({ testimonials, onFeatureClick, selectedFeature }) {
   // --- Word Cloud/Tags helpers ---

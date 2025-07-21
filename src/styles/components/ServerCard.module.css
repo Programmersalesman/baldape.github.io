@@ -1,0 +1,35 @@
+/* Mobile-first: edge-to-edge, no max-width, no auto margin */
+.serverCard {
+  width: 100%;
+  max-width: 100%;
+  margin: 0 0 20px 0;
+  transition: transform 0.2s;
+  box-sizing: border-box;
+}
+
+.serverImage {
+  border-radius: 12px;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+@media (orientation: landscape) and (max-width: 900px) {
+  .serverCard {
+    max-width: 480px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+@media (min-width: 768px) {
+  .serverCard {
+    width: 320px;
+    max-width: 90vw;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+ 

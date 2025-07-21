@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './ProgressBar.module.css';
+import styles from '../../styles/components/ProgressBar.module.css';
 
 function ProgressBar({ progress, label = "Form Progress", showPercentage = true }) {
   return (

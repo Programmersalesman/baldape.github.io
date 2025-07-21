@@ -1,4 +1,8 @@
-import React from "react";
+import React, { useContext, useState } from "react";
+import styles from "./styles/components/OrganizationSection.module.css";
+import ImageExpandOverlay from "./components/ui/ImageExpandOverlay";
+import { DebugContext } from "./context/DebugContext";
+import FullSizeImageModal from "./components/ui/FullSizeImageModal";
 
 const transformations = [
   {
@@ -28,6 +32,8 @@ const transformations = [
 ];
 
 function OrganizationSection() {
+  const { debug } = useContext(DebugContext);
+  const [modalImg, setModalImg] = useState(null);
   return (
     <section id="organization" className="section section-light">
       <div className="container">
@@ -35,30 +41,34 @@ function OrganizationSection() {
         <div className="section-subtitle">
           Each server below is expertly organized to maximize clarity, security,
           and engagement.
-          <br />
-          <span className="subtitle-note">
-            More organization examples are always being added.
-          </span>
         </div>
-        <div className="grid-2">
+        <div className={styles.organizationGrid}>
           {transformations.map((item, idx) => (
-            <div className="transformation-group" key={idx}>
-              <div className="transformation-card dark-glass-card no-hover equal-size">
-                <div className="image-badge-wrapper">
+            <div className={styles.organizationUnifiedCard} key={idx}>
+              <div className={styles.organizationCardImage}>
+                <ImageExpandOverlay onClick={() => setModalImg(item)}>
                   <img
                     src={item.img}
                     alt={item.alt}
-                    className="transformation-image fill-card-image"
+                    className={styles.fillOrganizationImage}
+                    style={{ cursor: 'zoom-in' }}
                   />
-                </div>
+                </ImageExpandOverlay>
               </div>
-              <div className="transformation-details frosted-text-card">
+              <div className={styles.organizationCardText}>
                 <h3>{item.title}</h3>
                 <p>{item.desc}</p>
               </div>
             </div>
           ))}
         </div>
+        <FullSizeImageModal
+          open={!!modalImg}
+          onClose={() => setModalImg(null)}
+          src={modalImg?.img}
+          alt={modalImg?.alt}
+          caption={modalImg?.title}
+        />
       </div>
     </section>
   );

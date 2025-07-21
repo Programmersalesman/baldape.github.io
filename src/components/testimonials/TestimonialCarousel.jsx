@@ -1,19 +1,62 @@
 import React, { useState, useEffect, useRef } from "react";
 import StarRating from "../ui/StarRating";
-import styles from "./TestimonialCarousel.module.css";
+import RoleBadge from "../ui/RoleBadge";
+import styles from '../../styles/components/TestimonialCarousel.module.css';
+import mysteryStyles from "../../styles/components/mystery-effects.module.css";
 import { getCommunityInfo } from "../../utils/communityMapping";
 
-function TestimonialCarousel({ testimonials }) {
-  // Select 3 random testimonials for the carousel
-  const [featuredTestimonials] = useState(() => {
-    if (testimonials.length <= 3) return testimonials;
-    const shuffled = [...testimonials].sort(() => 0.5 - Math.random());
-    return shuffled.slice(0, 3);
-  });
-
+function TestimonialCarousel({ testimonials, highlightedTestimonialId, highlightStyle = 'mystery' }) {
+  // Select testimonials for the carousel, prioritizing the highlighted one
+  const [featuredTestimonials, setFeaturedTestimonials] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAutoScrolling, setIsAutoScrolling] = useState(true);
   const autoScrollRef = useRef(null);
+
+  // Update featured testimonials when testimonials or highlightedTestimonialId changes
+  useEffect(() => {
+    console.log('🔄 Carousel updating with highlightedTestimonialId:', highlightedTestimonialId);
+    console.log('📊 Available testimonials:', testimonials.map(t => ({ id: t.id, type: typeof t.id })));
+    
+    if (testimonials.length <= 3) {
+      setFeaturedTestimonials(testimonials);
+      return;
+    }
+    
+    // If there's a highlighted testimonial, put it first
+    if (highlightedTestimonialId) {
+      // Try multiple ways to find the testimonial
+      let highlightedTestimonial = testimonials.find(t => t.id === highlightedTestimonialId);
+      if (!highlightedTestimonial) {
+        highlightedTestimonial = testimonials.find(t => t.id?.toString() === highlightedTestimonialId);
+      }
+      if (!highlightedTestimonial) {
+        highlightedTestimonial = testimonials.find(t => t.id?.toString() === highlightedTestimonialId?.toString());
+      }
+      
+      console.log('🎯 Found highlighted testimonial:', highlightedTestimonial);
+      console.log('🔍 Search details:', {
+        highlightedTestimonialId,
+        highlightedTestimonialIdType: typeof highlightedTestimonialId,
+        found: !!highlightedTestimonial
+      });
+      
+      if (highlightedTestimonial) {
+        const otherTestimonials = testimonials.filter(t => t.id !== highlightedTestimonial.id);
+        const shuffledOthers = otherTestimonials.sort(() => 0.5 - Math.random()).slice(0, 2);
+        const newFeatured = [highlightedTestimonial, ...shuffledOthers];
+        console.log('📋 Setting featured testimonials:', newFeatured.map(t => t.id));
+        setFeaturedTestimonials(newFeatured);
+        setCurrentIndex(0); // Reset to first position
+        return;
+      } else {
+        console.log('❌ Could not find highlighted testimonial with ID:', highlightedTestimonialId);
+      }
+    }
+    
+    // Fallback to random selection
+    const shuffled = [...testimonials].sort(() => 0.5 - Math.random());
+    setFeaturedTestimonials(shuffled.slice(0, 3));
+  }, [testimonials, highlightedTestimonialId]);
 
   // Get display name helper
   const getDisplayName = (testimonial) => {
@@ -29,14 +72,14 @@ function TestimonialCarousel({ testimonials }) {
 
     autoScrollRef.current = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % featuredTestimonials.length);
-    }, 4000); // Change every 4 seconds
+    }, highlightedTestimonialId && currentIndex === 0 ? 8000 : 4000); // Longer delay for highlighted testimonial
 
     return () => {
       if (autoScrollRef.current) {
         clearInterval(autoScrollRef.current);
       }
     };
-  }, [isAutoScrolling, featuredTestimonials.length]);
+  }, [isAutoScrolling, featuredTestimonials.length, highlightedTestimonialId, currentIndex]);
 
   // Pause auto-scroll on hover
   const handleMouseEnter = () => setIsAutoScrolling(false);
@@ -93,8 +136,17 @@ function TestimonialCarousel({ testimonials }) {
       <div className={styles.testimonialContainer}>
         <div
           key={currentTestimonial.id || currentIndex}
-          className={styles.testimonialCard}
+          className={`${styles.testimonialCard} ${
+            highlightedTestimonialId && (
+              currentTestimonial.id === highlightedTestimonialId ||
+              currentTestimonial.id?.toString() === highlightedTestimonialId ||
+              currentTestimonial.id?.toString() === highlightedTestimonialId?.toString()
+            )
+              ? mysteryStyles[`testimonialHighlight${highlightStyle.charAt(0).toUpperCase() + highlightStyle.slice(1)}`]
+              : ''
+          }`}
         >
+
           {/* Testimonial Text */}
           <div className={styles.testimonialText}>
             {currentTestimonial.text || currentTestimonial.message}
@@ -106,21 +158,26 @@ function TestimonialCarousel({ testimonials }) {
               <div className={styles.authorName}>
                 {getDisplayName(currentTestimonial)}
               </div>
-              {currentTestimonial.community && (
-                <div 
-                  className={styles.authorCommunity}
-                  style={{
-                    '--community-gradient': getCommunityInfo(currentTestimonial.community).gradient,
-                    '--community-border': `1px solid ${getCommunityInfo(currentTestimonial.community).color}`,
-                    background: getCommunityInfo(currentTestimonial.community).gradient,
-                    border: `1px solid ${getCommunityInfo(currentTestimonial.community).color}`,
-                    color: 'white',
-                    textShadow: '0 1px 2px rgba(0, 0, 0, 0.3)'
-                  }}
-                >
-                  {getCommunityInfo(currentTestimonial.community).name}
-                </div>
-              )}
+              <div className={styles.authorBadges}>
+                {currentTestimonial.role && (
+                  <RoleBadge role={currentTestimonial.role} size="small" />
+                )}
+                {currentTestimonial.community && (
+                  <div 
+                    className={styles.authorCommunity}
+                    style={{
+                      '--community-gradient': getCommunityInfo(currentTestimonial.community).gradient,
+                      '--community-border': `1px solid ${getCommunityInfo(currentTestimonial.community).color}`,
+                      background: getCommunityInfo(currentTestimonial.community).gradient,
+                      border: `1px solid ${getCommunityInfo(currentTestimonial.community).color}`,
+                      color: 'white',
+                      textShadow: '0 1px 2px rgba(0, 0, 0, 0.3)'
+                    }}
+                  >
+                    {getCommunityInfo(currentTestimonial.community).name}
+                  </div>
+                )}
+              </div>
             </div>
             
 

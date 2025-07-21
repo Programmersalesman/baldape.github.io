@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './TestimonialsHero.module.css';
+import styles from '../../styles/components/TestimonialsHero.module.css';
 
 function TestimonialsHero({ onOpenModal }) {
   return (

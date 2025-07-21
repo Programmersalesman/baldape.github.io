@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./FAQCard.module.css";
+import styles from '../../styles/components/FAQCard.module.css';
 
 function FAQCard({ question, answer }) {
   return (

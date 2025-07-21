@@ -9,4 +9,5 @@ export { default as CTACard } from './CTACard';
 export { default as FAQCard } from './FAQCard';
 export { default as ContactInfoCard } from './ContactInfoCard';
 export { default as Dropdown } from './Dropdown';
-export { default as LoadingSpinner } from './LoadingSpinner'; 
+export { default as LoadingSpinner } from './LoadingSpinner';
+export { default as RoleBadge } from './RoleBadge'; 

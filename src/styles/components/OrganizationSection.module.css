@@ -1,0 +1,244 @@
+/* Mobile-first: stack cards, edge-to-edge, with spacing */
+.organizationGrid {
+  display: block;
+  width: 100%;
+  padding: 0;
+}
+.organizationCard {
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 2.5rem; /* Increased for more separation */
+  /* overflow: hidden; removed to allow image to be visually free */
+  /* border-radius: 16px; removed to allow image to be visually free */
+}
+.organizationCardImage {
+  width: 100%;
+  display: block;
+  margin-bottom: 0.5rem;
+  position: relative;
+}
+.debugBorder {
+  border: 2px solid #0074d9 !important;
+}
+.organizationCardDetails.frosted-text-card {
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  background: #f8f9faee;
+  color: #23272a;
+  border-radius: 18px;
+  box-shadow: 0 4px 24px #00000018;
+  padding: 2rem 1.5rem 2rem 1.5rem;
+  margin: 0 auto 0 auto;
+  min-height: 180px;
+  border: 1.5px solid rgba(200,200,200,.18);
+}
+.transformation-card {
+  margin-bottom: 1rem;
+  flex: 1 1 0;
+}
+.transformation-details {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+.fillCardImage {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  display: block;
+  border-radius: 16px;
+}
+.fillOrganizationImage {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  object-fit: cover;
+  display: block;
+  border-radius: 16px;
+  margin: 0 auto;
+}
+.imageOverlayContainer {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  display: block;
+}
+.imageOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(30, 34, 40, 0.32);
+  color: #fff;
+  opacity: 1;
+  transition: opacity 0.25s;
+  border-radius: 16px;
+  pointer-events: none;
+  z-index: 2;
+  display: none;
+}
+.overlayIcon {
+  font-size: 2.2rem;
+  margin-bottom: 0.3rem;
+  filter: drop-shadow(0 2px 8px #0008);
+}
+.overlayText {
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-shadow: 0 2px 8px #0008;
+}
+@media (hover: hover) and (pointer: fine) {
+  .imageOverlay {
+    display: flex;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .imageOverlayContainer:hover .imageOverlay {
+    opacity: 1;
+    pointer-events: none;
+  }
+}
+
+@media (min-width: 768px) {
+  .organizationGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+    width: 100%;
+    padding: 0;
+  }
+  .organizationCard {
+    margin-bottom: 0;
+    height: 100%;
+  }
+}
+.organizationPair {
+  width: 100%;
+  margin: 0 auto 2.5rem auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.organizationCardDetails.frosted-text-card {
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  background: #f8f9faee;
+  color: #23272a;
+  border-radius: 18px;
+  box-shadow: 0 4px 24px #00000018;
+  padding: 2rem 1.5rem 2rem 1.5rem;
+  margin: 0 auto 0 auto;
+  min-height: 180px;
+  border: 1.5px solid rgba(200,200,200,.18);
+}
+.organizationUnifiedCard {
+  display: flex;
+  flex-direction: column;
+  background: rgba(255,255,255,0.82);
+  backdrop-filter: blur(10px);
+  border-radius: 22px;
+  box-shadow: 0 8px 32px #00000022, 0 1.5px 8px #00000010;
+  overflow: hidden;
+  margin: 0 auto 2.5rem auto;
+  width: 100%;
+  max-width: 700px;
+  border: 1.5px solid rgba(200,200,200,.22);
+}
+.organizationUnifiedCard .organizationCardDetails.frosted-text-card {
+  background: none;
+  box-shadow: none;
+}
+.organizationCardText {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 2rem 1.5rem 2rem 1.5rem;
+  flex: 1 1 0;
+  color: #23272a;
+  font-size: 0.99rem;
+  line-height: 1.6;
+}
+@media (min-width: 900px) {
+  .organizationCardText {
+    padding: 2.5rem 2.2rem 2.5rem 2.2rem;
+    align-items: flex-start;
+  }
+}
+.organizationCardText h3 {
+  margin-top: 0;
+  margin-bottom: 0.7rem;
+  font-size: 1.13rem;
+  font-weight: 700;
+}
+.organizationCardText p {
+  margin: 0;
+  font-size: 0.99rem;
+  font-weight: 400;
+}
+@media (min-width: 900px) {
+  .organizationUnifiedCard {
+    flex-direction: row;
+    align-items: stretch;
+    min-height: 320px;
+    margin: 0 auto 2.5rem auto;
+  }
+  .organizationGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+    align-items: stretch;
+  }
+  .organizationPair {
+    max-width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    gap: 2rem;
+  }
+  .organizationCardImage, .organizationCardDetails.frosted-text-card {
+    height: 100%;
+    flex: 1 1 0;
+    /* Only .organizationCardDetails should be flex; .organizationCardImage should be block */
+  }
+  .organizationCardImage {
+    max-width: 50%;
+    min-width: 220px;
+    margin-bottom: 0;
+    display: block;
+    aspect-ratio: 4/3;
+    border-radius: 0;
+  }
+  .organizationCardDetails.frosted-text-card {
+    max-width: 50%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    border-radius: 0 22px 22px 0;
+    background: #f8f9faee;
+    box-shadow: none;
+  }
+  .fillOrganizationImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    border-radius: 22px 0 0 22px;
+    margin: 0 auto;
+  }
+} 

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { servers } from "./data/servers";
 import ServerCard from "./components/servers/ServerCard";
 import ServerWidgetModal from "./components/servers/ServerWidgetModal";
-import styles from "./ManagedServersSection.module.css";
+import styles from './styles/components/ManagedServersSection.module.css';
 
 function ManagedServersSection() {
   const [modalServer, setModalServer] = useState(null);

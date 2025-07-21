@@ -1,6 +1,6 @@
 import React from 'react';
 import { Dropdown } from '../ui';
-import styles from './TestimonialsHeader.module.css';
+import styles from '../../styles/components/TestimonialsHeader.module.css';
 
 function TestimonialsHeader({ testimonials, onSortChange, onFilterChange, onCommunityChange, currentSort, currentFilter, currentCommunity }) {
   const sortOptions = [

@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { useSearchParams, useLocation } from "react-router-dom";
 import Modal from "../components/ui/Modal";
 import { LoadingSpinner } from "../components/ui";
 import { 
@@ -6,14 +7,14 @@ import {
   TestimonialAnalytics,
   TestimonialList,
   TestimonialWordCloud,
-  TestimonialCarousel,
-  TestimonialsHero
+  TestimonialCarousel
 } from "../components/testimonials";
+import HeroSection from "../components/ui/HeroSection";
 import FormDebugPanel from "../components/forms/FormDebugPanel";
 import StatusMessage from "../components/ui/StatusMessage";
 import testimonialsData from "../testimonialsData";
 import { sendToDiscord } from "../services/discordService";
-import styles from "./Testimonials.module.css";
+import styles from '../styles/components/Testimonials.module.css';
 import { 
   getPublicTestimonials, 
   addTestimonial, 
@@ -24,9 +25,12 @@ import {
   subscribeToTestimonials
 } from "../services/supabaseTestimonialService";
 import { testSupabaseConnection } from "../services/testSupabaseConnection";
+import { DebugContext } from '../context/DebugContext';
 
 
 function Testimonials() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const location = useLocation();
   const [modalOpen, setModalOpen] = useState(false);
   const [testimonials, setTestimonials] = useState([]);
   const [submissionStatus, setSubmissionStatus] = useState({ type: null, message: '' });
@@ -37,6 +41,27 @@ function Testimonials() {
   const [sortBy, setSortBy] = useState('newest');
   const [featureFilter, setFeatureFilter] = useState(null);
   const [currentFilter, setCurrentFilter] = useState('all');
+  const [highlightedTestimonialId, setHighlightedTestimonialId] = useState(null);
+  const { debug } = useContext(DebugContext);
+
+  // Handle URL parameters for direct testimonial linking
+  useEffect(() => {
+    const testimonialId = searchParams.get('testimonial');
+    const shouldShare = searchParams.get('share') === 'true';
+    
+    console.log('🔍 URL params - testimonialId:', testimonialId, 'shouldShare:', shouldShare);
+    console.log('📊 Current testimonials count:', testimonials.length);
+    
+    if (testimonialId && testimonialId !== 'shared' && testimonials.length > 0) {
+      console.log('🎯 Setting highlightedTestimonialId to:', testimonialId);
+      setHighlightedTestimonialId(testimonialId);
+      
+      // If share parameter is true, the share modal will be opened by TestimonialList
+      if (shouldShare) {
+        console.log(`🔗 Share link detected for testimonial ${testimonialId}`);
+      }
+    }
+  }, [searchParams, testimonials]);
 
   // Load testimonials on component mount and set up real-time subscriptions
   // Note: React StrictMode causes this to run twice in development
@@ -255,16 +280,18 @@ function Testimonials() {
   return (
     <>
       {/* Debug Panel - Only shows when modal is open */}
-      <FormDebugPanel
-        formType={modalOpen ? 'testimonial' : null}
-        onFillForm={handleFillForm}
-        onTestDiscordWebhook={handleTestDiscordWebhook}
-        onReviewFormData={handleReviewFormData}
-        formData={debugFormData}
-        onViewStats={handleViewStats}
-        onTestConnection={handleTestConnection}
-        storageStats={storageStats}
-      />
+      {debug && (
+        <FormDebugPanel
+          formType={modalOpen ? 'testimonial' : null}
+          onFillForm={handleFillForm}
+          onTestDiscordWebhook={handleTestDiscordWebhook}
+          onReviewFormData={handleReviewFormData}
+          formData={debugFormData}
+          onViewStats={handleViewStats}
+          onTestConnection={handleTestConnection}
+          storageStats={storageStats}
+        />
+      )}
 
       {/* Status Messages */}
       <StatusMessage
@@ -274,16 +301,33 @@ function Testimonials() {
       />
 
       {/* Hero Section */}
-      <TestimonialsHero onOpenModal={() => setModalOpen(true)} />
+      <HeroSection
+        title="Testimonials & Reviews"
+        subtitle="Real feedback from communities and clients. Discover what makes our service stand out."
+      />
 
       {/* Main Testimonials Section */}
       <section className="section">
         <div className="container">
           {/* Carousel in main section */}
           {!isLoading && testimonials.length > 0 && (
-            <div className={styles.carouselContainer}>
-              <TestimonialCarousel testimonials={testimonials} />
-            </div>
+            <>
+              <div className={styles.carouselContainer}>
+                <TestimonialCarousel 
+                  testimonials={testimonials} 
+                  highlightedTestimonialId={highlightedTestimonialId}
+                  highlightStyle="mystery"
+                />
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'center', margin: '0.7rem 0 1.1rem 0' }}>
+                <button
+                  onClick={() => setModalOpen(true)}
+                  className="testimonials-hero-btn"
+                >
+                  Leave a Testimonial
+                </button>
+              </div>
+            </>
           )}
 
           {/* Testimonials Content */}
@@ -307,6 +351,7 @@ function Testimonials() {
                 onSortChange={setSortBy}
                 featureFilter={featureFilter}
                 onFeatureFilterChange={setFeatureFilter}
+                highlightedTestimonialId={highlightedTestimonialId}
               />
             </>
           )}
