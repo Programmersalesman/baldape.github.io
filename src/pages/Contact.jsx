@@ -12,8 +12,8 @@ import StatusMessage from "../components/ui/StatusMessage";
 import { sendToDiscord } from "../services/discordService";
 import { addTestimonial, exportTestimonials, importTestimonials, clearTestimonials, getTestimonialStats } from "../services/supabaseTestimonialService";
 import { addConsultation, exportConsultations, importConsultations, clearConsultations, getConsultationStats } from "../services/supabaseConsultationService";
-import { CoreCalendar, CoreStar } from "@glyphs/react-core";
-import { CoreArrow } from '@glyphs/react-core';
+// import { CoreCalendar, CoreStar } from "@glyphs/react-core"; // Removed: package not found. Replace with another icon library if needed.
+// import { CoreArrow } from '@glyphs/react-core'; // Removed: package not found. Replace with another icon library if needed.
 import { BrandsFigma } from '@glyphs/react-brands';
 import { FlagsCanada } from '@glyphs/react-flags';
 import { CalendarIcon, StarIcon } from '../components/ui/v2/icons/glyphs';
