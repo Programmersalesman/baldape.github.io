@@ -14,8 +14,8 @@ import { addTestimonial, exportTestimonials, importTestimonials, clearTestimonia
 import { addConsultation, exportConsultations, importConsultations, clearConsultations, getConsultationStats } from "../services/supabaseConsultationService";
 // import { CoreCalendar, CoreStar } from "@glyphs/react-core"; // Removed: package not found. Replace with another icon library if needed.
 // import { CoreArrow } from '@glyphs/react-core'; // Removed: package not found. Replace with another icon library if needed.
-import { BrandsFigma } from '@glyphs/react-brands';
-import { FlagsCanada } from '@glyphs/react-flags';
+// import { BrandsFigma } from '@glyphs/react-brands'; // Removed: package not found. Replace with another icon library if needed.
+// import { FlagsCanada } from '@glyphs/react-flags'; // Removed: package not found. Replace with another icon library if needed.
 import { CalendarIcon, StarIcon } from '../components/ui/v2/icons/glyphs';
 
 function Contact() {
