@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { LoadingSpinner } from "../ui";
 import styles from '../../styles/components/ServerWidgetModal.module.css';
+import { RefreshIcon } from '../ui/v2/icons/glyphs';
 
 function ServerWidgetModal({ open, onClose, server }) {
   const [widget, setWidget] = useState(null);
@@ -69,6 +70,14 @@ function ServerWidgetModal({ open, onClose, server }) {
     return server.image;
   };
 
+  // Utility to shuffle an array
+  function shuffle(array) {
+    return array
+      .map(value => ({ value, sort: Math.random() }))
+      .sort((a, b) => a.sort - b.sort)
+      .map(({ value }) => value);
+  }
+
   // Modal content
   const modalContent = (
     <div
@@ -104,7 +113,7 @@ function ServerWidgetModal({ open, onClose, server }) {
                   {widget.name || server.name}
                 </div>
                 <div className={styles.serverMemberCount}>
-                  {widget.presence_count || 0} Members Online
+                  🟢 {widget.presence_count || 0} Members Online
                 </div>
               </div>
             </div>
@@ -115,22 +124,26 @@ function ServerWidgetModal({ open, onClose, server }) {
               <div className={styles.membersTitle}>
                 Online Members
               </div>
-              <div className={styles.membersList}>
-                {widget.members && widget.members.length > 0 ? (
-                  widget.members.slice(0, 8).map((m) => (
-                    <div key={m.id} className={styles.memberItem}>
-                      <img src={m.avatar_url} alt={m.username} className={styles.memberAvatar} />
-                      <span className={styles.memberName}>{m.username}</span>
-                      <span className={`${styles.memberStatus} ${styles[m.status] || styles.offline}`}>●</span>
-                    </div>
-                  ))
-                ) : (
-                  <div className={styles.noMembersMessage}>No online members.</div>
-                )}
-                {widget.members && widget.members.length > 8 && (
-                  <div className={styles.moreMembersMessage}>...and more</div>
-                )}
-              </div>
+              {(() => {
+                const randomMembers = widget.members ? shuffle([...widget.members]) : [];
+                return (
+                  <div className={styles.membersList}>
+                    {randomMembers.slice(0, 8).map((m) => (
+                      <div key={m.id} className={styles.memberItem}>
+                        <img src={m.avatar_url} alt={m.username} className={styles.memberAvatar} />
+                        <span className={styles.memberName} title={m.username}>{m.username}</span>
+                        <span className={`${styles.memberStatus} ${styles[m.status] || styles.offline}`}>●</span>
+                      </div>
+                    ))}
+                    {randomMembers.length === 0 && (
+                      <div className={styles.noMembersMessage}>No online members.</div>
+                    )}
+                    {randomMembers.length > 8 && (
+                      <div className={styles.moreMembersMessage}>...and more</div>
+                    )}
+                  </div>
+                );
+              })()}
             </div>
             {/* Featured member */}
             {widget.members && widget.members.length > 0 && (
@@ -158,24 +171,35 @@ function ServerWidgetModal({ open, onClose, server }) {
             </a>
             <div className={styles.footerInfo}>
               <div className={styles.footerLeft}>
-                <span>🟢 {widget.presence_count || 0} online</span>
-                <span>•</span>
-                <span>{widget.members ? widget.members.length : 0} members</span>
+                {/* Online/member count only shown in header now */}
               </div>
-              <div className={styles.footerRight}>
+              <div className={styles.footerRight} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 16, width: '100%' }}>
                 <button
                   onClick={fetchWidget}
                   className={styles.refreshButton}
                   title="Refresh data"
+                  style={{ display: 'flex', alignItems: 'center', gap: 4, background: 'none', border: 'none', cursor: 'pointer' }}
                 >
-                  🔄
+                  <RefreshIcon size={20} />
+                  <span style={{ fontWeight: 500, fontSize: 14, color: '#5865f2' }}>Refresh</span>
                 </button>
-                <span>•</span>
-                <span>Last updated: {updatedAt}</span>
+                <span style={{ color: '#888', fontSize: 13 }}>
+                  Last updated: <span style={{ fontWeight: 600 }}>{updatedAt}</span>
+                </span>
               </div>
             </div>
             <div className={styles.lastUpdated}>
-              Data provided by Discord Widget API
+              <span style={{
+                color: '#5865f2',
+                fontWeight: 600,
+                fontSize: 13,
+                letterSpacing: 0.2,
+                display: 'block',
+                textAlign: 'center',
+                width: '100%'
+              }}>
+                Discord Widget API
+              </span>
             </div>
           </>
         )}
@@ -186,4 +210,4 @@ function ServerWidgetModal({ open, onClose, server }) {
   return createPortal(modalContent, document.body);
 }
 
-export default ServerWidgetModal; 
+export default ServerWidgetModal;

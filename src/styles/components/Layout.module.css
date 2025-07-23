@@ -2,7 +2,6 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  padding-top: 120px; /* Always reserve enough space for nav bar */
   padding-bottom: 2.5rem;
   min-height: 100vh;
   transition: padding-left 0.3s ease;
@@ -10,9 +9,14 @@
 
 .main {
   flex: 1;
-  padding: 2rem 0 0 0;
+  padding: 72px 0 0 0;
   display: flex;
   flex-direction: column;
+}
+@media (max-width: 700px) {
+  .main {
+    padding: 56px 0 0 0;
+  }
 }
 
 .footer {
@@ -25,15 +29,60 @@
   margin: 2rem auto 0 auto;
   width: calc(100% - 3rem);
   color: #a3e3ff;
-  text-align: center;
-  padding: 1.5rem 0 1.2rem 0;
+  padding: 1.2rem 2.5rem 1.2rem 2.5rem;
   font-size: 1.08em;
   letter-spacing: 0.01em;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
   box-sizing: border-box;
+  text-align: center;
+}
+
+.footerLinksRow {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 2.5rem;
+  width: 100%;
+  font-weight: 600;
+  font-size: 1.08em;
+  margin-bottom: 0.2em;
+  letter-spacing: 0.01em;
+  text-align: center;
+}
+
+.footerLink {
+  color: #a3e3ff;
+  text-decoration: none;
+  padding: 0.1em 0.4em;
+  border-radius: 6px;
+  transition: background 0.18s, color 0.18s;
+}
+
+.footerLink:hover {
+  background: #1e223c;
+  color: #fff;
+}
+
+.footerDivider {
+  color: #3e4a6b;
+  font-size: 1.1em;
+  user-select: none;
+}
+
+@media (max-width: 700px) {
+  .footer {
+    padding: 1.2rem 0.5rem 1.2rem 0.5rem;
+    font-size: 0.98em;
+  }
+  .footerLinksRow {
+    gap: 1.2rem;
+    font-size: 0.98em;
+  }
 }
 
 .copyright {
@@ -41,29 +90,14 @@
   font-size: 1.08em;
   color: #a3e3ff;
   text-shadow: none;
+  text-align: center;
 }
 
 .techStack {
   font-size: 0.98em;
   color: #a3e3ff;
   text-shadow: none;
-}
-
-.socialLinks {
-  display: flex;
-  gap: 1.5rem;
-  margin-top: 0.2em;
-}
-
-.socialLink {
-  color: #a3e3ff;
-  text-decoration: none;
-  font-size: 1.3em;
-  text-shadow: none;
-}
-
-.socialLink:hover {
-  opacity: 0.8;
+  text-align: center;
 }
 
 .githubIcon {

@@ -8,6 +8,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@glyphs/brands": "^0.1.9",
+    "@glyphs/core": "^0.8.12",
+    "@glyphs/flags": "^0.5.5",
     "@supabase/supabase-js": "^2.52.0",
     "@vitejs/plugin-react": "^4.6.0",
     "react": "^19.1.0",

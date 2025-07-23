@@ -7,21 +7,21 @@ export const bots = [
     desc: "Advanced moderation and utility bot with custom commands",
   },
   {
-    href: "https://invitemanager.xyz/",
+    href: "https://invi-bot.xyz/",
     img: "/images/portfolio/bots/invite-management.gif",
     alt: "Invite Management Logo",
     name: "Invite Management",
     desc: "Professional invite tracking and management system",
   },
   {
-    href: "https://security.gg/",
+    href: "https://securitybot.gg/",
     img: "/images/portfolio/bots/security.png",
     alt: "Security.gg Logo",
     name: "Security.gg",
     desc: "Advanced security and anti-raid protection",
   },
   {
-    href: "https://quarklogger.com/",
+    href: "https://quark.bot",
     img: "/images/portfolio/bots/quark.png",
     alt: "Quark Logger Logo",
     name: "Quark Logger",
@@ -35,7 +35,7 @@ export const bots = [
     desc: "Automated content delivery and news updates (paid service)",
   },
   {
-    href: "https://autopublisher.com/",
+    href: "https://top.gg/bot/1093225359018827846",
     img: "/images/portfolio/bots/auto-publisher.png",
     alt: "Auto Publisher Logo",
     name: "Auto Publisher",

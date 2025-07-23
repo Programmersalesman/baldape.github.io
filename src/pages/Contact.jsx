@@ -12,6 +12,11 @@ import StatusMessage from "../components/ui/StatusMessage";
 import { sendToDiscord } from "../services/discordService";
 import { addTestimonial, exportTestimonials, importTestimonials, clearTestimonials, getTestimonialStats } from "../services/supabaseTestimonialService";
 import { addConsultation, exportConsultations, importConsultations, clearConsultations, getConsultationStats } from "../services/supabaseConsultationService";
+import { CoreCalendar, CoreStar } from "@glyphs/react-core";
+import { CoreArrow } from '@glyphs/react-core';
+import { BrandsFigma } from '@glyphs/react-brands';
+import { FlagsCanada } from '@glyphs/react-flags';
+import { CalendarIcon, StarIcon } from '../components/ui/v2/icons/glyphs';
 
 function Contact() {
   const [openModal, setOpenModal] = useState(null); // 'consultation' | 'testimonial' | null
@@ -292,7 +297,7 @@ function Contact() {
           </div>
           <div className="faq-grid">
             <CTACard
-              icon="📅"
+              icon={<CalendarIcon size={48} color="#2D9CDB" />}
               title="Book a Consultation"
               description="Schedule a free consultation to discuss your community's needs."
               onClick={() => setOpenModal("consultation")}
@@ -300,7 +305,7 @@ function Contact() {
               shadowColor="rgba(88, 101, 242, 0.13)"
             />
             <CTACard
-              icon="⭐"
+              icon={<StarIcon size={48} color="#F2C94C" />}
               title="Leave a Testimonial"
               description="Share your experience working with BaldApe Services."
               onClick={() => setOpenModal("testimonial")}

@@ -1,0 +1,119 @@
+.carouselSection {
+  margin: 2.5rem 0 1.5rem 0;
+  padding: 2rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: linear-gradient(120deg, #ffe082 0%, #a3e3ff 100%);
+  border-radius: 24px;
+  box-shadow: 0 2px 12px #0001;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+}
+.carouselTitle {
+  font-size: 1.35rem;
+  font-weight: 900;
+  margin-bottom: 18px;
+  color: #23272a;
+  letter-spacing: -0.5px;
+}
+.carouselFade {
+  width: 100%;
+  min-height: 220px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: opacity 0.35s;
+}
+.testimonialCard {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 2px 12px #0001;
+  padding: 1.2rem 1.2rem;
+  max-width: 420px;
+  min-width: 220px;
+  width: 100%;
+  margin-bottom: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+.testimonialHeader {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 8px;
+}
+.avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  box-shadow: 0 2px 8px #0001;
+}
+.author {
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: #23272a;
+}
+.role {
+  font-size: 0.95rem;
+  color: #5865f2;
+  font-weight: 500;
+}
+.text {
+  font-size: 1.08rem;
+  color: #23272a;
+  font-style: italic;
+  margin-bottom: 8px;
+}
+.stars {
+  display: flex;
+  gap: 2px;
+  margin-top: 2px;
+}
+.starFilled {
+  color: #f7b801;
+  font-size: 18px;
+}
+.starEmpty {
+  color: #e3e8f0;
+  font-size: 18px;
+}
+.dotsRow {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: none;
+  background: #e3e8f0;
+  cursor: pointer;
+  transition: background 0.2s;
+  outline: none;
+}
+.dotActive {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: none;
+  background: #5865f2;
+  cursor: pointer;
+  transition: background 0.2s;
+  outline: none;
+  box-shadow: 0 0 0 2px #a3e3ff;
+}
+.pauseIndicator {
+  font-size: 12px;
+  color: #5865f2;
+  margin-top: 4px;
+  opacity: 0.7;
+} 

@@ -142,8 +142,13 @@
 }
 
 .memberName {
-  color: #fff;
-  font-weight: 500;
+  overflow: visible;
+  text-overflow: unset;
+  max-width: none;
+  word-break: break-word;
+  display: inline-block;
+  vertical-align: middle;
+  white-space: normal;
 }
 
 .memberStatus {

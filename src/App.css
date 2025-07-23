@@ -85,21 +85,13 @@ body {
   font-family: var(--font-family-primary);
   line-height: var(--line-height-normal);
   color: var(--color-white);
-  background: var(--gradient-hero);
   min-height: 100vh;
   font-size: var(--font-size-base);
   position: relative;
 }
 
 body::before {
-  content: "";
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: var(--gradient-hero);
-  z-index: -1;
+  content: none;
 }
 
 /* Container using design system */
@@ -124,6 +116,7 @@ body::before {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  background: transparent;
 }
 
 .testimonials-hero-btn {
